@@ -1,3 +1,5 @@
+"use client";
+
 import { CircleUser, ChevronDown } from "lucide-react";
 //import { getServerAuthSession } from "@/server/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
