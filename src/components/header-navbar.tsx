@@ -8,12 +8,12 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="ml-6 flex items-center gap-6 text-sm">
+    <nav className="flex items-center gap-6 text-sm">
       {links.map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className={"transition-colors hover:text-foreground/80"}
+          className="text-foreground/60 transition-colors hover:text-foreground/80"
         >
           {link.text}
         </Link>
