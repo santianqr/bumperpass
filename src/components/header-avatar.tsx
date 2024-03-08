@@ -5,7 +5,7 @@ import { CircleUser, ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 
-export async function HeaderAvatar() {
+export function HeaderAvatar() {
   //const session = await getServerAuthSession();
   const { data: session } = useSession();
 
