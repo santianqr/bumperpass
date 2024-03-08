@@ -4,6 +4,7 @@ import { Maven_Pro } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/toaster";
+import Header from "@/components/header";
 
 const fontMaven = Maven_Pro({
   subsets: ["latin"],
@@ -30,7 +31,10 @@ export default function RootLayout({
         )}
       >
         <TRPCReactProvider>
-          {children}
+          <div className="mx-auto max-w-screen-xl">
+            <Header />
+            {children}
+          </div>
           <Toaster />
         </TRPCReactProvider>
       </body>
