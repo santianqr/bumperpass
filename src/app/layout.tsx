@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header";
-import SessionWrapper from "@/components/session-provider";
 
 const fontMaven = Maven_Pro({
   subsets: ["latin"],
@@ -32,13 +31,11 @@ export default function RootLayout({
         )}
       >
         <TRPCReactProvider>
-          <SessionWrapper>
-            <div className="mx-auto max-w-screen-xl">
-              <Header />
-              {children}
-            </div>
-            <Toaster />
-          </SessionWrapper>
+          <div className="mx-auto max-w-screen-xl">
+            <Header />
+            {children}
+          </div>
+          <Toaster />
         </TRPCReactProvider>
       </body>
     </html>
