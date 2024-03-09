@@ -60,14 +60,14 @@ const FormSchema = z.object({
 });
 
 type Props = {
-  firstName: string;
-  email: string;
+  firstName?: string;
+  email?: string;
   phone?: string | null;
-  state: string;
-  city: string;
-  numberNameStreet: string;
-  zipCode: string;
-  currentPlate: string;
+  state?: string;
+  city?: string;
+  numberNameStreet?: string;
+  zipCode?: string;
+  currentPlate?: string;
 };
 export function AccountForm({ accountData }: { accountData: Props }) {
   console.log(accountData);

@@ -73,8 +73,8 @@ model VerificationToken {
 }
 
 model Person {
-    id               String   @id @default(cuid())
-    email            String   @unique
+    id               String  @id @default(cuid())
+    email            String  @unique
     password         String
     confirmPassword  String
     firstName        String
@@ -83,11 +83,11 @@ model Person {
     phone            String?
     city             String
     zipCode          String
-    currentPlate     String   @unique
-    vin              String   @unique
-    state            String   @default("ca")
+    currentPlate     String  @unique
+    vin              String  @unique
+    state            String  @default("ca")
     numberNameStreet String
     unitNumber       String?
-    suscribe         Boolean? @default(false)
-    terms            Boolean  @default(false)
+    suscribe         Boolean @default(false)
+    terms            Boolean @default(false)
 }
