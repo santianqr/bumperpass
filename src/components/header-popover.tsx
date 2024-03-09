@@ -6,7 +6,6 @@ import {
 import { HeaderAvatar } from "./header-avatar";
 import { UserCog, FolderSearch2, Settings, LogOut } from "lucide-react";
 import Link from "next/link";
-import SessionWrapper from "./session-provider";
 
 const menu = [
   {
@@ -35,9 +34,7 @@ export function HeaderPopover() {
   return (
     <Popover>
       <PopoverTrigger>
-        <SessionWrapper>
           <HeaderAvatar />
-        </SessionWrapper>
       </PopoverTrigger>
       <PopoverContent className="w-44 space-y-1 text-sm text-foreground/60">
         {menu.map((option, index) => (
