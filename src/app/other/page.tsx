@@ -3,8 +3,10 @@ import Link from "next/link";
 import { CreatePost } from "@/app/_components/create-post";
 import { getServerAuthSession } from "@/server/auth";
 import { api } from "@/trpc/server";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function Home() {
+  noStore();
   const hello = await api.post.hello.query({ text: "from tRPC" });
   const session = await getServerAuthSession();
   const accountData = await api.post.getAccount.query();
