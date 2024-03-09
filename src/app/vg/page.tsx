@@ -4,7 +4,7 @@ export default function VGPage() {
   return (
     <main className="flex flex-col justify-center space-y-8">
       <section className="flex justify-center bg-gradient-to-r from-[#E62534] to-[#F59F0F] py-12 text-background">
-        <div className="max-w-screen-sm">
+        <div>
           <p className="text-5xl font-medium tracking-tighter">
             Welcome to our
           </p>
@@ -14,7 +14,7 @@ export default function VGPage() {
         </div>
       </section>
       <section className="flex justify-center">
-        <div className="max-w-screen-sm">
+        <div>
           <p className="text-lg font-semibold text-primary">Instructions</p>
           <ul className="list-inside list-disc text-sm marker:text-foreground/60">
             <li>

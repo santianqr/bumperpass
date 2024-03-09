@@ -1,8 +1,8 @@
 "use client";
 
-import { VGForm } from "@/components/vg-form";
-import { VGCard } from "./vg-card";
-import { VGPopup } from "./vg-popup";
+import {VGForm} from "@/components/vg-form";
+import {VGCard} from "./vg-card";
+import {VGPopup} from "./vg-popup";
 import { useState } from "react";
 
 type ResponseVg = {
@@ -33,6 +33,7 @@ export function VGResults() {
             />
             {form.allPlates}
             <VGPopup form={form} allPlates={result.allPlates} />
+            
           </>
         ) : null}
       </div>

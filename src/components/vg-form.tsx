@@ -105,7 +105,7 @@ export function VGForm({ setResult, setForm }: VGFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex max-w-screen-sm flex-col items-stretch space-y-1"
+        className="flex flex-col items-stretch space-y-1"
       >
         <FormField
           control={form.control}
@@ -214,6 +214,7 @@ export function VGForm({ setResult, setForm }: VGFormProps) {
         <Button
           type="submit"
           className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+          disabled={loading}
         >
           {loading ? <Loader className="animate-spin" /> : "Generate"}
         </Button>

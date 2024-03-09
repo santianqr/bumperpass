@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 
-import { Maven_Pro } from "next/font/google";
+import { Maven_Pro, Source_Serif_4 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/toaster";
@@ -11,6 +11,12 @@ const fontMaven = Maven_Pro({
   subsets: ["latin"],
   variable: "--font-maven",
 });
+
+const fontSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif",
+});
+
 
 export const metadata = {
   title: "Bumper Pass | Web App",

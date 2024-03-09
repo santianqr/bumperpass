@@ -22,6 +22,7 @@ const config = {
     extend: {
       fontFamily: {
         maven: ["var(--font-maven)", ...fontFamily.sans],
+        serif: ["var(--font-serif)", ...fontFamily.serif],
       },
 
       colors: {

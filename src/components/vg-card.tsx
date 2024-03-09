@@ -17,7 +17,7 @@ type VGCardProps = {
 
 export function VGCard({ result, description }: VGCardProps) {
   return (
-    <Card className="flex max-w-screen-sm flex-col items-stretch">
+    <Card className="flex flex-col items-stretch">
       <CardHeader>
         <CardTitle>Your type</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -32,7 +32,7 @@ export function VGCard({ result, description }: VGCardProps) {
         </CardContent>
       </CardContent>
       <CardFooter className="self-end">
-        <Link href="/account/dashbpard">
+        <Link href="/account/dashboard">
           <Button
             type="submit"
             className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"

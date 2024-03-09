@@ -87,6 +87,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
             type="submit"
             onClick={handleYesClick}
             className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+            disabled={loading}
           >
             {loading ? <Loader className="animate-spin" /> : "Yes"}
           </Button>
@@ -94,6 +95,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
             type="submit"
             onClick={handleNoClick}
             className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+            disabled={loading}
           >
             {loading ? <Loader className="animate-spin" /> : "No"}
           </Button>
@@ -109,6 +111,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
               type="submit"
               onClick={handleSendClick}
               className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+              disabled={loading}
             >
               {loading ? <Loader className="animate-spin" /> : "Send"}
             </Button>
