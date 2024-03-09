@@ -9,10 +9,7 @@ type Props = {
 
 export function SearchSection({ id }: Props) {
   return (
-    <section
-      id={id}
-      className="flex flex-col items-center space-y-8 "
-    >
+    <section id={id} className="flex flex-col items-center space-y-8 ">
       <h2 className="col-span-2 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
         Search Now!
       </h2>
@@ -30,7 +27,7 @@ export function SearchSection({ id }: Props) {
           <ul className="mb-4 list-inside list-decimal space-y-2 text-sm">
             <li>
               <Link
-                href="#"
+                href="/login"
                 className="font-semibold underline decoration-foreground"
               >
                 Click here to login

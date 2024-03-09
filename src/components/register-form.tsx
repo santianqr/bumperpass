@@ -78,7 +78,7 @@ const FormSchema = z
     path: ["terms"],
   });
 
-export function SignUp() {
+export function RegisterForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

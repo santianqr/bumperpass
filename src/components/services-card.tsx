@@ -35,7 +35,6 @@ export function ServicesCard() {
         <CardFooter>
           <Link href="/#search-now">
             <Button
-              type="submit"
               className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
             >
               Make a search
@@ -62,7 +61,6 @@ export function ServicesCard() {
         <CardFooter>
           <Link href="/vg">
             <Button
-              type="submit"
               className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
             >
               Learn more
