@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Loader } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -384,7 +385,11 @@ export function SignUp() {
             className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
             disabled={created.isLoading}
           >
-            {created.isLoading ? "Loading..." : "Register"}
+            {created.isLoading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              "Register"
+            )}
           </Button>
         </form>
       </div>
