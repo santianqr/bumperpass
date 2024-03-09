@@ -1,8 +1,10 @@
 import { AccountForm } from "@/components/account-form";
 import { CircleUser } from "lucide-react";
 import { api } from "@/trpc/server";
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function Account() {
+  noStore();
   const accountData = await api.post.getAccount.query();
   console.log(accountData);
   console.log(typeof accountData);
