@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { User } from "@prisma/client";
+import type { User, VerificationToken } from "@prisma/client";
 
 type VerifyEmailProps = {
   searchParams: Record<string, string | string[] | undefined>;
@@ -7,21 +7,22 @@ type VerifyEmailProps = {
 
 export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
   if (searchParams.token) {
-    const verificationToken = await db.verificationToken.findUnique({
+    const verificationToken = (await db.verificationToken.findUnique({
       where: {
         token: searchParams.token as string,
       },
       include: {
         user: true,
       },
-    });
+    })) as VerificationToken & { user: User };
+
     if (!verificationToken) {
       return <div>Invalid token</div>;
     }
 
     await db.user.update({
       where: {
-        id: verificationToken.user.id as User["id"],
+        id: verificationToken.user.id,
       },
       data: {
         emailVerified: new Date(),

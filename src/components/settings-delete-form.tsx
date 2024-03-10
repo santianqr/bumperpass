@@ -2,13 +2,15 @@
 
 import { z } from "zod";
 import { Loader } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
+import { redirect } from "next/navigation";
 
 export default function DeleteForm() {
-
+  const [showConfirm, setShowConfirm] = useState(false);
   const deleteAccount = api.func.deleteAccount.useMutation({
     onSuccess: () => {
       toast({
@@ -18,15 +20,40 @@ export default function DeleteForm() {
             <code className="text-white">Your account has been deleted.</code>
           </pre>
         ),
-      });
+      }),
+        redirect("/");
     },
   });
 
-  function onClick() {
-    const res = deleteAccount.mutate();
-    console.log(res);
+  function onClickDelete() {
+    setShowConfirm(true);
   }
 
+  function onClickCancel() {
+    setShowConfirm(false);
+  }
 
-  return <div><h4>Delete account</h4></div>;
+  function onClickYes() {
+    const res = deleteAccount.mutate();
+    console.log(res);
+    setShowConfirm(false);
+  }
+
+  return (
+    <div>
+      <h4>Delete account</h4>
+      <Button onClick={onClickDelete}>Delete</Button>
+      {showConfirm && (
+        <div>
+          <p>Borrarás tu cuenta de bumperpass, estas seguro?</p>
+          <Button onClick={onClickCancel} disabled={deleteAccount.isLoading}>
+            Cancel
+          </Button>
+          <Button onClick={onClickYes} disabled={deleteAccount.isLoading}>
+            {deleteAccount.isLoading ? <Loader /> : "Yes"}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
 }
