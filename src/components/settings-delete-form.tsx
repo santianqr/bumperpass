@@ -1,18 +1,19 @@
 "use client";
 
-import { z } from "zod";
 import { Loader } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
-import { redirect } from "next/navigation";
 
 export default function DeleteForm() {
   const [showConfirm, setShowConfirm] = useState(false);
+  const router = useRouter();
   const deleteAccount = api.func.deleteAccount.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: "You submitted the following values:",
         description: (
@@ -20,8 +21,9 @@ export default function DeleteForm() {
             <code className="text-white">Your account has been deleted.</code>
           </pre>
         ),
-      }),
-        redirect("/");
+      });
+      await signOut(); // Cierra la sesión
+      await router.push("/"); // Redirige al inicio
     },
   });
 

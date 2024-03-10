@@ -4,6 +4,7 @@ import { NotificactionsForm } from "@/components/settings-notifications-form";
 import { api } from "@/trpc/server";
 
 import { unstable_noStore as noStore } from "next/cache";
+import DeleteForm from "@/components/settings-delete-form";
 
 export default async function Settings() {
   noStore();
@@ -18,8 +19,9 @@ export default async function Settings() {
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
           Settings & Preferences
         </h3>
-        <SettingsForm/>
+        <SettingsForm />
         <NotificactionsForm suscribe={suscribe} />
+        <DeleteForm />
       </section>
     </main>
   );

@@ -6,7 +6,7 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { hash, compare } from "bcrypt";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { EmailVerify } from "@/components/email-verify";
 import { Resend } from "resend";
 //import { env } from "@/env";
