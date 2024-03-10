@@ -1,4 +1,5 @@
 import { db } from "@/server/db";
+import { User } from "@prisma/client";
 
 type VerifyEmailProps = {
   searchParams: Record<string, string | string[] | undefined>;
@@ -20,7 +21,7 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
 
     await db.user.update({
       where: {
-        id: verificationToken.user.id as string,
+        id: verificationToken.user.id as User["id"],
       },
       data: {
         emailVerified: new Date(),
