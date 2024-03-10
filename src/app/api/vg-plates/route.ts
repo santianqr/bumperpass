@@ -8,7 +8,6 @@ import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 
-export const runtime = "edge";
 
 type Body = {
   ideas: string;
