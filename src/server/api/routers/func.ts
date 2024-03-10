@@ -9,7 +9,7 @@ import { hash, compare } from "bcrypt";
 import { NextResponse, NextRequest } from "next/server";
 import { EmailVerify } from "@/components/email-verify";
 import { Resend } from "resend";
-import { env } from "@/env";
+//import { env } from "@/env";
 import { randomBytes } from "crypto";
 
 const FormSchemaRegister = z
@@ -107,7 +107,7 @@ export const funcRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       try {
         const data_user = FormSchemaRegister.parse(input);
-        const resend = new Resend(env.RESEND_API_KEY);
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         const existingEmail = await ctx.db.user.findUnique({
           where: { email: data_user.email },
@@ -325,4 +325,16 @@ export const funcRouter = createTRPCRouter({
         }
       }
     }),
+
+  deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    try {
+      return ctx.db.user.delete({
+        where: { id: ctx.session.user.id },
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+  }),
 });

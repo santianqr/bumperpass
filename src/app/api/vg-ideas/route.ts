@@ -7,8 +7,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
-import { env } from "@/env";
-
+//import { env } from "@/env";
 
 type Body = {
   description: string;
@@ -50,7 +49,7 @@ export async function POST(req: NextRequest) {
     const model = new ChatOpenAI({
       temperature: 0.8,
       modelName: "gpt-4-0125-preview",
-      openAIApiKey: env.OPENAI_API_KEY,
+      openAIApiKey: process.env.OPENAI_API_KEY,
     });
 
     const schema = z.object({
