@@ -18,7 +18,7 @@ export default async function Settings() {
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
           Settings & Preferences
         </h3>
-        <SettingsForm />
+        <SettingsForm/>
         <NotificactionsForm suscribe={suscribe} />
       </section>
     </main>

@@ -5,53 +5,70 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { hash, compare } from "bcrypt";
+import { NextResponse } from "next/server";
 
 const FormSchemaRegister = z
   .object({
-    email: z.string().email(),
+    email: z.string({ required_error: "Please type a valid email." }).email(),
     password: z
       .string()
-      .refine((value) =>
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(
-          value,
-        ),
+      .refine(
+        (value) =>
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(
+            value,
+          ),
+        {
+          message:
+            "Password must have 8 characters, one mayus, one symbol and one number.",
+        },
       ),
-    firstName: z.string().min(2),
-    state: z.string(),
-    unitNumber: z.string().optional(),
-    vin: z.string().min(3).max(3),
+    name: z.string().min(2, { message: "Type at least 2 characters." }),
+    state: z.string({ required_error: "Please select a valid option." }),
+    unit: z.string().optional(),
+    vin: z
+      .string({ required_error: "Must be just numbers." })
+      .min(3, { message: "Type just 3 numbers." })
+      .max(3, { message: "Type just 3 numbers." }),
     phone: z.string().optional(),
     confirmPassword: z.string(),
     middleName: z.string().optional(),
-    city: z.string().min(2),
+    city: z.string().min(2, { message: "Type at least 2 characters." }),
     zipCode: z
       .string()
-      .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value)),
-    currentPlate: z.string().min(2).max(7),
-    lastName: z.string().min(2),
-    numberNameStreet: z.string().min(2),
+      .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value), {
+        message: "Must be a valid zip code on USA.",
+      }),
+    currentPlate: z
+      .string()
+      .min(2, { message: "Type at least 2 characters." })
+      .max(7, { message: "Type at most 7 characters." }),
+    lastName: z.string().min(2, { message: "Type at least 2 characters." }),
+    street: z.string().min(2, { message: "Type at least 2 characters." }),
     terms: z.boolean().default(false),
-    suscribe: z.boolean().default(false),
+    suscribe: z.boolean().default(true),
   })
   .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match.",
     path: ["confirmPassword"],
   })
   .refine((data) => data.terms === true, {
+    message: "Please accept the terms and conditions.",
     path: ["terms"],
   });
 
 const FormSchemaAccount = z.object({
-  email: z.string().email().optional(),
-  firstName: z.string().min(2).optional(),
-  state: z.string().optional(),
+  email: z.string().email(),
+  name: z.string().min(2),
+  state: z.string(),
   phone: z.string().optional(),
-  city: z.string().min(2).optional(),
+  city: z.string().min(2),
   zipCode: z
     .string()
     .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value))
     .optional(),
-  currentPlate: z.string().min(2).max(7).optional(),
-  numberNameStreet: z.string().min(2).optional(),
+  currentPlate: z.string().min(2).max(7),
+  street: z.string().min(2),
 });
 
 const FormSchemaResetPassword = z
@@ -81,48 +98,64 @@ const FormSchemaSuscribe = z.object({
 });
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
   created: publicProcedure
     .input(FormSchemaRegister)
     .mutation(async ({ ctx, input }) => {
       try {
-        // Parsea el input con el esquema
         const data = FormSchemaRegister.parse(input);
 
-        // Verifica si el email ya existe en la base de datos
-        const existingEmail = await ctx.db.person.findUnique({
+        const existingEmail = await ctx.db.user.findUnique({
           where: { email: data.email },
         });
         if (existingEmail) {
-          throw new Error("El email ya existe");
+          return NextResponse.json({
+            user: null,
+            message: "Email already exists.",
+            status: 409,
+          });
         }
 
-        // Verifica si currentPlate ya existe en la base de datos
-        const existingPlate = await ctx.db.person.findUnique({
+        const existingPlate = await ctx.db.user.findUnique({
           where: { currentPlate: data.currentPlate },
         });
         if (existingPlate) {
-          throw new Error("La placa actual ya existe");
+          return NextResponse.json({
+            user: null,
+            message: "Plate already exists.",
+            status: 409,
+          });
         }
 
-        // Verifica si vin ya existe en la base de datos
-        const existingVin = await ctx.db.person.findUnique({
+        const existingVin = await ctx.db.user.findUnique({
           where: { vin: data.vin },
         });
         if (existingVin) {
-          throw new Error("El VIN ya existe");
+          return NextResponse.json({
+            user: null,
+            message: "VIN already exists.",
+            status: 409,
+          });
         }
 
-        // Crea la persona en la base de datos
-        return await ctx.db.person.create({
-          data,
+        const hashedPassword = await hash(data.password, 10);
+
+        return await ctx.db.user.create({
+          data: {
+            name: data.name,
+            email: data.email,
+            password: hashedPassword,
+            middleName: data.middleName,
+            lastName: data.lastName,
+            phone: data.phone,
+            city: data.city,
+            zipCode: data.zipCode,
+            currentPlate: data.currentPlate,
+            vin: data.vin,
+            state: data.state,
+            street: data.street,
+            unit: data.unit,
+            suscribe: data.suscribe,
+          },
         });
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -131,32 +164,52 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
+  getPassword: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.user.findUnique({
+      where: { id: ctx.session.user.id },
+      select: {
+        password: true,
+      },
+    });
+  }),
+
   resetPassword: protectedProcedure
     .input(FormSchemaResetPassword)
     .mutation(async ({ ctx, input }) => {
       try {
-        // Parsea el input con el esquema
         const data = FormSchemaResetPassword.parse(input);
 
-        // Obtiene la persona de la base de datos
-        const person = await ctx.db.person.findUnique({
-          where: { id: "1" },
+        const person = await ctx.db.user.findUnique({
+          where: { id: ctx.session.user.id },
         });
-        if (!person) throw new Error("No se encontró la persona");
-        // Comprueba si la contraseña actual es correcta
-        if (person.password !== data.currentPassword) {
-          throw new Error("La contraseña actual es incorrecta");
+        if (!person) {
+          return NextResponse.json({
+            user: null,
+            message: "Person doesnt exists.",
+            status: 409,
+          });
         }
 
-        // Crea un nuevo objeto con los campos que deseas actualizar
+        if (person.password !== null) {
+          const passwordMatch = await compare(
+            data.currentPassword,
+            person.password,
+          );
+          if (!passwordMatch) {
+            return NextResponse.json({
+              user: null,
+              message: "Passwords not matched.",
+              status: 409,
+            });
+          }
+        }
+
         const updateData = {
           password: data.newPassword,
-          confirmPassword: data.confirmPassword,
         };
 
-        // Actualiza la persona en la base de datos
-        return ctx.db.person.update({
-          where: { id: "1" },
+        return ctx.db.user.update({
+          where: { id: ctx.session.user.id },
           data: updateData,
         });
       } catch (error: unknown) {
@@ -167,26 +220,28 @@ export const postRouter = createTRPCRouter({
     }),
 
   updateSuscribe: protectedProcedure
-    .input(FormSchemaSuscribe) // Asume que tienes un esquema de validación para suscribe
+    .input(FormSchemaSuscribe)
     .mutation(async ({ ctx, input }) => {
       try {
-        // Parsea el input con el esquema
         const data = FormSchemaSuscribe.parse(input);
 
-        // Obtiene la persona de la base de datos
-        const person = await ctx.db.person.findUnique({
-          where: { id: "1" },
+        const person = await ctx.db.user.findUnique({
+          where: { id: ctx.session.user.id },
         });
-        if (!person) throw new Error("No se encontró la persona");
+        if (!person) {
+          return NextResponse.json({
+            user: null,
+            message: "Person doesnt exists.",
+            status: 409,
+          });
+        }
 
-        // Crea un nuevo objeto con el campo que deseas actualizar
         const updateData = {
           suscribe: data.suscribe,
         };
 
-        // Actualiza la persona en la base de datos
-        return ctx.db.person.update({
-          where: { id: "1" },
+        return ctx.db.user.update({
+          where: { id: ctx.session.user.id },
           data: updateData,
         });
       } catch (error: unknown) {
@@ -197,8 +252,8 @@ export const postRouter = createTRPCRouter({
     }),
 
   getSuscribe: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.person.findUnique({
-      where: { id: "1" },
+    return ctx.db.user.findUnique({
+      where: { id: ctx.session.user.id },
       select: {
         suscribe: true,
       },
@@ -206,15 +261,15 @@ export const postRouter = createTRPCRouter({
   }),
 
   getAccount: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.person.findUnique({
-      where: { id: "1" },
+    return ctx.db.user.findUnique({
+      where: { id: ctx.session.user.id },
       select: {
-        firstName: true,
+        name: true,
         email: true,
         phone: true,
         state: true,
         city: true,
-        numberNameStreet: true,
+        street: true,
         zipCode: true,
         currentPlate: true,
       },
@@ -225,22 +280,23 @@ export const postRouter = createTRPCRouter({
     .input(FormSchemaAccount)
     .mutation(async ({ ctx, input }) => {
       try {
-        // Parsea el input con el esquema
         const data = FormSchemaAccount.parse(input);
 
-        // Si currentPlate está presente en los datos de entrada, verifica si ya existe en la base de datos
         if (data.currentPlate) {
-          const existingPlate = await ctx.db.person.findFirst({
+          const existingPlate = await ctx.db.user.findFirst({
             where: { currentPlate: data.currentPlate },
           });
-          if (existingPlate && existingPlate.id !== "1") {
-            throw new Error("La placa actual ya existe");
+          if (existingPlate && existingPlate.id !== ctx.session.user.id) {
+            return NextResponse.json({
+              user: null,
+              message: "Email already exists.",
+              status: 409,
+            });
           }
         }
 
-        // Actualiza la persona en la base de datos
-        return ctx.db.person.update({
-          where: { id: "1" },
+        return ctx.db.user.update({
+          where: { id: ctx.session.user.id },
           data,
         });
       } catch (error: unknown) {
@@ -250,28 +306,5 @@ export const postRouter = createTRPCRouter({
       }
     }),
 
-  create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      return ctx.db.post.create({
-        data: {
-          name: input.name,
-          createdBy: { connect: { id: ctx.session.user.id } },
-        },
-      });
-    }),
-
-  getLatest: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.post.findFirst({
-      orderBy: { createdAt: "desc" },
-      where: { createdBy: { id: ctx.session.user.id } },
-    });
-  }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
 });

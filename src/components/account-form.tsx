@@ -26,61 +26,46 @@ import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
 
 const FormSchema = z.object({
-  email: z
-    .string({ required_error: "Please type a valid email." })
-    .email()
-    .optional(),
-  firstName: z
-    .string()
-    .min(2, { message: "Type at least 2 characters." })
-    .optional(),
-  state: z
-    .string({ required_error: "Please select a valid option." })
-    .optional(),
+  email: z.string({ required_error: "Please type a valid email." }).email(),
+  name: z.string().min(2, { message: "Type at least 2 characters." }),
+  state: z.string({ required_error: "Please select a valid option." }),
   phone: z.string().optional(),
-  city: z
-    .string()
-    .min(2, { message: "Type at least 2 characters." })
-    .optional(),
+  city: z.string().min(2, { message: "Type at least 2 characters." }),
   zipCode: z
     .string()
     .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value), {
       message: "Must be a valid zip code on USA.",
-    })
-    .optional(),
+    }),
   currentPlate: z
     .string()
     .min(2, { message: "Type at least 2 characters." })
-    .max(7, { message: "Type at most 7 characters." })
-    .optional(),
-  numberNameStreet: z
-    .string()
-    .min(2, { message: "Type at least 2 characters." })
-    .optional(),
+    .max(7, { message: "Type at most 7 characters." }),
+  street: z.string().min(2, { message: "Type at least 2 characters." }),
 });
 
 type Props = {
-  firstName?: string;
-  email?: string;
-  phone?: string | null;
-  state?: string;
-  city?: string;
-  numberNameStreet?: string;
-  zipCode?: string;
-  currentPlate?: string;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  state: string | null;
+  city: string | null;
+  street: string | null;
+  zipCode: string | null;
+  currentPlate: string | null;
 };
+
 export function AccountForm({ accountData }: { accountData: Props }) {
   console.log(accountData);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      firstName: accountData.firstName,
-      email: accountData.email,
-      city: accountData.city,
-      numberNameStreet: accountData.numberNameStreet,
-      zipCode: accountData.zipCode,
-      currentPlate: accountData.currentPlate,
-      state: accountData.state,
+      name: accountData.name ?? "",
+      email: accountData.email ?? "",
+      city: accountData.city ?? "",
+      street: accountData.street ?? "",
+      zipCode: accountData.zipCode ?? "",
+      currentPlate: accountData.currentPlate ?? "",
+      state: accountData.state ?? "",
       phone: accountData.phone ?? "",
     },
   });
@@ -90,9 +75,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(data, null, 2)}
-            </code>
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
           </pre>
         ),
       });
@@ -108,12 +91,12 @@ export function AccountForm({ accountData }: { accountData: Props }) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
         <FormField
           control={form.control}
-          name="firstName"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>First Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.firstName} />
+                <Input {...field} placeholder={accountData.name ?? ""} />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -131,7 +114,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                   {...field}
                   type="email"
                   disabled
-                  placeholder={accountData.email}
+                  placeholder={accountData.email ?? ""}
                 />
               </FormControl>
               <FormDescription></FormDescription>
@@ -181,7 +164,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
             <FormItem>
               <FormLabel>City</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.city} />
+                <Input {...field} placeholder={accountData.city ?? ""} />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -190,12 +173,12 @@ export function AccountForm({ accountData }: { accountData: Props }) {
         />
         <FormField
           control={form.control}
-          name="numberNameStreet"
+          name="street"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Number & Name Street</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.numberNameStreet} />
+                <Input {...field} placeholder={accountData.street ?? ""} />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -210,7 +193,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
             <FormItem>
               <FormLabel>Zip Code</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.zipCode} />
+                <Input {...field} placeholder={accountData.zipCode ?? ""} />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -224,7 +207,10 @@ export function AccountForm({ accountData }: { accountData: Props }) {
             <FormItem>
               <FormLabel>Current Plate</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.currentPlate} />
+                <Input
+                  {...field}
+                  placeholder={accountData.currentPlate ?? ""}
+                />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -234,8 +220,9 @@ export function AccountForm({ accountData }: { accountData: Props }) {
         <Button
           type="submit"
           className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+          disabled={updateUser.isLoading}
         >
-          Update
+          {updateUser.isLoading ? "Loading..." : "Save"}
         </Button>
       </form>
     </Form>

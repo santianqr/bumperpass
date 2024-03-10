@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -40,12 +41,20 @@ export function LoginForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const loginData = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+    console.log(loginData);
     toast({
       title: "You submitted the following values:",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          <code className="text-white">
+            {JSON.stringify(loginData, null, 2)}
+          </code>
         </pre>
       ),
     });
@@ -91,6 +100,12 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
+              <Button
+                type="submit"
+                className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+              >
+                Sign In
+              </Button>
             </form>
           </Form>
           <Link
@@ -101,12 +116,6 @@ export function LoginForm() {
           </Link>
         </CardContent>
         <CardFooter className="flex flex-col items-center space-y-2">
-          <Button
-            type="submit"
-            className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-          >
-            Sign In
-          </Button>
           <p className="text-sm text-muted-foreground">
             If you dont have an account
           </p>

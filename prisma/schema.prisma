@@ -14,18 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -58,10 +46,21 @@ model User {
     name          String?
     email         String?   @unique
     emailVerified DateTime?
+    password      String?
+    middleName    String?
+    lastName      String?
+    phone         String?
+    city          String?
+    zipCode       String?
+    currentPlate  String?   @unique
+    vin           String?   @unique
+    state         String?   @default("ca")
+    street        String?
+    unit          String?
+    suscribe      Boolean   @default(false)
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
 }
 
 model VerificationToken {
@@ -70,24 +69,4 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
-}
-
-model Person {
-    id               String  @id @default(cuid())
-    email            String  @unique
-    password         String
-    confirmPassword  String
-    firstName        String
-    middleName       String?
-    lastName         String
-    phone            String?
-    city             String
-    zipCode          String
-    currentPlate     String  @unique
-    vin              String  @unique
-    state            String  @default("ca")
-    numberNameStreet String
-    unitNumber       String?
-    suscribe         Boolean @default(false)
-    terms            Boolean @default(false)
 }

@@ -6,6 +6,7 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/header";
 import { Footer } from "@/components/footer";
+//import SessionWrapper from "@/components/session-provider";
 
 const fontMaven = Maven_Pro({
   subsets: ["latin"],
@@ -16,7 +17,6 @@ const fontSerif = Source_Serif_4({
   subsets: ["latin"],
   variable: "--font-serif",
 });
-
 
 export const metadata = {
   title: "Bumper Pass | Web App",

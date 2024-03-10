@@ -42,9 +42,9 @@ const FormSchema = z
             "Password must have 8 characters, one mayus, one symbol and one number.",
         },
       ),
-    firstName: z.string().min(2, { message: "Type at least 2 characters." }),
+    name: z.string().min(2, { message: "Type at least 2 characters." }),
     state: z.string({ required_error: "Please select a valid option." }),
-    unitNumber: z.string().optional(),
+    unit: z.string().optional(),
     vin: z
       .string({ required_error: "Must be just numbers." })
       .min(3, { message: "Type just 3 numbers." })
@@ -63,11 +63,11 @@ const FormSchema = z
       .min(2, { message: "Type at least 2 characters." })
       .max(7, { message: "Type at most 7 characters." }),
     lastName: z.string().min(2, { message: "Type at least 2 characters." }),
-    numberNameStreet: z
+    street: z
       .string()
       .min(2, { message: "Type at least 2 characters." }),
     terms: z.boolean().default(false),
-    suscribe: z.boolean().default(false),
+    suscribe: z.boolean().default(true),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match.",
@@ -84,7 +84,7 @@ export function RegisterForm() {
     defaultValues: {
       state: "ca",
       suscribe: false,
-      terms: false,
+      terms: true,
     },
   });
 
@@ -156,7 +156,7 @@ export function RegisterForm() {
             />
             <FormField
               control={form.control}
-              name="firstName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name*</FormLabel>
@@ -194,7 +194,7 @@ export function RegisterForm() {
             />
             <FormField
               control={form.control}
-              name="unitNumber"
+              name="unit"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Apartment/Unit Number</FormLabel>
@@ -320,7 +320,7 @@ export function RegisterForm() {
             />
             <FormField
               control={form.control}
-              name="numberNameStreet"
+              name="street"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Number & Name Street*</FormLabel>
