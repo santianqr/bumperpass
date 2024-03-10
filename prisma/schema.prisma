@@ -73,7 +73,6 @@ model User {
     street        String?
     unit          String?
     suscribe      Boolean             @default(false)
-    verified      Boolean             @default(false)
     image         String?
     accounts      Account[]
     sessions      Session[]

@@ -24,7 +24,6 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
       },
       data: {
         emailVerified: new Date(),
-        verified: true,
       },
     });
 

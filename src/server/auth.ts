@@ -98,6 +98,11 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // Verificar si el correo electrónico ha sido verificado
+        if (!existingUser?.emailVerified) {
+          return null;
+        }
+
         const passwordMatch = await compare(
           credentials.password,
           existingUser.password,
@@ -105,6 +110,7 @@ export const authOptions: NextAuthOptions = {
         if (!passwordMatch) {
           return null;
         }
+
         return {
           id: existingUser.id,
           email: existingUser.email,
