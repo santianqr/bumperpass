@@ -57,9 +57,9 @@ model Session {
 }
 
 model User {
-    id            String        @id @default(cuid())
+    id            String              @id @default(cuid())
     name          String?
-    email         String?       @unique
+    email         String?             @unique
     emailVerified DateTime?
     password      String?
     middleName    String?
@@ -67,23 +67,25 @@ model User {
     phone         String?
     city          String?
     zipCode       String?
-    currentPlate  String?       @unique
-    vin           String?       @unique
-    state         String?       @default("ca")
+    currentPlate  String?             @unique
+    vin           String?             @unique
+    state         String?             @default("ca")
     street        String?
     unit          String?
-    suscribe      Boolean       @default(false)
+    suscribe      Boolean             @default(false)
+    verified      Boolean             @default(false)
     image         String?
     accounts      Account[]
     sessions      Session[]
-    Plate         Plate[]
-    CustomPlate   CustomPlate[]
+    plate         Plate[]
+    customPlate   CustomPlate[]
+    tokens        VerificationToken[]
 }
 
 model VerificationToken {
-    identifier String
+    id         Int      @id @default(autoincrement())
     token      String   @unique
     expires    DateTime
-
-    @@unique([identifier, token])
+    identifier String
+    user       User     @relation(fields: [identifier], references: [id])
 }

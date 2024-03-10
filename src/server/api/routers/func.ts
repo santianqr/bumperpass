@@ -6,7 +6,11 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { hash, compare } from "bcrypt";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import { EmailVerify } from "@/components/email-verify";
+import { Resend } from "resend";
+import { env } from "@/env";
+import { randomBytes } from "crypto";
 
 const FormSchemaRegister = z
   .object({
@@ -102,10 +106,11 @@ export const funcRouter = createTRPCRouter({
     .input(FormSchemaRegister)
     .mutation(async ({ ctx, input }) => {
       try {
-        const data = FormSchemaRegister.parse(input);
+        const data_user = FormSchemaRegister.parse(input);
+        const resend = new Resend(env.RESEND_API_KEY);
 
         const existingEmail = await ctx.db.user.findUnique({
-          where: { email: data.email },
+          where: { email: data_user.email },
         });
         if (existingEmail) {
           return NextResponse.json({
@@ -116,7 +121,7 @@ export const funcRouter = createTRPCRouter({
         }
 
         const existingPlate = await ctx.db.user.findUnique({
-          where: { currentPlate: data.currentPlate },
+          where: { currentPlate: data_user.currentPlate },
         });
         if (existingPlate) {
           return NextResponse.json({
@@ -127,7 +132,7 @@ export const funcRouter = createTRPCRouter({
         }
 
         const existingVin = await ctx.db.user.findUnique({
-          where: { vin: data.vin },
+          where: { vin: data_user.vin },
         });
         if (existingVin) {
           return NextResponse.json({
@@ -137,24 +142,46 @@ export const funcRouter = createTRPCRouter({
           });
         }
 
-        const hashedPassword = await hash(data.password, 10);
+        const hashedPassword = await hash(data_user.password, 10);
+        const token = randomBytes(32).toString("base64url");
+        const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-        return await ctx.db.user.create({
+        const { data, error } = await resend.emails.send({
+          from: "Bumperpass Contact <onboarding@resend.dev>",
+          to: "contact@bumperpass.com",
+          subject: "Hello world",
+          text: "Hello world",
+          react: EmailVerify({ name: data_user.name, token: token }),
+        });
+
+        if (error) {
+          console.error(error);
+        }
+
+        console.log(data);
+
+        return ctx.db.user.create({
           data: {
-            name: data.name,
-            email: data.email,
+            name: data_user.name,
+            email: data_user.email,
             password: hashedPassword,
-            middleName: data.middleName,
-            lastName: data.lastName,
-            phone: data.phone,
-            city: data.city,
-            zipCode: data.zipCode,
-            currentPlate: data.currentPlate,
-            vin: data.vin,
-            state: data.state,
-            street: data.street,
-            unit: data.unit,
-            suscribe: data.suscribe,
+            middleName: data_user.middleName,
+            lastName: data_user.lastName,
+            phone: data_user.phone,
+            city: data_user.city,
+            zipCode: data_user.zipCode,
+            currentPlate: data_user.currentPlate,
+            vin: data_user.vin,
+            state: data_user.state,
+            street: data_user.street,
+            unit: data_user.unit,
+            suscribe: data_user.suscribe,
+            tokens: {
+              create: {
+                token: token,
+                expires: expiryDate,
+              },
+            },
           },
         });
       } catch (error: unknown) {
