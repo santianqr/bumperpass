@@ -2,7 +2,7 @@
 
 import { Loader } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation'
 import { signOut } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,9 @@ export default function DeleteForm() {
           </pre>
         ),
       });
-      await signOut(); // Cierra la sesión
-      await router.push("/"); // Redirige al inicio
+      
+      router.push("/");
+      await signOut();
     },
   });
 
