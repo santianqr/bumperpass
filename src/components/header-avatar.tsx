@@ -5,8 +5,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export async function HeaderAvatar() {
   const session = await getServerAuthSession();
+  console.log(session);
   //const { data: session } = useSession();
-  
+
   return session ? (
     <Avatar className="block h-[2rem] w-[2rem]">
       <AvatarImage src="https://github.com/santianqr.png" alt="user_image" />

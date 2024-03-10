@@ -195,8 +195,10 @@ export const funcRouter = createTRPCRouter({
           }
         }
 
+        const hashedPassword = await hash(data.newPassword, 10);
+
         const updateData = {
-          password: data.newPassword,
+          password: hashedPassword,
         };
 
         return ctx.db.user.update({
@@ -296,6 +298,4 @@ export const funcRouter = createTRPCRouter({
         }
       }
     }),
-
-
 });

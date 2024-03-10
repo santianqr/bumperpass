@@ -14,6 +14,21 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Plate {
+    id        String  @id @default(cuid())
+    plate     String  @unique
+    available Boolean
+    userId    String
+    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CustomPlate {
+    id     String @id @default(cuid())
+    plate  String @unique
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -42,9 +57,9 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     password      String?
     middleName    String?
@@ -52,15 +67,17 @@ model User {
     phone         String?
     city          String?
     zipCode       String?
-    currentPlate  String?   @unique
-    vin           String?   @unique
-    state         String?   @default("ca")
+    currentPlate  String?       @unique
+    vin           String?       @unique
+    state         String?       @default("ca")
     street        String?
     unit          String?
-    suscribe      Boolean   @default(false)
+    suscribe      Boolean       @default(false)
     image         String?
     accounts      Account[]
     sessions      Session[]
+    Plate         Plate[]
+    CustomPlate   CustomPlate[]
 }
 
 model VerificationToken {
