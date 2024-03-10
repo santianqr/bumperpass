@@ -5,7 +5,7 @@ import { unstable_noStore as noStore } from "next/cache";
 
 export default async function Account() {
   noStore();
-  const accountData = await api.post.getAccount.query();
+  const accountData = await api.func.getAccount.query();
   return (
     <main className="flex">
       <aside className="bg-foreground/15 p-8 text-primary">

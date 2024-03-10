@@ -33,7 +33,7 @@ export function NotificactionsForm({ suscribe }: Props) {
     },
   });
 
-  const updateSuscribe = api.post.updateSuscribe.useMutation({
+  const updateSuscribe = api.func.updateSuscribe.useMutation({
     onSuccess: (data) => {
       toast({
         title: "You submitted the following values:",

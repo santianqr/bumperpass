@@ -58,7 +58,7 @@ export function SettingsForm() {
     defaultValues: {},
   });
 
-  const updatePassword = api.post.resetPassword.useMutation({
+  const updatePassword = api.func.resetPassword.useMutation({
     onSuccess: (data) => {
       toast({
         title: "You submitted the following values:",

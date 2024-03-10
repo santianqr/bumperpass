@@ -63,9 +63,7 @@ const FormSchema = z
       .min(2, { message: "Type at least 2 characters." })
       .max(7, { message: "Type at most 7 characters." }),
     lastName: z.string().min(2, { message: "Type at least 2 characters." }),
-    street: z
-      .string()
-      .min(2, { message: "Type at least 2 characters." }),
+    street: z.string().min(2, { message: "Type at least 2 characters." }),
     terms: z.boolean().default(false),
     suscribe: z.boolean().default(true),
   })
@@ -88,7 +86,7 @@ export function RegisterForm() {
     },
   });
 
-  const created = api.post.created.useMutation({
+  const createAccount = api.func.createAccount.useMutation({
     onSuccess: (data) => {
       toast({
         title: "You submitted the following values:",
@@ -102,7 +100,7 @@ export function RegisterForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = created.mutate(data);
+    const res = createAccount.mutate(data);
     console.log(res);
   }
 
@@ -383,9 +381,9 @@ export function RegisterForm() {
           <Button
             type="submit"
             className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
-            disabled={created.isLoading}
+            disabled={createAccount.isLoading}
           >
-            {created.isLoading ? (
+            {createAccount.isLoading ? (
               <Loader className="animate-spin" />
             ) : (
               "Register"

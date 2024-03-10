@@ -69,7 +69,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
       phone: accountData.phone ?? "",
     },
   });
-  const updateUser = api.post.updateAccount.useMutation({
+  const updateUser = api.func.updateAccount.useMutation({
     onSuccess: (data) => {
       toast({
         title: "You submitted the following values:",

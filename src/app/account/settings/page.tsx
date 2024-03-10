@@ -7,7 +7,7 @@ import { unstable_noStore as noStore } from "next/cache";
 
 export default async function Settings() {
   noStore();
-  const suscribeData = await api.post.getSuscribe.query();
+  const suscribeData = await api.func.getSuscribe.query();
   const suscribe = suscribeData?.suscribe ?? false;
   return (
     <main className="flex">

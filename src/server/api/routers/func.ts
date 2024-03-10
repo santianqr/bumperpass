@@ -97,8 +97,8 @@ const FormSchemaSuscribe = z.object({
   suscribe: z.boolean(),
 });
 
-export const postRouter = createTRPCRouter({
-  created: publicProcedure
+export const funcRouter = createTRPCRouter({
+  createAccount: publicProcedure
     .input(FormSchemaRegister)
     .mutation(async ({ ctx, input }) => {
       try {
@@ -163,15 +163,6 @@ export const postRouter = createTRPCRouter({
         }
       }
     }),
-
-  getPassword: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findUnique({
-      where: { id: ctx.session.user.id },
-      select: {
-        password: true,
-      },
-    });
-  }),
 
   resetPassword: protectedProcedure
     .input(FormSchemaResetPassword)
