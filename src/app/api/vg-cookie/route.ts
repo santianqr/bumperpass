@@ -8,10 +8,10 @@ export async function GET() {
   try {
     if (!browser) {
       browser = await puppeteer.launch({
-        headless: false,
-        slowMo: 10,
+        headless: true,
+        //slowMo: 10,
         //headless: true,
-        //executablePath: "/usr/bin/chromium",
+        executablePath: "/usr/bin/chromium",
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
