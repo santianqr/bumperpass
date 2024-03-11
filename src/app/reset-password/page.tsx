@@ -1,12 +1,13 @@
 import { db } from "@/server/db";
 import type { User, VerificationToken } from "@prisma/client";
-
-type VerifyEmailProps = {
+import { ForgotPasswordForm } from "@/components/forgot-password-form";
+type ForgotPasswordProps = {
   searchParams: Record<string, string | string[] | undefined>;
 };
-// verificar la comparacion de fechas del token con la fecha actual
 
-export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
+export default async function VerifyEmail({
+  searchParams,
+}: ForgotPasswordProps) {
   if (searchParams.token) {
     const verificationToken = (await db.verificationToken.findUnique({
       where: {
@@ -34,17 +35,12 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
       },
     });
 
-    await db.verificationToken.delete({
-      where: {
-        token: searchParams.token as string,
-      },
-    });
-
     return (
       <div>
         <h1>
-          Email verified for <b>{verificationToken.user.email}</b>!
+          Reset password for <b>{verificationToken.user.email}</b>!
         </h1>
+        <ForgotPasswordForm token={searchParams.token as string} />
       </div>
     );
   } else {

@@ -8,8 +8,8 @@ import {
 import { hash, compare } from "bcrypt";
 import { NextResponse } from "next/server";
 import { EmailVerify } from "@/components/email-verify";
+import { EmailForgotPassword } from "@/components/email-forgot-password";
 import { Resend } from "resend";
-//import { env } from "@/env";
 import { randomBytes } from "crypto";
 
 const FormSchemaRegister = z
@@ -99,6 +99,19 @@ const FormSchemaResetPassword = z
 
 const FormSchemaSuscribe = z.object({
   suscribe: z.boolean(),
+});
+
+const FormSchemaForgotPassword = z.object({
+  email: z.string().email(),
+});
+
+const FormSchemaUpdatePassword = z.object({
+  password: z
+    .string()
+    .refine((value) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(value),
+    ),
+  token: z.string(),
 });
 
 export const funcRouter = createTRPCRouter({
@@ -337,4 +350,126 @@ export const funcRouter = createTRPCRouter({
       }
     }
   }),
+
+  forgotPassword: publicProcedure
+    .input(FormSchemaForgotPassword)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const data_user = FormSchemaForgotPassword.parse(input);
+
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
+        const existingUser = await ctx.db.user.findUnique({
+          where: { email: data_user.email },
+        });
+        if (!existingUser) {
+          return NextResponse.json({
+            user: null,
+            message: "Email doesnt exists.",
+            status: 409,
+          });
+        }
+        const token = randomBytes(32).toString("base64url");
+        const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        const { data, error } = await resend.emails.send({
+          from: "Bumperpass Contact <onboarding@resend.dev>",
+          to: "contact@bumperpass.com",
+          subject: "Hello world",
+          text: "Hello world",
+          react: EmailForgotPassword({
+            name: existingUser.name ?? "",
+            token: token,
+          }),
+        });
+        if (error) {
+          console.error(error);
+        }
+        console.log(data);
+
+        return ctx.db.verificationToken.create({
+          data: {
+            token: token,
+            expires: expiryDate,
+            identifier: existingUser.id,
+          },
+        });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error(error.message);
+        }
+      }
+    }),
+
+  updatePassword: publicProcedure
+    .input(FormSchemaUpdatePassword)
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const data = FormSchemaUpdatePassword.parse(input);
+        console.log(data);
+        if (data.token) {
+          const verificationToken = await ctx.db.verificationToken.findUnique({
+            where: {
+              token: data.token,
+            },
+            include: {
+              user: true,
+            },
+          });
+
+          if (!verificationToken) {
+            return NextResponse.json({
+              user: null,
+              message: "Invalid token.",
+              status: 400,
+            });
+          }
+          
+          if (new Date() > verificationToken.expires) {
+            return NextResponse.json({
+              user: null,
+              message: "Your token has expired.",
+              status: 400,
+            });
+          }
+
+          const hashedPassword = await hash(data.password, 10);
+
+          const updatedUser = await ctx.db.user.update({
+            where: {
+              id: verificationToken.user.id,
+            },
+            data: {
+              password: hashedPassword,
+            },
+          });
+
+          if (updatedUser) {
+            await ctx.db.verificationToken.deleteMany({
+              where: {
+                user: {
+                  id: verificationToken.user.id,
+                },
+              },
+            });
+          }
+
+          return NextResponse.json({
+            user: updatedUser,
+            message: "Password updated successfully.",
+            status: 200,
+          });
+        } else {
+          return NextResponse.json({
+            user: null,
+            message: "No token provided.",
+            status: 400,
+          });
+        }
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          console.error(error.message);
+        }
+      }
+    }),
 });
