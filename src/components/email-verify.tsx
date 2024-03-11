@@ -12,7 +12,7 @@ export const EmailVerify: React.FC<Readonly<EmailVerifyProps>> = ({
   <div>
     <h1>Welcome to Bumperpass, {name}!</h1>
     <p>Please, click on this link to activate your account on Bumperpass:</p>
-    <a href={`http://localhost:3000/verify-email?token=${token}`}>
+    <a href={`https://h3maejcadh.us-east-1.awsapprunner.com/verify-email?token=${token}`}>
       Click on me!
     </a>
   </div>

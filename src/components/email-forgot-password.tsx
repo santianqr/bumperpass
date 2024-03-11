@@ -12,7 +12,7 @@ export const EmailForgotPassword: React.FC<Readonly<EmailForgotPasswordProps>> =
   <div>
     <h1>Hi, {name}!</h1>
     <p>Please, click on this link to reset your password on Bumperpass:</p>
-    <a href={`http://localhost:3000/reset-password?token=${token}`}>
+    <a href={`https://h3maejcadh.us-east-1.awsapprunner.com/reset-password?token=${token}`}>
       Click on me!
     </a>
   </div>
