@@ -160,10 +160,10 @@ export const funcRouter = createTRPCRouter({
         const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
         const { data, error } = await resend.emails.send({
-          from: "Bumperpass Contact <onboarding@resend.dev>",
-          to: "contact@bumperpass.com",
-          subject: "Hello world",
-          text: "Hello world",
+          from: "Bumperpass Contact <contact@bumperpass.com>",
+          to: data_user.email,
+          subject: "Email verification.",
+          text: "Email verification.",
           react: EmailVerify({ name: data_user.name, token: token }),
         });
 
@@ -373,10 +373,10 @@ export const funcRouter = createTRPCRouter({
         const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
         const { data, error } = await resend.emails.send({
-          from: "Bumperpass Contact <onboarding@resend.dev>",
-          to: "contact@bumperpass.com",
-          subject: "Hello world",
-          text: "Hello world",
+          from: "Bumperpass Contact <contact@bumperpass.com>",
+          to: existingUser.email ?? "",
+          subject: "Password Reset",
+          text: "Password Reset",
           react: EmailForgotPassword({
             name: existingUser.name ?? "",
             token: token,
@@ -424,7 +424,7 @@ export const funcRouter = createTRPCRouter({
               status: 400,
             });
           }
-          
+
           if (new Date() > verificationToken.expires) {
             return NextResponse.json({
               user: null,
