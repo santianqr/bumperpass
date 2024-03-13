@@ -1,17 +1,18 @@
 import { CircleUser, ChevronDown } from "lucide-react";
 import { getServerAuthSession } from "@/server/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 //import { useSession } from "next-auth/react";
 
 export async function HeaderAvatar() {
   const session = await getServerAuthSession();
   console.log(session);
-  //const { data: session } = useSession();
+
+  // Obtiene la primera letra del nombre del usuario
+  const userInitial = session?.user.name ? session.user.name[0] : null;
 
   return session ? (
     <Avatar className="block h-[2rem] w-[2rem]">
-      <AvatarImage src="https://github.com/santianqr.png" alt="user_image" />
-      <AvatarFallback className="text-foreground">SQ</AvatarFallback>
+      <AvatarFallback className="text-foreground">{userInitial}</AvatarFallback>
     </Avatar>
   ) : (
     <div className="flex items-center text-foreground/60">

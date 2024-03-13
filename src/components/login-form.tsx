@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -33,6 +34,7 @@ const FormSchema = z.object({
 });
 
 export function LoginForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -58,6 +60,8 @@ export function LoginForm() {
         </pre>
       ),
     });
+    router.push("/");
+    router.refresh();
   }
 
   return (
