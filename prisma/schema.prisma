@@ -15,11 +15,14 @@ datasource db {
 }
 
 model Plate {
-    id        String  @id @default(cuid())
-    plate     String  @unique
-    available Boolean
-    userId    String
-    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id          String   @id @default(cuid())
+    plate       String   @unique
+    available   Boolean
+    userId      String
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt   DateTime @default(now()) // para guardar la fecha
+    vehicleType String 
+    state       String // para guardar el estado
 }
 
 model CustomPlate {

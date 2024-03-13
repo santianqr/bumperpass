@@ -309,6 +309,20 @@ export const funcRouter = createTRPCRouter({
     });
   }),
 
+  getSearch: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.plate.findMany({
+      where: { userId: ctx.session.user.id },
+      select: {
+        id: true,
+        plate: true,
+        available: true,
+        vehicleType: true,
+        state: true,
+        createdAt: true,
+      },
+    });
+  }),
+
   updateAccount: protectedProcedure
     .input(FormSchemaAccount)
     .mutation(async ({ ctx, input }) => {
@@ -471,5 +485,46 @@ export const funcRouter = createTRPCRouter({
           console.error(error.message);
         }
       }
+    }),
+
+  savePlate: protectedProcedure
+    .input(
+      z.object({
+        plate: z.string(),
+        available: z.boolean(),
+        vehicleType: z.string(),
+        state: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Accede al ID del usuario a través de la sesión
+      const userId = ctx.session.user.id;
+
+      // Primero, verifica si la placa ya existe
+      const existingPlate = await ctx.db.plate.findUnique({
+        where: { plate: input.plate },
+      });
+
+      if (existingPlate) {
+        // Si la placa ya existe, devuelve su estado de disponibilidad
+        return NextResponse.json(
+          { message: "La placa ya existe", available: existingPlate.available },
+          { status: 200 },
+        );
+      }
+
+      // Si la placa no existe, la crea
+      const newPlate = await ctx.db.plate.create({
+        data: {
+          plate: input.plate,
+          available: input.available,
+          userId: userId, // Usa el ID del usuario de la sesión
+          createdAt: new Date(), // Guarda la fecha actual
+          vehicleType: input.vehicleType, // Guarda el tipo de vehículo
+          state: input.state, // Guarda el estado
+        },
+      });
+
+      return newPlate;
     }),
 });
