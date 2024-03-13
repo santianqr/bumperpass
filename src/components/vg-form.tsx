@@ -61,9 +61,10 @@ type VGFormProps = {
     description: string;
     allPlates: string[];
   }) => void;
+  plates: string[];
 };
 
-export function VGForm({ setResult, setForm }: VGFormProps) {
+export function VGForm({ setResult, setForm, plates }: VGFormProps) {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -78,12 +79,14 @@ export function VGForm({ setResult, setForm }: VGFormProps) {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
     console.log(data);
+    const allPlates = data.allPlates.concat(plates);
+    console.log(allPlates);
     const response: Response = await fetch("/api/vg-main", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...data, allPlates }),
     });
     const responseData = (await response.json()) as ResponseVg;
     console.log(responseData.validPlates);

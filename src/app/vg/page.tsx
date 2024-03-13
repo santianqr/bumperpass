@@ -1,6 +1,10 @@
 import { VGResults } from "@/components/vg-results";
+import { api } from "@/trpc/server";
 
-export default function VGPage() {
+export default async function VGPage() {
+  const userPlates = await api.func.getPlates.query();
+  const plates = userPlates.map((plate) => plate.plate);
+  console.log(plates);
   return (
     <main className="flex flex-col justify-center space-y-8">
       <section className="flex justify-center bg-gradient-to-r from-[#E62534] to-[#F59F0F] py-12 text-background">
@@ -29,7 +33,7 @@ export default function VGPage() {
           </ul>
         </div>
       </section>
-      <VGResults />
+      <VGResults plates={plates} />
     </main>
   );
 }

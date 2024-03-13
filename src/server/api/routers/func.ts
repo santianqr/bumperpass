@@ -293,6 +293,15 @@ export const funcRouter = createTRPCRouter({
     });
   }),
 
+  getPlates: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.customPlate.findMany({
+      where: { userId: ctx.session.user.id },
+      select: {
+        plate: true,
+      },
+    });
+  }),
+
   getAccount: protectedProcedure.query(({ ctx }) => {
     return ctx.db.user.findUnique({
       where: { id: ctx.session.user.id },

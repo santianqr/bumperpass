@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const symbols = body.symbols;
     const description = body.description;
     let allPlates: string[] = body.allPlates;
-
+    console.log("allPlates: in vg main", allPlates);
     // get the cookie
     const response_cookie: Response = await fetch(
       "http://localhost:3000/api/vg-cookie",
