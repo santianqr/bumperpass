@@ -323,6 +323,18 @@ export const funcRouter = createTRPCRouter({
     });
   }),
 
+  getVG: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.customPlate.findMany({
+      where: { userId: ctx.session.user.id },
+      select: {
+        id: true,
+        plate: true,
+        createdAt: true,
+        description: true,
+      },
+    });
+  }),
+
   updateAccount: protectedProcedure
     .input(FormSchemaAccount)
     .mutation(async ({ ctx, input }) => {
@@ -526,5 +538,33 @@ export const funcRouter = createTRPCRouter({
       });
 
       return newPlate;
+    }),
+
+  saveValidPlates: protectedProcedure
+    .input(
+      z.object({
+        plates: z.array(z.string()),
+        description: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Accede al ID del usuario a través de la sesión
+      const userId = ctx.session.user.id;
+
+      // Para cada placa válida, crea una nueva entrada en la tabla CustomPlate
+      const createdPlates = await Promise.all(
+        input.plates.map((plate) =>
+          ctx.db.customPlate.create({
+            data: {
+              plate,
+              userId,
+              createdAt: new Date(), // Guarda la fecha actual
+              description: input.description, // Usa el prompt proporcionado
+            },
+          }),
+        ),
+      );
+
+      return createdPlates;
     }),
 });

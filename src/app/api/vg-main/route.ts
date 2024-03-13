@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getRandomUserAgent } from "@/lib/userAgents";
+import { api } from "@/trpc/server";
 
 const userAgent =
   getRandomUserAgent() ??
@@ -150,6 +151,7 @@ export async function POST(req: NextRequest) {
       console.log("search plates: ", search_plates);
       validPlates = validPlates.concat(search_plates);
     }
+    await api.func.saveValidPlates.mutate({ plates: validPlates, description });
 
     return NextResponse.json({
       validPlates,
