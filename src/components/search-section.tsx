@@ -5,12 +5,12 @@ import Link from "next/link";
 
 export function SearchSection() {
   return (
-    <section className="flex flex-col items-center space-y-8 ">
+    <section className="from- flex flex-col items-center space-y-8 bg-gradient-to-r from-[#E62534]/90 to-[#F59F0F]/85 py-4">
       <h2 className="col-span-2 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
         Search Now!
       </h2>
       <div className="grid grid-cols-2 items-center justify-items-center gap-4">
-        <Card className="flex max-h-96 max-w-sm items-center">
+        <Card className="flex max-w-sm items-center border-none bg-[#B1B1B1]/20 shadow-md">
           <CardContent className="pt-6">
             <SearchForm />
           </CardContent>

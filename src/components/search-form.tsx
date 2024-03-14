@@ -26,6 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { SearchAvailable } from "@/components/search-available";
+import { SearchNotAvailable } from "@/components/search-not-available";
 
 const emojis = ["🖐", "❤", "⭐", "➕"];
 
@@ -225,14 +227,18 @@ export function SearchForm() {
           >
             Clear
           </Button>
-          {searchResponse && (
-            <p>
-              The plate is{" "}
-              {searchResponse === "OK" ? "available" : "not available"}.
-            </p>
-          )}
         </div>
       </form>
+      {searchResponse && (
+        <div>
+          {searchResponse === "OK" ? (
+            <SearchAvailable />
+          ) : (
+            <SearchNotAvailable />
+          )}
+          .
+        </div>
+      )}
     </Form>
   );
 }

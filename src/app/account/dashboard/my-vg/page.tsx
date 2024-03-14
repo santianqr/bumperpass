@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { api } from "@/trpc/server";
+import { Plate } from "@/components/plate";
 
 type PlateData = {
   createdAt: Date;
@@ -16,7 +17,7 @@ export default async function MyVG() {
   const vgData: PlateData[] = await api.func.getVG.query();
 
   if (!vgData) {
-    return <div>No data available</div>;
+    return <div className="text-center">No data available</div>;
   }
 
   const groupedData = vgData.reduce<Record<string, PlateData[]>>(
@@ -40,11 +41,13 @@ export default async function MyVG() {
           <AccordionItem key={`item-${index}`} value={`item-${index}`}>
             <AccordionTrigger>{key}</AccordionTrigger>
             <AccordionContent>
-              <ul>
+              <div className="flex flex-wrap">
+                {" "}
+                {/* Aquí agregamos Flexbox */}
                 {plates.map((plate) => (
-                  <li key={plate.plate}>{plate.plate}</li>
+                  <Plate key={plate.plate} bpPlate={plate.plate} /> // Aquí usamos el componente Plate
                 ))}
-              </ul>
+              </div>
             </AccordionContent>
           </AccordionItem>
         ))}

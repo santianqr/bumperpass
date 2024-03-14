@@ -21,7 +21,10 @@ export default async function MySearch() {
   const searchData: PlateData[] = await api.func.getSearch.query();
 
   return (
-    <main>
+    <main className="space-y-8">
+      <h2 className="col-span-2 scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0">
+        Search Results
+      </h2>
       <Table>
         <TableCaption>List of your plates from Search</TableCaption>
         <TableHeader>

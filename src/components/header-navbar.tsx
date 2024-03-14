@@ -18,7 +18,11 @@ export function Navbar() {
         <Link
           key={link.href}
           href={link.href}
-          className={`transition-colors hover:text-foreground/80  ${pathname === link.href ? " text-foreground underline decoration-foreground decoration-2 underline-offset-4 " : "text-foreground/60"}`}
+          className={`transition-colors hover:text-foreground/80  ${
+            (pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))) 
+            ? " text-foreground underline decoration-foreground decoration-2 underline-offset-4 " 
+            : "text-foreground/60"
+          }`}
         >
           {link.text}
         </Link>
