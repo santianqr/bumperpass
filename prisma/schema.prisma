@@ -20,7 +20,7 @@ model Plate {
     available   Boolean
     userId      String
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt   DateTime @default(now()) 
+    createdAt   DateTime @default(now())
     vehicleType String
     state       String
 }
@@ -30,8 +30,8 @@ model CustomPlate {
     plate       String   @unique
     userId      String
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    createdAt   DateTime @default(now()) 
-    description String 
+    createdAt   DateTime @default(now())
+    description String
 }
 
 // Necessary for Next auth
@@ -91,5 +91,5 @@ model VerificationToken {
     token      String   @unique
     expires    DateTime
     identifier String
-    user       User     @relation(fields: [identifier], references: [id])
+    user       User     @relation(fields: [identifier], references: [id], onDelete: Cascade)
 }

@@ -2,7 +2,7 @@
 
 import { Loader } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,10 @@ export default function DeleteForm() {
           </pre>
         ),
       });
-      
-      router.push("/");
+
       await signOut();
+      router.push("/");
+      router.refresh();
     },
   });
 
@@ -43,18 +44,51 @@ export default function DeleteForm() {
   }
 
   return (
-    <div>
-      <h4>Delete account</h4>
-      <Button onClick={onClickDelete}>Delete</Button>
+    <div className="space-y-2">
+      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+        Delete account
+      </h4>
+      <Button
+        type="submit"
+        className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+        disabled={deleteAccount.isLoading}
+        onClick={onClickDelete}
+      >
+        {deleteAccount.isLoading ? (
+          <Loader className="animate-spin" />
+        ) : (
+          "Delete"
+        )}
+      </Button>
       {showConfirm && (
-        <div>
-          <p>Borrarás tu cuenta de bumperpass, estas seguro?</p>
-          <Button onClick={onClickCancel} disabled={deleteAccount.isLoading}>
-            Cancel
-          </Button>
-          <Button onClick={onClickYes} disabled={deleteAccount.isLoading}>
-            {deleteAccount.isLoading ? <Loader /> : "Yes"}
-          </Button>
+        <div className="space-y-1">
+          <p className="text-sm">
+            All your Bumperpass data will be delete. Are you sure?
+          </p>
+          <div className="space-x-2">
+            <Button
+              onClick={onClickCancel}
+              disabled={deleteAccount.isLoading}
+              className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+            >
+              {deleteAccount.isLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                "Cancel"
+              )}
+            </Button>
+            <Button
+              onClick={onClickYes}
+              disabled={deleteAccount.isLoading}
+              className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+            >
+              {deleteAccount.isLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                "Yes"
+              )}
+            </Button>
+          </div>
         </div>
       )}
     </div>

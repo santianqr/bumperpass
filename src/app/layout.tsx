@@ -34,14 +34,13 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "flex min-h-screen flex-col justify-between bg-background font-sans antialiased",
           fontMaven.variable,
         )}
       >
         <TRPCReactProvider>
           <Header />
-          <div className="mx-auto max-w-screen-xl">{children}</div>
-          <Toaster />
+          <div className="mx-auto w-full max-w-screen-xl">{children}</div>
           <Footer />
         </TRPCReactProvider>
       </body>

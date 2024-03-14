@@ -29,7 +29,7 @@ export function NotificactionsForm({ suscribe }: Props) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-        suscribe: suscribe,
+      suscribe: suscribe,
     },
   });
 
@@ -39,9 +39,7 @@ export function NotificactionsForm({ suscribe }: Props) {
         title: "You submitted the following values:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {JSON.stringify(data, null, 2)}
-            </code>
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
           </pre>
         ),
       });
@@ -55,9 +53,11 @@ export function NotificactionsForm({ suscribe }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
         <div className="space-y-2">
-          <h4 className="text-lg font-medium">Notifications</h4>
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Notifications
+          </h4>
           <div className="space-y-2">
             <FormField
               control={form.control}
@@ -91,8 +91,9 @@ export function NotificactionsForm({ suscribe }: Props) {
         <Button
           type="submit"
           className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+          disabled={updateSuscribe.isLoading}
         >
-          Submit
+          {updateSuscribe.isLoading ? "Loading..." : "Save"}
         </Button>
       </form>
     </Form>

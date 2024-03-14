@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -34,7 +33,6 @@ const FormSchema = z.object({
 });
 
 export function LoginForm() {
-  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -47,7 +45,8 @@ export function LoginForm() {
     const loginData = await signIn("credentials", {
       email: data.email,
       password: data.password,
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/",
     });
     console.log(loginData);
     toast({
@@ -60,13 +59,11 @@ export function LoginForm() {
         </pre>
       ),
     });
-    router.push("/");
-    router.refresh();
   }
 
   return (
     <main>
-      <Card>
+      <Card className="mx-auto w-1/3">
         <CardHeader>
           <CardTitle>Sign In</CardTitle>
           <CardDescription>
