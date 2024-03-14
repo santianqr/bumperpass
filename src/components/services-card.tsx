@@ -59,7 +59,7 @@ export function ServicesCard() {
         </CardContent>
         <CardDescription></CardDescription>
         <CardFooter>
-          <Link href="/vg">
+          <Link href="/services/vg">
             <Button
               className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
             >

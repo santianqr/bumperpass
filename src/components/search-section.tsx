@@ -49,7 +49,7 @@ export function SearchSection() {
           <p className="mb-4 text-xs text-muted-foreground">
             *Only certain specific types of plates allow including symbols
           </p>
-          <Plate bpPlate="BM3RP4SS" />
+          <Plate bpPlate="BMPRP4S" />
 
           <p className="text-center text-xs text-muted-foreground">
             *This is not an official preview of your plate
