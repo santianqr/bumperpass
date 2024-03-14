@@ -6,6 +6,7 @@ import {
 import { HeaderAvatar } from "./header-avatar";
 import { UserCog, FolderSearch2, Settings, LogOut } from "lucide-react";
 import Link from "next/link";
+import { getServerAuthSession } from "@/server/auth";
 
 const menu = [
   {
@@ -30,23 +31,32 @@ const menu = [
   },
 ];
 
-export function HeaderPopover() {
+export async function HeaderPopover() {
+  const session = await getServerAuthSession();
+
   return (
     <Popover>
       <PopoverTrigger>
-          <HeaderAvatar />
+        <HeaderAvatar />
       </PopoverTrigger>
       <PopoverContent className="w-44 space-y-1 text-sm text-foreground/60">
-        {menu.map((option, index) => (
-          <Link
-            key={index}
-            className="flex items-center space-x-2"
-            href={option.href}
-          >
-            {option.icon}
-            <span>{option.label}</span>
-          </Link>
-        ))}
+        {menu.map((option, index) => {
+          // Si la opción es "Logout" y no hay sesión, no la muestres
+          if (option.label === "Log out" && !session) {
+            return null;
+          }
+
+          return (
+            <Link
+              key={index}
+              className="flex items-center space-x-2"
+              href={option.href}
+            >
+              {option.icon}
+              <span>{option.label}</span>
+            </Link>
+          );
+        })}
       </PopoverContent>
     </Popover>
   );

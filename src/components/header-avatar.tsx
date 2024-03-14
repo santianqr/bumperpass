@@ -7,7 +7,6 @@ export async function HeaderAvatar() {
   const session = await getServerAuthSession();
   console.log(session);
 
-  // Obtiene la primera letra del nombre del usuario
   const userInitial = session?.user.name ? session.user.name[0] : null;
 
   return session ? (
@@ -15,7 +14,7 @@ export async function HeaderAvatar() {
       <AvatarFallback className="text-foreground">{userInitial}</AvatarFallback>
     </Avatar>
   ) : (
-    <div className="flex items-center text-foreground/60">
+    <div className="flex items-center text-primary">
       <CircleUser />
       <ChevronDown size={12} />
     </div>

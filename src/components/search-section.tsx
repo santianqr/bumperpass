@@ -3,13 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plate } from "./plate";
 import Link from "next/link";
 
-type Props = {
-  id: string;
-};
-
-export function SearchSection({ id }: Props) {
+export function SearchSection() {
   return (
-    <section id={id} className="flex flex-col items-center space-y-8 ">
+    <section className="flex flex-col items-center space-y-8 ">
       <h2 className="col-span-2 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
         Search Now!
       </h2>

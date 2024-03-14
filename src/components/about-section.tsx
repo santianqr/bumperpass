@@ -1,17 +1,18 @@
+"use client";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
-type Props = {
-  id: string;
-};
-
-export function AboutSection({ id }: Props) {
+export function AboutSection() {
+  const pathname = usePathname();
   return (
-    <section id={id} className="space-y-8">
+    <section className="space-y-8 ">
       <h2 className="scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0">
         About us
       </h2>
 
-      <div className="flex items-center space-y-4 text-sm">
+      <div
+        className={`mx-auto text-sm ${pathname === "/about" ? "flex max-w-screen-md flex-col items-center space-y-4" : "flex items-center space-y-4"}`}
+      >
         <div>
           <p>
             We are excited to provide you a unique experience to express your

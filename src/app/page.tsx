@@ -8,20 +8,20 @@ export default async function Home() {
   const session = await getServerAuthSession();
   if (session) {
     return (
-      <main>
-        <SearchSection id="search-now" />
-        <AboutSection id="about" />
-        <ServicesSection id="services" />
+      <main className="space-y-16">
+        <SearchSection />
+        <AboutSection />
+        <ServicesSection />
       </main>
     );
   } else {
     return (
       <main className="flex justify-center">
         <Image
-          src="/building_website.webp" 
+          src="/building_website.webp"
           alt="website_building_image"
-          width={900} 
-          height={300} 
+          width={900}
+          height={300}
         />
       </main>
     );
