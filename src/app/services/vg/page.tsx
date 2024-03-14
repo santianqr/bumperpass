@@ -1,10 +1,19 @@
 import { VGResults } from "@/components/vg-results";
-import { api } from "@/trpc/server";
+import { db } from "@/server/db";
+import { getServerAuthSession } from "@/server/auth";
 
 export default async function VGPage() {
-  const userPlates = await api.func.getPlates.query();
+  const session = await getServerAuthSession();
+
+  const userPlates = await db.customPlate.findMany({
+    where: { userId: session?.user.id },
+    select: {
+      plate: true,
+    },
+  });
+
   const plates = userPlates.map((plate) => plate.plate);
-  console.log(plates);
+  console.log(typeof userPlates);
   return (
     <main className="flex flex-col justify-center space-y-8">
       <section className="flex justify-center bg-gradient-to-r from-[#E62534] to-[#F59F0F] py-12 text-background">

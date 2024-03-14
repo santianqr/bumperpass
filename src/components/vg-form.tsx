@@ -66,7 +66,7 @@ type VGFormProps = {
 
 export function VGForm({ setResult, setForm, plates }: VGFormProps) {
   const [loading, setLoading] = useState(false);
-
+  console.log("from vg form", plates);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

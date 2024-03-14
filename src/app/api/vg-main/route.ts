@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
     );
     const data_cookies = (await response_cookie.json()) as ResponseCookie;
     const cookies = data_cookies.message;
+    console.log("cookies: ", cookies);
 
     let validPlates: string[] = [];
 

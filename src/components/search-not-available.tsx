@@ -14,8 +14,8 @@ export function SearchNotAvailable() {
           Variation Generator
         </Link>
       </p>
-      <Link href="https://www.dmv.ca.gov/wasapp/ipp2/initPers.do">
-        <Button className="rounded-2xl">Take me to the DMV</Button>
+      <Link href="/services/vg">
+        <Button className="rounded-2xl">Go!</Button>
       </Link>
       <p className="font-medium text-primary">
         Clic below to get our tailored creative alternatives.
