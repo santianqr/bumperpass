@@ -16,8 +16,10 @@ type PlateData = {
   state: string;
   createdAt: Date;
 };
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function MySearch() {
+  noStore();
   const searchData: PlateData[] = await api.func.getSearch.query();
 
   return (

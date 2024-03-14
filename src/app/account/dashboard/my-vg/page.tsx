@@ -12,8 +12,10 @@ type PlateData = {
   description: string;
   plate: string;
 };
+import { unstable_noStore as noStore } from "next/cache";
 
 export default async function MyVG() {
+  noStore();
   const vgData: PlateData[] = await api.func.getVG.query();
 
   if (!vgData) {
