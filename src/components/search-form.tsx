@@ -236,7 +236,7 @@ export function SearchForm() {
           ) : (
             <SearchNotAvailable />
           )}
-          .
+          
         </div>
       )}
     </Form>
