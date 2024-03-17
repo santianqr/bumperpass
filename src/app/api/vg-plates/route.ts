@@ -19,6 +19,18 @@ type Body = {
   used_plates: string[];
 };
 
+const emojiMap: Record<string, string> = {
+  "~": "❤",
+  "*": "⭐",
+  "=": "🖐",
+  "+": "➕",
+};
+
+// Función que reemplaza los símbolos por emojis
+function replaceSymbolsWithEmojis(str: string): string {
+  return str.replace(/[\~\*\=\+]/g, (symbol) => emojiMap[symbol] ?? symbol);
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Body;
@@ -34,22 +46,31 @@ export async function POST(req: NextRequest) {
     const user_input = `Ideas: ${ideas}
 
     Parameters:
-    1. Plates lentgh: ${plateLength === "any" ? "each plate between 2 and 7 characters." : `each plate with exactly ${plateLength} characters.`}
-    2. Plate type: ${plateType === "any" ? "use letters and numbers." : plateType === "letters" ? "use letters and no numbers." : "use just numbers excluding the 0 and no letters. "}
-    3. Space: ${spaces}
-    4. Emoji: ${symbols}
+    1. Plates lentgh = ${plateLength === "any" ? "between 2 and 7 characters." : `exactly ${plateLength} characters.`}
+    2. Plate type = ${plateType === "any" ? "Use letters and numbers." : plateType === "letters" ? "Use just letters. Numbers disabed." : ""}
+    3. Space= ${spaces}
+    4. Emoji= ${symbols}
     `;
     console.log(user_input);
 
-    const TEMPLATE = `Create ${num_ideas} custom plates following input parameters using input ideas. ${plateType === "numbers" ? "Give priority to numerical data to generate the plates." : ""}
+    const TEMPLATE = `Create ${num_ideas} creative custom plates based on input ideas following input parameters.
 
-      Each emoji or space count as a character.
+      Considerations:
+      Number 0 are not allowed in the plates.
+      The space " " counts as character.
       Emojis allowed: ❤, ⭐, 🖐, ➕.
       Replace ❤: ~, ⭐: *, 🖐: =, ➕: +.
-      Just one space per plate.
+      Just one space in middle of plate.
       Just one emoji per plate.
-      Number 0 are not allowed in the plates.
       Plates already in use: ${used_plates.join(", ")}
+      Generate ${num_ideas} plates.
+      
+      Steps:
+      1. Extract the input ideas.
+      2. Analyze the input ideas.
+      3. Add creativity and related data.
+      4. Ensure each plate fill the input parameters and considerations.
+      5. Generate ${num_ideas} plates.
 
       Input: 
       {input}
@@ -68,27 +89,27 @@ export async function POST(req: NextRequest) {
       plate1: z
         .string()
         .describe(
-          "First custom plate following the parameters being creative.",
+          "First custom plate.",
         ),
       plate2: z
         .string()
         .describe(
-          "Second custom plate following the parameters being creative.",
+          "Second custom plate.",
         ),
       plate3: z
         .string()
         .describe(
-          "Third custom plate following the parameters being creative.",
+          "Third custom plate.",
         ),
       plate4: z
         .string()
         .describe(
-          "Fourth custom plate following the parameters being creative.",
+          "Fourth custom plate.",
         ),
       plate5: z
         .string()
         .describe(
-          "Fifth custom plate following the parameters being creative.",
+          "Fifth custom plate.",
         ),
     });
 
@@ -111,7 +132,13 @@ export async function POST(req: NextRequest) {
       input: user_input,
     });
 
-    return NextResponse.json(result, { status: 200 });
+    const newArray: string[] = Object.values(result);
+    const resultArray = newArray.map(replaceSymbolsWithEmojis);
+    const plates = {
+      plates: resultArray,
+    };
+
+    return NextResponse.json(plates, { status: 200 });
   } catch (e: unknown) {
     if (e instanceof Error) {
       const error = e as { message?: string; status?: number };

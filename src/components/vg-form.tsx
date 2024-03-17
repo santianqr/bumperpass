@@ -165,7 +165,6 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
                 <SelectContent>
                   <SelectItem value="any">Letters and numbers</SelectItem>
                   <SelectItem value="letters">Letters</SelectItem>
-                  <SelectItem value="numbers">Numbers</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>

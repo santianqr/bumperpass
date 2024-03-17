@@ -22,20 +22,21 @@ export async function POST(req: NextRequest) {
     const num_ideas = body.num_ideas;
     const plateType = body.plateType;
 
-    const TEMPLATE = `Generate ${num_ideas} ideas (max 80 chars each) from user input. Mention and link interesting/specific facts about the topics. ${plateType === "numbers" ? "Focus on all numeric data available. This includes statistics, measurements, quantities, rankings, dates and any other numerical information that could be relevant and interesting." : ""}. Split ideas by ".".
+    const TEMPLATE = `Generate ${num_ideas} ideas (max 80 chars each) from user input. Mention and link interesting/specific facts about the topics. ${plateType === "any" ? "Include statistics, measurements, quantities, rankings, dates and any other numerical information that could be relevant and interesting." : ""} Split ideas by ".".
 
     Steps:
     1. Analyze input for links, keywords, and specific details.
     2. Analyze ideas that integrate topics and specific details.
     3. Analyze other information into the main topic for the ideas.
-    3. Generate a text with ${num_ideas} ideas following the steps.
+    4. Generate a text with ${num_ideas} ideas following the steps.
     
     Input:{input}`;
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-    console.log(TEMPLATE);
+
     const model = new ChatOpenAI({
       temperature: 0.8,
+      maxTokens: 200,
       modelName: "gpt-4-0125-preview",
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
