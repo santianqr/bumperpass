@@ -93,15 +93,17 @@ export async function POST(req: NextRequest) {
     const plates = body.plates;
     const cookie = body.cookie;
 
-    const validPlates = (
-      await Promise.all(
-        plates.map((plate) =>
-          validPlate(plate, cookie).then((result) =>
-            result.isValid ? plate : null,
-          ),
-        ),
-      )
-    ).filter(Boolean);
+    const validPlates = await plates.reduce(async (accP, plate) => {
+      const acc = await accP;
+      if (acc.length >= 5) {
+        return acc;
+      }
+      const result = await validPlate(plate, cookie);
+      if (result.isValid) {
+        acc.push(plate);
+      }
+      return acc;
+    }, Promise.resolve([] as string[]));
 
     return NextResponse.json({ validPlates });
   } catch (e: unknown) {

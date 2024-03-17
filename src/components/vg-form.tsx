@@ -112,6 +112,20 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
       >
         <FormField
           control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel></FormLabel>
+              <FormControl>
+                <Textarea placeholder="Insert your type" {...field} />
+              </FormControl>
+              <FormDescription></FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="plateLength"
           render={({ field }) => (
             <FormItem>
@@ -149,12 +163,15 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="any">Any</SelectItem>
+                  <SelectItem value="any">Letters and numbers</SelectItem>
                   <SelectItem value="letters">Letters</SelectItem>
                   <SelectItem value="numbers">Numbers</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription></FormDescription>
+              <FormDescription>
+                At this time DMV most number only plates are not available.
+                Please refrain from selecting only numbers.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -196,24 +213,14 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
                   You can include default DMV symbols allowed on your
                   generations.
                 </FormDescription>
+                <span className="text-xs text-muted-foreground">
+                  *Only certian specific types of plates allow including symbols
+                </span>
               </div>
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel></FormLabel>
-              <FormControl>
-                <Textarea placeholder="Insert your type" {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
         <Button
           type="submit"
           className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"

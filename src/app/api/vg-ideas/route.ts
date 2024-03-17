@@ -12,6 +12,7 @@ import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 type Body = {
   description: string;
   num_ideas: number;
+  plateType: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -19,33 +20,20 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as Body;
     const user_input = body.description;
     const num_ideas = body.num_ideas;
+    const plateType = body.plateType;
 
-    const TEMPLATE = `Generate ${num_ideas} ideas/shor texts based on a user input, linking all the topics if applicable, and mentioning interesting/curious facts about them.
-
-    Input: a user input (a word, a phrase, a sentence, etc.)
-    Output: ${num_ideas} ideas (short texts) related to the input, separated by new lines
+    const TEMPLATE = `Generate ${num_ideas} ideas (max 80 chars each) from user input. Mention and link interesting/specific facts about the topics. ${plateType === "numbers" ? "Focus on all numeric data available. This includes statistics, measurements, quantities, rankings, dates and any other numerical information that could be relevant and interesting." : ""}. Split ideas by ".".
 
     Steps:
-    1. Analyze the input and determinate the links and the keywords.
-    2. Generate ${num_ideas} texts based on the input, using related data and keywords.
-    3. Link the topics in the input, if applicable, and generate ideas that integrate them smoothly and naturally.
-    4. All outputs must be written in English.
-
-    Example input: I like Roblox, I am from Colombia, Tolima and I like the football.
-    Example output:
-
-    Tolima's name staduium is Manuel Murillo Toro
-    The typical tree of Tolima is called Ocobo
-    The favorite food is the Tamal and Lechona
-    Rolombia is a Roblox server dedicated to the Roleplay Colombian community
-    One of the best players on the Tolima team is Marco Perez
-
-    Input:
+    1. Analyze input for links, keywords, and specific details.
+    2. Analyze ideas that integrate topics and specific details.
+    3. Analyze other information into the main topic for the ideas.
+    3. Generate a text with ${num_ideas} ideas following the steps.
     
-    {input}`;
+    Input:{input}`;
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-
+    console.log(TEMPLATE);
     const model = new ChatOpenAI({
       temperature: 0.8,
       modelName: "gpt-4-0125-preview",
@@ -54,19 +42,10 @@ export async function POST(req: NextRequest) {
 
     const schema = z.object({
       ideas: z
-        .array(
-          z
-            .string()
-            .min(20, "Each idea must be at least 20 characters long.")
-            .max(60, "Each idea must be no more than 60 characters long.")
-            .describe(
-              "Unique and creative short text based on user's input, linking topics, ideas, and related data with curious facts",
-            ),
-        )
-        .min(num_ideas)
-        .max(num_ideas)
+        .string()
+        .max(400)
         .describe(
-          `Array of ${num_ideas} Unique and creative short text based on user's input, linking topics, ideas, and related data with curious facts`,
+          `Unique and creative short text based on user's input, linking topics, ideas, and related data with curious facts.`,
         ),
     });
 

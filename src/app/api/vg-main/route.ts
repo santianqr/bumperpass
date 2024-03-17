@@ -79,6 +79,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             description: description,
             num_ideas: num_ideas,
+            plateType: plateType,
           }),
         },
       );

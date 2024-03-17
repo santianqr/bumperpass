@@ -8,7 +8,7 @@ export async function GET() {
   try {
     if (!browser) {
       browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         //slowMo: 10,
         //headless: true,
         //executablePath: "/usr/bin/chromium",
@@ -68,7 +68,7 @@ export async function GET() {
     const cookiesString = cookies
       .map((cookie) => `${cookie.name}=${cookie.value}`)
       .join("; ");
-    console.log(cookiesString);
+
     return NextResponse.json({ message: cookiesString });
   } catch (e: unknown) {
     if (e instanceof Error) {

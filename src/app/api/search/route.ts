@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
 
     let modifiedPlate = replaceSymbols(body.personalizedPlate);
     modifiedPlate = modifiedPlate.padEnd(7, " ");
-
+    console.log(modifiedPlate);
     for (let i = 0; i < 7; i++) {
       const character = modifiedPlate[i];
       character
