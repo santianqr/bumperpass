@@ -107,8 +107,7 @@ export async function POST(req: NextRequest) {
       if (result.isValid) {
         validPlates.push(plate);
       }
-      // Espera 1 segundo (o el tiempo que desees) antes de la próxima solicitud
-      await delay(100);
+      await delay(200);
     }
 
     return NextResponse.json({ validPlates });
