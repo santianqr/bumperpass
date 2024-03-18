@@ -86,21 +86,30 @@ async function validPlate(
   }
 }
 
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Body;
     const plates = body.plates;
     const cookie = body.cookie;
 
-    const validPlates = (
-      await Promise.all(
-        plates.map((plate) =>
-          validPlate(plate, cookie).then((result) =>
-            result.isValid ? plate : null,
-          ),
-        ),
-      )
-    ).filter(Boolean);
+    const validPlates: string[] = [];
+    const limit = 5;
+
+    for (const plate of plates) {
+      if (validPlates.length >= limit) {
+        break;
+      }
+      const result = await validPlate(plate, cookie);
+      if (result.isValid) {
+        validPlates.push(plate);
+      }
+      // Espera 1 segundo (o el tiempo que desees) antes de la próxima solicitud
+      await delay(100);
+    }
 
     return NextResponse.json({ validPlates });
   } catch (e: unknown) {
