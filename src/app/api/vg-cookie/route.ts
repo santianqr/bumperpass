@@ -68,7 +68,7 @@ export async function GET() {
     const cookiesString = cookies
       .map((cookie) => `${cookie.name}=${cookie.value}`)
       .join("; ");
-
+    console.log(cookiesString);
     return NextResponse.json({ message: cookiesString });
   } catch (e: unknown) {
     if (e instanceof Error) {
@@ -78,6 +78,11 @@ export async function GET() {
         { error: "An unknown error occurred. Please try again later" },
         { status: 500 },
       );
+    }
+  } finally {
+    if (browser) {
+      await browser.close();
+      browser = undefined;
     }
   }
 }

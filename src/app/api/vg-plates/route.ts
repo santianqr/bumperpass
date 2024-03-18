@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as Body;
 
     const ideas = body.ideas;
-    const num_ideas = body.num_ideas;
+    const num_ideas = body.num_ideas * 2;
     const plateLength = body.plateLength;
     const plateType = body.plateType;
     const spaces = body.spaces;
@@ -80,37 +80,21 @@ export async function POST(req: NextRequest) {
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
     const model = new ChatOpenAI({
-      temperature: 0.2,
+      temperature: 0.1,
       modelName: "gpt-4-0125-preview",
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
 
     const schema = z.object({
-      plate1: z
-        .string()
-        .describe(
-          "First custom plate.",
-        ),
-      plate2: z
-        .string()
-        .describe(
-          "Second custom plate.",
-        ),
-      plate3: z
-        .string()
-        .describe(
-          "Third custom plate.",
-        ),
-      plate4: z
-        .string()
-        .describe(
-          "Fourth custom plate.",
-        ),
-      plate5: z
-        .string()
-        .describe(
-          "Fifth custom plate.",
-        ),
+      plate1: z.string().describe("First custom plate."),
+      plate2: z.string().describe("Second custom plate."),
+      plate3: z.string().describe("Third custom plate."),
+      plate4: z.string().describe("Fourth custom plate."),
+      plate5: z.string().describe("Fifth custom plate."),
+      plate7: z.string().describe("Sixth custom plate."),
+      plate8: z.string().describe("Seventh custom plate."),
+      plate9: z.string().describe("Nineth custom plate."),
+      plate10: z.string().describe("Tenth custom plate."),
     });
 
     const functionCallingModel = model.bind({
