@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     Input:{input}`;
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-
+    console.log(TEMPLATE)
     const model = new ChatOpenAI({
       temperature: 0.8,
       maxTokens: 200,

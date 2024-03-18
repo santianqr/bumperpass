@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
       Input: 
       {input}
       `;
-    console.log(TEMPLATE);
+    //console.log(TEMPLATE);
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
