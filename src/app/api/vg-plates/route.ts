@@ -26,6 +26,46 @@ const emojiMap: Record<string, string> = {
   "+": "➕",
 };
 
+const emojis = ["❤", "⭐", "🖐", "➕"];
+
+function validatePlate(
+  plate: string,
+  allPlates: string[],
+  plateLength: string,
+  plateType: string,
+  spaces: boolean,
+  symbols: boolean,
+): boolean {
+  const existsCondition = !allPlates.includes(plate);
+  const upperCasePlate = plate.toUpperCase();
+  const plateWithoutEmojis = upperCasePlate.replace(
+    new RegExp(emojis.join("|"), "g"),
+    "E",
+  );
+  const trimmedPlate = plateWithoutEmojis.trim();
+  const lengthCondition =
+    plateLength === "any"
+      ? trimmedPlate.length >= 2 && trimmedPlate.length <= 7
+      : trimmedPlate.length === Number(plateLength);
+  const typeCondition =
+    plateType === "any" ||
+    (plateType === "letters" && /^[A-Z\s]*$/.test(trimmedPlate)) ||
+    (plateType === "numbers" && /^[1-9\s]*$/.test(trimmedPlate));
+  const spacesCondition = spaces
+    ? !/^[\s]|[\s]$/.test(trimmedPlate)
+    : !/\s/.test(trimmedPlate);
+  const symbolsCondition = symbols
+    ? emojis.filter((emoji) => upperCasePlate.includes(emoji)).length <= 1
+    : !emojis.some((emoji) => upperCasePlate.includes(emoji));
+  return (
+    lengthCondition &&
+    typeCondition &&
+    spacesCondition &&
+    symbolsCondition &&
+    existsCondition
+  );
+}
+
 // Función que reemplaza los símbolos por emojis
 function replaceSymbolsWithEmojis(str: string): string {
   return str.replace(/[\~\*\=\+]/g, (symbol) => emojiMap[symbol] ?? symbol);
@@ -42,6 +82,17 @@ export async function POST(req: NextRequest) {
     const spaces = body.spaces;
     const symbols = body.symbols;
     const used_plates = body.used_plates;
+
+    const usingPlates = used_plates.filter((plate) =>
+      validatePlate(
+        plate,
+        used_plates,
+        plateLength,
+        plateType,
+        spaces,
+        symbols,
+      ),
+    );
 
     const user_input = `Ideas: ${ideas}
 
@@ -62,7 +113,7 @@ export async function POST(req: NextRequest) {
       Replace ❤: ~, ⭐: *, 🖐: =, ➕: +.
       Just one space in middle of plate.
       Just one emoji per plate.
-      Plates already in use: ${used_plates.join(", ")}
+      ${usingPlates.length > 0 ? `Plates already in use: ${usingPlates.join(", ")}` : ""}
       Generate ${num_ideas} plates.
       
       Steps:
@@ -75,7 +126,7 @@ export async function POST(req: NextRequest) {
       Input: 
       {input}
       `;
-    //console.log(TEMPLATE);
+    console.log(TEMPLATE);
 
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 

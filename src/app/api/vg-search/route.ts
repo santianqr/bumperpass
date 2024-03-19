@@ -2,10 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getRandomUserAgent } from "@/lib/userAgents";
 
-const userAgent =
-  getRandomUserAgent() ??
-  "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
-
 type Body = {
   plates: string[];
   cookie: string;
@@ -29,6 +25,10 @@ async function validPlate(
   plate: string,
   cookie: string,
 ): Promise<{ plate: string; isValid: boolean }> {
+  const userAgent =
+    getRandomUserAgent() ??
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+
   const hasSymbol: boolean = /❤|⭐|🖐|➕/.test(plate);
 
   const symbolKey = Object.keys(symbolMap).find((symbol) =>
@@ -87,7 +87,7 @@ async function validPlate(
 }
 
 function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function POST(req: NextRequest) {
