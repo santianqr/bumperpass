@@ -4,7 +4,7 @@ import * as puppeteer from "puppeteer";
 let page: puppeteer.Page | undefined;
 let browser: puppeteer.Browser | undefined;
 
-export async function GET() {
+export async function POST() {
   try {
     if (!browser) {
       browser = await puppeteer.launch({

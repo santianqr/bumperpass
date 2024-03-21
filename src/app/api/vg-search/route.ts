@@ -58,7 +58,7 @@ async function validPlate(
   const userAgent =
     getRandomUserAgent() ??
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
-    
+
   const response = await fetch(
     "https://www.dmv.ca.gov/wasapp/ipp2/processConfigPlate.do",
     {
@@ -74,9 +74,9 @@ async function validPlate(
         "Sec-Fetch-Mode": "navigate",
         "Sec-Fetch-User": "?1",
         "Upgrade-Insecure-Requests": "1",
-        "Sec-Ch-Ua-Platform": "Windows",
+        "Sec-Ch-Ua-Platform": `"Windows"`,
         "Sec-Fetch-Dest": "document",
-        "Sec-Ch-Ua": `Not(A:Brand";v="24", "Chromium";v="122`,
+        "Sec-Ch-Ua": `"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"`,
         "Cache-Control": "max-age=0",
         "Accept-Language": "en-US,en;q=0.9",
         "Accept-Encoding": "gzip, deflate, br",
@@ -89,6 +89,7 @@ async function validPlate(
   if (response.ok) {
     const html = await response.text();
     const isValid = html.includes('aria-valuenow="30"');
+    console.log(`Plate: ${plate}, isValid: ${isValid}`);
     return { plate, isValid };
   } else {
     console.log(`HTTP error! status: ${response.status}`);

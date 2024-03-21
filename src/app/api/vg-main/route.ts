@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     const response_cookie: Response = await fetch(
       "http://localhost:3000/api/vg-cookie",
       {
-        method: "GET",
+        method: "POST",
         headers: {
           Accept: "*/*",
           "User-Agent": userAgent,
