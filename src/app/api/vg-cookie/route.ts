@@ -6,19 +6,30 @@ let browser: puppeteer.Browser | undefined;
 
 export async function GET() {
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      executablePath: "/usr/bin/chromium",
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-      ],
-    });
-    const context = await browser.createBrowserContext();
-    page = await context.newPage();
-    
+    if (!browser) {
+      browser = await puppeteer.launch({
+        headless: true,
+        executablePath: "/usr/bin/chromium",
+        args: [
+          "--incognito",
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-gpu",
+        ],
+      });
+    }
+
+    page = (await browser.pages())[0] ?? (await browser.newPage());
+
+    if (!page) {
+      console.log("There are no open pages");
+      return NextResponse.json(
+        { error: "The requested service is currently unavailable" },
+        { status: 503 },
+      );
+    }
+
     await page.goto("https://www.dmv.ca.gov/wasapp/ipp2/initPers.do", {
       waitUntil: "networkidle0",
     });
@@ -68,18 +79,9 @@ export async function GET() {
       );
     }
   } finally {
-    if (page) {
-      const cookies = await page.cookies();
-      for (const cookie of cookies) {
-        await page.deleteCookie(cookie);
-      }
-      await page.close();
-
-      //  page = undefined;
-    }
     if (browser) {
       await browser.close();
-      // browser = undefined;
+      browser = undefined;
     }
   }
 }

@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
       const ideas = data_ideas.ideas;
       console.log("ideas: ", ideas);
 
+      console.log("all plates", allPlates);
       // get the plates
       const response_plates: Response = await fetch(
         "http://localhost:3000/api/vg-plates",

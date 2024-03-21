@@ -39,10 +39,9 @@ export async function POST(req: NextRequest) {
     if (!browser) {
       browser = await puppeteer.launch({
         headless: true,
-        //slowMo: 5,
-        //headless: true,
         executablePath: "/usr/bin/chromium",
         args: [
+          "--incognito",
           "--no-sandbox",
           "--disable-setuid-sandbox",
           "--disable-dev-shm-usage",

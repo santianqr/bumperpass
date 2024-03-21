@@ -26,46 +26,6 @@ const emojiMap: Record<string, string> = {
   "+": "➕",
 };
 
-const emojis = ["❤", "⭐", "🖐", "➕"];
-
-function validatePlate(
-  plate: string,
-  allPlates: string[],
-  plateLength: string,
-  plateType: string,
-  spaces: boolean,
-  symbols: boolean,
-): boolean {
-  const existsCondition = !allPlates.includes(plate);
-  const upperCasePlate = plate.toUpperCase();
-  const plateWithoutEmojis = upperCasePlate.replace(
-    new RegExp(emojis.join("|"), "g"),
-    "E",
-  );
-  const trimmedPlate = plateWithoutEmojis.trim();
-  const lengthCondition =
-    plateLength === "any"
-      ? trimmedPlate.length >= 2 && trimmedPlate.length <= 7
-      : trimmedPlate.length === Number(plateLength);
-  const typeCondition =
-    plateType === "any" ||
-    (plateType === "letters" && /^[A-Z\s]*$/.test(trimmedPlate)) ||
-    (plateType === "numbers" && /^[1-9\s]*$/.test(trimmedPlate));
-  const spacesCondition = spaces
-    ? !/^[\s]|[\s]$/.test(trimmedPlate)
-    : !/\s/.test(trimmedPlate);
-  const symbolsCondition = symbols
-    ? emojis.filter((emoji) => upperCasePlate.includes(emoji)).length <= 1
-    : !emojis.some((emoji) => upperCasePlate.includes(emoji));
-  return (
-    lengthCondition &&
-    typeCondition &&
-    spacesCondition &&
-    symbolsCondition &&
-    existsCondition
-  );
-}
-
 // Función que reemplaza los símbolos por emojis
 function replaceSymbolsWithEmojis(str: string): string {
   return str.replace(/[\~\*\=\+]/g, (symbol) => emojiMap[symbol] ?? symbol);
@@ -83,28 +43,17 @@ export async function POST(req: NextRequest) {
     const symbols = body.symbols;
     const used_plates = body.used_plates;
 
-    const usingPlates = used_plates.filter((plate) =>
-      validatePlate(
-        plate,
-        used_plates,
-        plateLength,
-        plateType,
-        spaces,
-        symbols,
-      ),
-    );
-
     const user_input = `Ideas: ${ideas}
 
     Parameters:
-    1. Plates lentgh = ${plateLength === "any" ? "between 2 and 7 characters." : `exactly ${plateLength} characters.`}
-    2. Plate type = ${plateType === "any" ? "Use letters and numbers." : plateType === "letters" ? "Use just letters. Numbers disabed." : ""}
+    1. Number characters = ${plateLength === "any" ? "between 2 and 7 characters." : `exactly ${plateLength} characters.`}
+    2. Type characters = ${plateType === "any" ? "Use letters and numbers." : plateType === "letters" ? "Use just letters. Numbers disabed." : ""}
     3. Space= ${spaces}
     4. Emoji= ${symbols}
     `;
     console.log(user_input);
 
-    const TEMPLATE = `Create ${num_ideas} creative custom plates based on input ideas following input parameters.
+    const TEMPLATE = `Create ${num_ideas} creative custom plates based on input ideas following the input parameters.
 
       Considerations:
       Number 0 are not allowed in the plates.
@@ -113,14 +62,13 @@ export async function POST(req: NextRequest) {
       Replace ❤: ~, ⭐: *, 🖐: =, ➕: +.
       Just one space in middle of plate.
       Just one emoji per plate.
-      ${usingPlates.length > 0 ? `Plates already in use: ${usingPlates.join(", ")}` : ""}
-      Generate ${num_ideas} plates.
+      ${used_plates.length > 0 ? `Plates already in use: ${used_plates.join(", ")}` : ""}
       
       Steps:
       1. Extract the input ideas.
       2. Analyze the input ideas.
       3. Add creativity and related data.
-      4. Ensure each plate fill the input parameters and considerations.
+      4. Analyze and follow inputs parameters.
       5. Generate ${num_ideas} plates.
 
       Input: 
@@ -137,15 +85,16 @@ export async function POST(req: NextRequest) {
     });
 
     const schema = z.object({
-      plate1: z.string().describe("First custom plate."),
-      plate2: z.string().describe("Second custom plate."),
-      plate3: z.string().describe("Third custom plate."),
-      plate4: z.string().describe("Fourth custom plate."),
-      plate5: z.string().describe("Fifth custom plate."),
-      plate7: z.string().describe("Sixth custom plate."),
-      plate8: z.string().describe("Seventh custom plate."),
-      plate9: z.string().describe("Nineth custom plate."),
-      plate10: z.string().describe("Tenth custom plate."),
+      plates: z
+        .array(
+          z
+            .string()
+            .min(3)
+            .max(7)
+            .describe("Unique plate using input ideas and parameters."),
+        )
+        .length(num_ideas)
+        .describe("Plates"),
     });
 
     const functionCallingModel = model.bind({
@@ -163,17 +112,15 @@ export async function POST(req: NextRequest) {
       .pipe(functionCallingModel)
       .pipe(new JsonOutputFunctionsParser());
 
-    const result = await chain.invoke({
+    const result: { plates: string[] } = await chain.invoke({
       input: user_input,
     });
 
-    const newArray: string[] = Object.values(result);
-    const resultArray = newArray.map(replaceSymbolsWithEmojis);
-    const plates = {
-      plates: resultArray,
-    };
+    const platesWithEmojis = result.plates.map((plate) =>
+      replaceSymbolsWithEmojis(plate),
+    );
 
-    return NextResponse.json(plates, { status: 200 });
+    return NextResponse.json({ plates: platesWithEmojis }, { status: 200 });
   } catch (e: unknown) {
     if (e instanceof Error) {
       const error = e as { message?: string; status?: number };
