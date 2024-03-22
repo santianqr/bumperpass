@@ -55,7 +55,6 @@ type Props = {
 };
 
 export function AccountForm({ accountData }: { accountData: Props }) {
-  console.log(accountData);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -69,21 +68,24 @@ export function AccountForm({ accountData }: { accountData: Props }) {
       phone: accountData.phone ?? "",
     },
   });
-  const updateUser = api.func.updateAccount.useMutation({
-    onSuccess: (data) => {
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-    },
-  });
+
+  const updateUser = api.func.updateAccount.useMutation();
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = updateUser.mutate(data);
-    console.log(res);
+    updateUser.mutate(data, {
+      onSuccess: () => {
+        toast({
+          title: "Account updated!",
+          description: "Your account has been successfully updated.",
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Error",
+          description: error.message,
+        });
+      },
+    });
   }
 
   return (

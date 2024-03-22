@@ -58,22 +58,34 @@ export function SettingsForm() {
     defaultValues: {},
   });
 
-  const updatePassword = api.func.resetPassword.useMutation({
-    onSuccess: (data) => {
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-    },
-  });
+  const updatePassword = api.func.resetPassword.useMutation();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = updatePassword.mutate(data);
-    console.log(res);
+    updatePassword.mutate(data, {
+      onSuccess() {
+        toast({
+          title: "Password updated!",
+          description: "Your password has been updated successfully.",
+        });
+        form.reset(
+          {
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+          },
+          {
+            keepValues: false,
+            keepErrors: false,
+          },
+        );
+      },
+      onError(error) {
+        toast({
+          title: "Error updating password",
+          description: error.message,
+        });
+      },
+    });
   }
   return (
     <Form {...form}>

@@ -118,170 +118,115 @@ export const funcRouter = createTRPCRouter({
   createAccount: publicProcedure
     .input(FormSchemaRegister)
     .mutation(async ({ ctx, input }) => {
+      const data_user = FormSchemaRegister.parse(input);
+      const resend = new Resend(process.env.RESEND_API_KEY);
+
+      const existingEmail = await ctx.db.user.findUnique({
+        where: { email: data_user.email },
+      });
+      if (existingEmail) {
+        throw new Error("Email already exists.");
+      }
+
+      const existingPlate = await ctx.db.user.findUnique({
+        where: { currentPlate: data_user.currentPlate },
+      });
+      if (existingPlate) {
+        throw new Error("Plate already exists.");
+      }
+
+      const existingVin = await ctx.db.user.findUnique({
+        where: { vin: data_user.vin },
+      });
+      if (existingVin) {
+        throw new Error("Vin already exists.");
+      }
+
+      const hashedPassword = await hash(data_user.password, 10);
+      const token = randomBytes(32).toString("base64url");
+      const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
       try {
-        const data_user = FormSchemaRegister.parse(input);
-        const resend = new Resend(process.env.RESEND_API_KEY);
-
-        const existingEmail = await ctx.db.user.findUnique({
-          where: { email: data_user.email },
-        });
-        if (existingEmail) {
-          return NextResponse.json({
-            user: null,
-            message: "Email already exists.",
-            status: 409,
-          });
-        }
-
-        const existingPlate = await ctx.db.user.findUnique({
-          where: { currentPlate: data_user.currentPlate },
-        });
-        if (existingPlate) {
-          return NextResponse.json({
-            user: null,
-            message: "Plate already exists.",
-            status: 409,
-          });
-        }
-
-        const existingVin = await ctx.db.user.findUnique({
-          where: { vin: data_user.vin },
-        });
-        if (existingVin) {
-          return NextResponse.json({
-            user: null,
-            message: "VIN already exists.",
-            status: 409,
-          });
-        }
-
-        const hashedPassword = await hash(data_user.password, 10);
-        const token = randomBytes(32).toString("base64url");
-        const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-        const { data, error } = await resend.emails.send({
+        await resend.emails.send({
           from: "Bumperpass Contact <contact@bumperpass.com>",
           to: data_user.email,
           subject: "Email verification.",
           text: "Email verification.",
           react: EmailVerify({ name: data_user.name, token: token }),
         });
+      } catch (error) {
+        throw new Error("Error sending email.");
+      }
 
-        if (error) {
-          console.error(error);
-        }
-
-        console.log(data);
-
-        return ctx.db.user.create({
-          data: {
-            name: data_user.name,
-            email: data_user.email,
-            password: hashedPassword,
-            middleName: data_user.middleName,
-            lastName: data_user.lastName,
-            phone: data_user.phone,
-            city: data_user.city,
-            zipCode: data_user.zipCode,
-            currentPlate: data_user.currentPlate,
-            vin: data_user.vin,
-            state: data_user.state,
-            street: data_user.street,
-            unit: data_user.unit,
-            suscribe: data_user.suscribe,
-            tokens: {
-              create: {
-                token: token,
-                expires: expiryDate,
-              },
+      return ctx.db.user.create({
+        data: {
+          name: data_user.name,
+          email: data_user.email,
+          password: hashedPassword,
+          middleName: data_user.middleName,
+          lastName: data_user.lastName,
+          phone: data_user.phone,
+          city: data_user.city,
+          zipCode: data_user.zipCode,
+          currentPlate: data_user.currentPlate,
+          vin: data_user.vin,
+          state: data_user.state,
+          street: data_user.street,
+          unit: data_user.unit,
+          suscribe: data_user.suscribe,
+          tokens: {
+            create: {
+              token: token,
+              expires: expiryDate,
             },
           },
-        });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-      }
+        },
+      });
     }),
 
   resetPassword: protectedProcedure
     .input(FormSchemaResetPassword)
     .mutation(async ({ ctx, input }) => {
-      try {
-        const data = FormSchemaResetPassword.parse(input);
+      const data = FormSchemaResetPassword.parse(input);
 
-        const person = await ctx.db.user.findUnique({
-          where: { id: ctx.session.user.id },
-        });
-        if (!person) {
-          return NextResponse.json({
-            user: null,
-            message: "Person doesnt exists.",
-            status: 409,
-          });
-        }
+      const person = await ctx.db.user.findUnique({
+        where: { id: ctx.session.user.id },
+        select: { password: true },
+      });
 
-        if (person.password !== null) {
-          const passwordMatch = await compare(
-            data.currentPassword,
-            person.password,
-          );
-          if (!passwordMatch) {
-            return NextResponse.json({
-              user: null,
-              message: "Passwords not matched.",
-              status: 409,
-            });
-          }
-        }
+      if (!person) {
+        throw new Error("Person doesn't exists.");
+      }
 
-        const hashedPassword = await hash(data.newPassword, 10);
-
-        const updateData = {
-          password: hashedPassword,
-        };
-
-        return ctx.db.user.update({
-          where: { id: ctx.session.user.id },
-          data: updateData,
-        });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
+      if (person.password !== null) {
+        const passwordMatch = await compare(
+          data.currentPassword,
+          person.password,
+        );
+        if (!passwordMatch) {
+          throw new Error("Password doesn't match.");
         }
       }
+
+      const hashedPassword = await hash(data.newPassword, 10);
+
+      return ctx.db.user.update({
+        where: { id: ctx.session.user.id },
+        data: { password: hashedPassword },
+      });
     }),
 
   updateSuscribe: protectedProcedure
     .input(FormSchemaSuscribe)
     .mutation(async ({ ctx, input }) => {
-      try {
-        const data = FormSchemaSuscribe.parse(input);
+      const data = FormSchemaSuscribe.parse(input);
 
-        const person = await ctx.db.user.findUnique({
-          where: { id: ctx.session.user.id },
-        });
-        if (!person) {
-          return NextResponse.json({
-            user: null,
-            message: "Person doesnt exists.",
-            status: 409,
-          });
-        }
-
-        const updateData = {
+      return ctx.db.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
           suscribe: data.suscribe,
-        };
-
-        return ctx.db.user.update({
-          where: { id: ctx.session.user.id },
-          data: updateData,
-        });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-      }
+        },
+      });
     }),
 
   getSuscribe: protectedProcedure.query(({ ctx }) => {
@@ -347,43 +292,26 @@ export const funcRouter = createTRPCRouter({
   updateAccount: protectedProcedure
     .input(FormSchemaAccount)
     .mutation(async ({ ctx, input }) => {
-      try {
-        const data = FormSchemaAccount.parse(input);
+      const data = FormSchemaAccount.parse(input);
 
-        if (data.currentPlate) {
-          const existingPlate = await ctx.db.user.findFirst({
-            where: { currentPlate: data.currentPlate },
-          });
-          if (existingPlate && existingPlate.id !== ctx.session.user.id) {
-            return NextResponse.json({
-              user: null,
-              message: "Email already exists.",
-              status: 409,
-            });
-          }
-        }
+      const existingPlate = await ctx.db.user.findUnique({
+        where: { currentPlate: data.currentPlate },
+      });
 
-        return ctx.db.user.update({
-          where: { id: ctx.session.user.id },
-          data,
-        });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
+      if (existingPlate && existingPlate.id !== ctx.session.user.id) {
+        throw new Error("Plate already exists.");
       }
+
+      return ctx.db.user.update({
+        where: { id: ctx.session.user.id },
+        data,
+      });
     }),
 
   deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
-    try {
-      return ctx.db.user.delete({
-        where: { id: ctx.session.user.id },
-      });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
-    }
+    return ctx.db.user.delete({
+      where: { id: ctx.session.user.id },
+    });
   }),
 
   forgotPassword: publicProcedure
@@ -439,72 +367,46 @@ export const funcRouter = createTRPCRouter({
   updatePassword: publicProcedure
     .input(FormSchemaUpdatePassword)
     .mutation(async ({ ctx, input }) => {
-      try {
-        const data = FormSchemaUpdatePassword.parse(input);
-        console.log(data);
-        if (data.token) {
-          const verificationToken = await ctx.db.verificationToken.findUnique({
-            where: {
-              token: data.token,
-            },
-            include: {
-              user: true,
-            },
-          });
+      const data = FormSchemaUpdatePassword.parse(input);
 
-          if (!verificationToken) {
-            return NextResponse.json({
-              user: null,
-              message: "Invalid token.",
-              status: 400,
-            });
-          }
+      if (data.token) {
+        const verificationToken = await ctx.db.verificationToken.findUnique({
+          where: {
+            token: data.token,
+          },
+          include: {
+            user: true,
+          },
+        });
 
-          if (new Date() > verificationToken.expires) {
-            return NextResponse.json({
-              user: null,
-              message: "Your token has expired.",
-              status: 400,
-            });
-          }
+        if (!verificationToken) {
+          throw new Error("Invalid token.");
+        }
 
-          const hashedPassword = await hash(data.password, 10);
+        if (new Date() > verificationToken.expires) {
+          throw new Error("Token expired.");
+        }
 
-          const updatedUser = await ctx.db.user.update({
-            where: {
+        const hashedPassword = await hash(data.password, 10);
+
+        await ctx.db.verificationToken.deleteMany({
+          where: {
+            user: {
               id: verificationToken.user.id,
             },
-            data: {
-              password: hashedPassword,
-            },
-          });
+          },
+        });
 
-          if (updatedUser) {
-            await ctx.db.verificationToken.deleteMany({
-              where: {
-                user: {
-                  id: verificationToken.user.id,
-                },
-              },
-            });
-          }
-
-          return NextResponse.json({
-            user: updatedUser,
-            message: "Password updated successfully.",
-            status: 200,
-          });
-        } else {
-          return NextResponse.json({
-            user: null,
-            message: "No token provided.",
-            status: 400,
-          });
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
+        return ctx.db.user.update({
+          where: {
+            id: verificationToken.user.id,
+          },
+          data: {
+            password: hashedPassword,
+          },
+        });
+      } else {
+        throw new Error("No token provided.");
       }
     }),
 

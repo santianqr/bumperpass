@@ -86,22 +86,24 @@ export function RegisterForm() {
     },
   });
 
-  const createAccount = api.func.createAccount.useMutation({
-    onSuccess: (data) => {
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-    },
-  });
+  const createAccount = api.func.createAccount.useMutation();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = createAccount.mutate(data);
-    console.log(res);
+    createAccount.mutate(data, {
+      onSuccess() {
+        toast({
+          title: "Account created!",
+          description: "Please, check your email for the validation.",
+        });
+        form.reset();
+      },
+      onError(error) {
+        toast({
+          title: "Error creating account",
+          description: error.message,
+        });
+      },
+    });
   }
 
   return (

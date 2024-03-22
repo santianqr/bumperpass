@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -33,27 +32,22 @@ export function NotificactionsForm({ suscribe }: Props) {
     },
   });
 
-  const updateSuscribe = api.func.updateSuscribe.useMutation({
-    onSuccess: (data) => {
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-    },
-  });
+  const updateSuscribe = api.func.updateSuscribe.useMutation();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = updateSuscribe.mutate(data);
-    console.log(res);
+    updateSuscribe.mutate(data, {
+      onError(error) {
+        toast({
+          title: "Something went wrong",
+          description: error.message,
+        });
+      },
+    });
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
             Notifications
@@ -73,7 +67,10 @@ export function NotificactionsForm({ suscribe }: Props) {
                   <FormControl>
                     <Switch
                       checked={field.value}
-                      onCheckedChange={field.onChange}
+                      onCheckedChange={(value) => {
+                        field.onChange(value);
+                        onSubmit({ suscribe: value });
+                      }}
                     />
                   </FormControl>
                 </FormItem>
@@ -88,13 +85,6 @@ export function NotificactionsForm({ suscribe }: Props) {
             </p>
           </div>
         </div>
-        <Button
-          type="submit"
-          className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-          disabled={updateSuscribe.isLoading}
-        >
-          {updateSuscribe.isLoading ? "Loading..." : "Save"}
-        </Button>
       </form>
     </Form>
   );
