@@ -47,22 +47,23 @@ export function ForgotPasswordForm({ token }: Props) {
     },
   });
 
-  const updatePassword = api.func.updatePassword.useMutation({
-    onSuccess: (data) => {
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-    },
-  });
+  const updatePassword = api.func.updatePassword.useMutation();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = updatePassword.mutate(data);
-    console.log(res);
+    updatePassword.mutate(data, {
+      onSuccess() {
+        toast({
+          title: "Success",
+          description: "Password updated successfully",
+        });
+      },
+      onError(error) {
+        toast({
+          title: "Error",
+          description: error.message,
+        });
+      },
+    });
   }
   return (
     <Card className="">

@@ -6,7 +6,6 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { hash, compare } from "bcrypt";
-import { NextResponse } from "next/server";
 import { EmailVerify } from "@/components/email-verify";
 import { EmailForgotPassword } from "@/components/email-forgot-password";
 import { Resend } from "resend";
@@ -317,25 +316,21 @@ export const funcRouter = createTRPCRouter({
   forgotPassword: publicProcedure
     .input(FormSchemaForgotPassword)
     .mutation(async ({ ctx, input }) => {
+      const data_user = FormSchemaForgotPassword.parse(input);
+
+      const resend = new Resend(process.env.RESEND_API_KEY);
+
+      const existingUser = await ctx.db.user.findUnique({
+        where: { email: data_user.email },
+      });
+      if (!existingUser) {
+        throw new Error("Email doesn't exists.");
+      }
+      const token = randomBytes(32).toString("base64url");
+      const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
       try {
-        const data_user = FormSchemaForgotPassword.parse(input);
-
-        const resend = new Resend(process.env.RESEND_API_KEY);
-
-        const existingUser = await ctx.db.user.findUnique({
-          where: { email: data_user.email },
-        });
-        if (!existingUser) {
-          return NextResponse.json({
-            user: null,
-            message: "Email doesnt exists.",
-            status: 409,
-          });
-        }
-        const token = randomBytes(32).toString("base64url");
-        const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-        const { data, error } = await resend.emails.send({
+        await resend.emails.send({
           from: "Bumperpass Contact <contact@bumperpass.com>",
           to: existingUser.email ?? "",
           subject: "Password Reset",
@@ -345,23 +340,17 @@ export const funcRouter = createTRPCRouter({
             token: token,
           }),
         });
-        if (error) {
-          console.error(error);
-        }
-        console.log(data);
-
-        return ctx.db.verificationToken.create({
-          data: {
-            token: token,
-            expires: expiryDate,
-            identifier: existingUser.id,
-          },
-        });
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
+      } catch (error) {
+        throw new Error("Error sending email.");
       }
+
+      return ctx.db.verificationToken.create({
+        data: {
+          token: token,
+          expires: expiryDate,
+          identifier: existingUser.id,
+        },
+      });
     }),
 
   updatePassword: publicProcedure
@@ -420,35 +409,26 @@ export const funcRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // Accede al ID del usuario a través de la sesión
       const userId = ctx.session.user.id;
 
-      // Primero, verifica si la placa ya existe
       const existingPlate = await ctx.db.plate.findUnique({
         where: { plate: input.plate },
       });
 
       if (existingPlate) {
-        // Si la placa ya existe, devuelve su estado de disponibilidad
-        return NextResponse.json(
-          { message: "La placa ya existe", available: existingPlate.available },
-          { status: 200 },
-        );
+        throw new Error("Plate already exists.");
       }
 
-      // Si la placa no existe, la crea
-      const newPlate = await ctx.db.plate.create({
+      return ctx.db.plate.create({
         data: {
           plate: input.plate,
           available: input.available,
-          userId: userId, // Usa el ID del usuario de la sesión
-          createdAt: new Date(), // Guarda la fecha actual
-          vehicleType: input.vehicleType, // Guarda el tipo de vehículo
-          state: input.state, // Guarda el estado
+          userId: userId,
+          createdAt: new Date(),
+          vehicleType: input.vehicleType,
+          state: input.state,
         },
       });
-
-      return newPlate;
     }),
 
   saveValidPlates: protectedProcedure
@@ -459,18 +439,16 @@ export const funcRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // Accede al ID del usuario a través de la sesión
       const userId = ctx.session.user.id;
 
-      // Para cada placa válida, crea una nueva entrada en la tabla CustomPlate
       const createdPlates = await Promise.all(
         input.plates.map((plate) =>
           ctx.db.customPlate.create({
             data: {
               plate,
               userId,
-              createdAt: new Date(), // Guarda la fecha actual
-              description: input.description, // Usa el prompt proporcionado
+              createdAt: new Date(),
+              description: input.description,
             },
           }),
         ),
