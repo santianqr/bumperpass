@@ -26,34 +26,8 @@ const FormSchemaRegister = z
             "Password must have 8 characters, one mayus, one symbol and one number.",
         },
       ),
-    name: z.string().min(2, { message: "Type at least 2 characters." }),
-    state: z.string({ required_error: "Please select a valid option." }),
-    unit: z.string().optional(),
-    vin: z
-      .string({ required_error: "Must be just numbers." })
-      .min(3, { message: "Type just 3 numbers." })
-      .max(3, { message: "Type just 3 numbers." }),
-    phone: z.string().optional(),
-    confirmPassword: z.string(),
-    middleName: z.string().optional(),
-    city: z.string().min(2, { message: "Type at least 2 characters." }),
-    zipCode: z
-      .string()
-      .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value), {
-        message: "Must be a valid zip code on USA.",
-      }),
-    currentPlate: z
-      .string()
-      .min(2, { message: "Type at least 2 characters." })
-      .max(7, { message: "Type at most 7 characters." }),
-    lastName: z.string().min(2, { message: "Type at least 2 characters." }),
-    street: z.string().min(2, { message: "Type at least 2 characters." }),
     terms: z.boolean().default(false),
     suscribe: z.boolean().default(true),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match.",
-    path: ["confirmPassword"],
   })
   .refine((data) => data.terms === true, {
     message: "Please accept the terms and conditions.",
@@ -127,20 +101,6 @@ export const funcRouter = createTRPCRouter({
         throw new Error("Email already exists.");
       }
 
-      const existingPlate = await ctx.db.user.findUnique({
-        where: { currentPlate: data_user.currentPlate },
-      });
-      if (existingPlate) {
-        throw new Error("Plate already exists.");
-      }
-
-      const existingVin = await ctx.db.user.findUnique({
-        where: { vin: data_user.vin },
-      });
-      if (existingVin) {
-        throw new Error("Vin already exists.");
-      }
-
       const hashedPassword = await hash(data_user.password, 10);
       const token = randomBytes(32).toString("base64url");
       const expiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000);
@@ -151,7 +111,7 @@ export const funcRouter = createTRPCRouter({
           to: data_user.email,
           subject: "Email verification.",
           text: "Email verification.",
-          react: EmailVerify({ name: data_user.name, token: token }),
+          react: EmailVerify({ name: "New Bumperpass user", token: token }),
         });
       } catch (error) {
         throw new Error("Error sending email.");
@@ -159,19 +119,8 @@ export const funcRouter = createTRPCRouter({
 
       return ctx.db.user.create({
         data: {
-          name: data_user.name,
           email: data_user.email,
           password: hashedPassword,
-          middleName: data_user.middleName,
-          lastName: data_user.lastName,
-          phone: data_user.phone,
-          city: data_user.city,
-          zipCode: data_user.zipCode,
-          currentPlate: data_user.currentPlate,
-          vin: data_user.vin,
-          state: data_user.state,
-          street: data_user.street,
-          unit: data_user.unit,
           suscribe: data_user.suscribe,
           tokens: {
             create: {
@@ -430,7 +379,7 @@ export const funcRouter = createTRPCRouter({
         },
       });
     }),
-
+  
   saveValidPlates: protectedProcedure
     .input(
       z.object({
