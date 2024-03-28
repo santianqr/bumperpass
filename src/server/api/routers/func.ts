@@ -34,6 +34,20 @@ const FormSchemaRegister = z
     path: ["terms"],
   });
 
+const FormSchemaFinishRegister = z.object({
+  name: z.string({ required_error: "Please type your name." }),
+  address: z.string().optional(),
+  city: z.string({ required_error: "Please type your city." }),
+  state: z.string({ required_error: "Please select a valid option." }),
+  phone: z.string().optional(),
+  vin: z
+    .string({ required_error: "Please type your VIN." })
+    .min(3, { message: "VIN must have 3 characters." })
+    .max(3, { message: "VIN must have 3 characters." }),
+  currentPlate: z.string({ required_error: "Please type your current plate." }),
+  token: z.string(),
+});
+
 const FormSchemaAccount = z.object({
   email: z.string().email(),
   name: z.string().min(2),
@@ -129,6 +143,37 @@ export const funcRouter = createTRPCRouter({
             },
           },
         },
+      });
+    }),
+
+  finishRegister: publicProcedure
+    .input(FormSchemaFinishRegister)
+    .mutation(async ({ ctx, input }) => {
+      const data = FormSchemaFinishRegister.parse(input);
+
+      const verificationToken = await ctx.db.verificationToken.findUnique({
+        where: { token: data.token },
+      });
+
+      if (!verificationToken) {
+        throw new Error("Invalid token");
+      }
+
+      await ctx.db.user.update({
+        where: { id: verificationToken.identifier },
+        data: {
+          name: data.name,
+          street: data.address,
+          city: data.city,
+          state: data.state,
+          phone: data.phone,
+          vin: data.vin,
+          currentPlate: data.currentPlate,
+        },
+      });
+
+      return ctx.db.verificationToken.deleteMany({
+        where: { identifier: verificationToken.identifier },
       });
     }),
 
@@ -379,7 +424,7 @@ export const funcRouter = createTRPCRouter({
         },
       });
     }),
-  
+
   saveValidPlates: protectedProcedure
     .input(
       z.object({

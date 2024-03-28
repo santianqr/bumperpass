@@ -1,10 +1,10 @@
+import { RegisterComplement } from "@/components/register-complement";
 import { db } from "@/server/db";
 import type { User, VerificationToken } from "@prisma/client";
 
 type VerifyEmailProps = {
   searchParams: Record<string, string | string[] | undefined>;
 };
-// verificar la comparacion de fechas del token con la fecha actual
 
 export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
   if (searchParams.token) {
@@ -33,24 +33,27 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
         emailVerified: new Date(),
       },
     });
-
+    {
+      /*}
     await db.verificationToken.delete({
       where: {
         token: searchParams.token as string,
       },
     });
-
+  */
+    }
     return (
       <div>
-        <h1>
+        <h3>
           Email verified for <b>{verificationToken.user.email}</b>!
-        </h1>
+          <RegisterComplement token={verificationToken.token} />
+        </h3>
       </div>
     );
   } else {
     return (
       <div>
-        <h1>Verify Email</h1>
+        <h3>Verify Email</h3>
         No email verification token found. Check your email.
       </div>
     );

@@ -11,12 +11,8 @@ export const EmailVerify: React.FC<Readonly<EmailVerifyProps>> = ({
 }) => (
   <div>
     <div>
-      <h3>
-        Hello, {name}!
-      </h3>
-      <h3>
-        Youre almost there!
-      </h3>
+      <h3>Hello, {name}!</h3>
+      <h3>Youre almost there!</h3>
     </div>
     <div>
       <p>Please confirm your suscription</p>
@@ -26,6 +22,7 @@ export const EmailVerify: React.FC<Readonly<EmailVerifyProps>> = ({
 
     <a
       href={`https://www.bumperpass.com/verify-email?token=${token}`}
+      //href={`http://localhost:3000/verify-email?token=${token}`}
     >
       <button>Confirm E-mail</button>
     </a>
@@ -41,12 +38,8 @@ export const EmailVerify: React.FC<Readonly<EmailVerifyProps>> = ({
       </div>
       <div>
         <div>
-          <div>
-            @Bumperpass
-          </div>
-          <div>
-            contact@bumperpass.com
-          </div>
+          <div>@Bumperpass</div>
+          <div>contact@bumperpass.com</div>
         </div>
       </div>
     </div>
