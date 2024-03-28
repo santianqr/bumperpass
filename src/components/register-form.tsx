@@ -28,6 +28,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { signIn } from "next-auth/react";
 
 const FormSchema = z
   .object({
@@ -96,7 +97,10 @@ export function RegisterForm() {
                 <Icons.apple className="mr-2 h-4 w-4" />
                 Apple
               </Button>
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                onClick={() => signIn("google", { callbackUrl: "/" })}
+              >
                 <Icons.google className="mr-2 h-4 w-4" />
                 Google
               </Button>
@@ -192,6 +196,7 @@ export function RegisterForm() {
                 "Create account"
               )}
             </Button>
+
             <div className="text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link href="/login" className="underline">

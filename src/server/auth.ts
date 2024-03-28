@@ -7,8 +7,9 @@ import {
 import { type Adapter } from "next-auth/adapters";
 //import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
-//import { env } from "@/env";
+import { env } from "@/env";
 import { db } from "@/server/db";
 import { compare } from "bcrypt";
 /**
@@ -73,6 +74,11 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
       id: "credentials",
