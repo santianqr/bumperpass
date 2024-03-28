@@ -54,10 +54,6 @@ const FormSchemaAccount = z.object({
   state: z.string(),
   phone: z.string().optional(),
   city: z.string().min(2),
-  zipCode: z
-    .string()
-    .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value))
-    .optional(),
   currentPlate: z.string().min(2).max(7),
   street: z.string().min(2),
 });
@@ -250,7 +246,6 @@ export const funcRouter = createTRPCRouter({
         state: true,
         city: true,
         street: true,
-        zipCode: true,
         currentPlate: true,
       },
     });

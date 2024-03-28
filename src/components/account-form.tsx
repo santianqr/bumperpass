@@ -31,11 +31,6 @@ const FormSchema = z.object({
   state: z.string({ required_error: "Please select a valid option." }),
   phone: z.string().optional(),
   city: z.string().min(2, { message: "Type at least 2 characters." }),
-  zipCode: z
-    .string()
-    .refine((value) => /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value), {
-      message: "Must be a valid zip code on USA.",
-    }),
   currentPlate: z
     .string()
     .min(2, { message: "Type at least 2 characters." })
@@ -62,7 +57,6 @@ export function AccountForm({ accountData }: { accountData: Props }) {
       email: accountData.email ?? "",
       city: accountData.city ?? "",
       street: accountData.street ?? "",
-      zipCode: accountData.zipCode ?? "",
       currentPlate: accountData.currentPlate ?? "",
       state: accountData.state ?? "",
       phone: accountData.phone ?? "",
@@ -188,20 +182,6 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="zipCode"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Zip Code</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder={accountData.zipCode ?? ""} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="currentPlate"
