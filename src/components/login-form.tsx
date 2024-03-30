@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { Icons } from "./icons";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -70,7 +70,7 @@ export function LoginForm() {
             Enter your email below to sign in into your account
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-2">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
               <FormField
@@ -101,14 +101,36 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Button
-                type="submit"
-                className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-              >
-                Sign In
+              <Button type="submit" className="w-full">
+                Sign In with credentials
               </Button>
             </form>
           </Form>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <Button variant="outline">
+              <Icons.apple className="mr-2 h-4 w-4" />
+              Apple
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              className="mb-2"
+            >
+              <Icons.google className="mr-2 h-4 w-4" />
+              Google
+            </Button>
+          </div>
+
           <Link
             href="/forgot-password"
             className="text-sm text-muted-foreground"
@@ -118,13 +140,11 @@ export function LoginForm() {
         </CardContent>
         <CardFooter className="flex flex-col items-center space-y-2">
           <p className="text-sm text-muted-foreground">
-            If you dont have an account
-          </p>
-          <Link href="/register">
-            <Button className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90">
+            If you dont have an account{" "}
+            <Link href="/register" className="underline">
               Register
-            </Button>
-          </Link>
+            </Link>
+          </p>
         </CardFooter>
       </Card>
     </main>
