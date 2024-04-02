@@ -89,7 +89,10 @@ export function SettingsForm() {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full space-y-2 text-gray-500"
+      >
         <FormField
           control={form.control}
           name="currentPassword"

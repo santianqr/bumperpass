@@ -10,7 +10,7 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
+  //  FormLabel,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
@@ -59,7 +59,6 @@ export function NotificactionsForm({ suscribe }: Props) {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between rounded-lg border p-2 shadow-sm">
                   <div className="space-y-0.5">
-                    <FormLabel></FormLabel>
                     <FormDescription>
                       Receive newsletters, promotions and news from Bumperpass
                     </FormDescription>
