@@ -20,7 +20,7 @@ export function ServicesCard() {
         <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight">
           Free Search
         </CardTitle>
-        <CardContent className="space-y-2 text-sm">
+        <CardContent className="space-y-2 text-sm text-gray-500">
           <p>
             With our innovate online custom license plate search service, you
             can conduct searches efficiently and hassle-free! With us, you can
@@ -34,9 +34,7 @@ export function ServicesCard() {
         <CardDescription></CardDescription>
         <CardFooter>
           <Link href="/search">
-            <Button
-              className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
-            >
+            <Button className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90">
               Make a search
             </Button>
           </Link>
@@ -49,7 +47,7 @@ export function ServicesCard() {
         <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight">
           Variation Generator
         </CardTitle>
-        <CardContent className="space-y-2 text-sm">
+        <CardContent className="text-sm text-gray-500">
           <p>
             With this revolutionary service, youll discover the most creative
             way to customize your license plates! get creative and unique
@@ -60,9 +58,7 @@ export function ServicesCard() {
         <CardDescription></CardDescription>
         <CardFooter>
           <Link href="/services/vg">
-            <Button
-              className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-            >
+            <Button className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90">
               Learn more
             </Button>
           </Link>

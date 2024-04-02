@@ -13,7 +13,7 @@ export function AboutSection() {
       <div
         className={`mx-auto text-sm ${pathname === "/about" ? "flex max-w-screen-md flex-col items-center space-y-4" : "flex items-center space-y-4"}`}
       >
-        <div>
+        <div className="text-gray-500">
           <p>
             We are excited to provide you a unique experience to express your
             style and personality on the road. Your vehicle deserves more than

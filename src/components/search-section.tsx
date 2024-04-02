@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function SearchSection() {
   return (
-    <section className="from- flex flex-col items-center space-y-8 bg-gradient-to-r from-[#E62534]/90 to-[#F59F0F]/85 py-4">
+    <section className="from- flex flex-col items-center space-y-8 bg-gradient-to-r from-[#E62534]/90 to-[#F59F0F]/85 py-4 text-white">
       <h2 className="col-span-2 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
         Search Now!
       </h2>
@@ -24,14 +24,14 @@ export function SearchSection() {
             <li>
               <Link
                 href="/login"
-                className="font-semibold underline decoration-foreground"
+                className="font-semibold underline decoration-white"
               >
                 Click here to login
               </Link>{" "}
               and start to use our search service, if you dont have and account{" "}
               <Link
                 href="/register"
-                className="font-semibold underline decoration-foreground"
+                className="font-semibold underline decoration-white"
               >
                 click here to sign up.
               </Link>

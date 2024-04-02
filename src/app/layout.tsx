@@ -36,13 +36,15 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "flex min-h-screen flex-col justify-between bg-background font-sans antialiased",
+          "flex min-h-screen flex-col bg-background font-sans antialiased",
           fontMaven.variable,
         )}
       >
         <TRPCReactProvider>
           {session ? <Header /> : null}
-          <div className="mx-auto w-full max-w-screen-xl">{children}</div>
+          <div className="mx-auto w-full max-w-screen-xl flex-grow">
+            {children}
+          </div>
           {session ? <Footer /> : null}
           <Toaster />
         </TRPCReactProvider>

@@ -124,7 +124,10 @@ export function SearchForm() {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-2 text-white"
+      >
         <FormField
           control={form.control}
           name="vehicleType"
@@ -222,7 +225,7 @@ export function SearchForm() {
           <Button
             type="button"
             variant="outline"
-            className="rounded-3xl"
+            className="rounded-3xl text-foreground"
             onClick={onClear}
           >
             Clear
@@ -236,7 +239,6 @@ export function SearchForm() {
           ) : (
             <SearchNotAvailable />
           )}
-          
         </div>
       )}
     </Form>
