@@ -84,13 +84,16 @@ export function AccountForm({ accountData }: { accountData: Props }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full space-y-2 text-gray-500"
+      >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>Full name</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={accountData.name ?? ""} />
               </FormControl>
@@ -123,7 +126,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone Number</FormLabel>
+              <FormLabel>Phone</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={accountData.phone ?? ""} />
               </FormControl>
@@ -172,7 +175,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           name="street"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Number & Name Street</FormLabel>
+              <FormLabel>Address</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={accountData.street ?? ""} />
               </FormControl>
