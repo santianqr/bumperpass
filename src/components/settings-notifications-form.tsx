@@ -75,7 +75,7 @@ export function NotificactionsForm({ suscribe }: Props) {
                 </FormItem>
               )}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-gray-500">
               Bumperpass will process your data to send information about our
               products, services, promotions, surveys and giveaways based on our
               legitimate interest, as well as news about artist you follow if
