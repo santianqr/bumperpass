@@ -16,10 +16,10 @@ export function Footer() {
         </h2>
       ) : null}
       <div className="grid grid-cols-2 justify-items-center gap-4">
-        <Image src="/bp_logo.webp" width={80} height={80} alt="bp_logo" />
+        <Image src="/bp_logo.webp" width={60} height={60} alt="bp_logo" />
         <div className="space-y-4 text-xs text-primary">
           <div className="flex items-center gap-x-2">
-            <Instagram size={24} />
+            <Instagram size={18} />
             @Bumperpass
           </div>
           {/*<div className="flex items-center gap-x-2">
@@ -28,7 +28,7 @@ export function Footer() {
           </div> */}
 
           <div className="flex items-center gap-x-2">
-            <Mail size={24} />
+            <Mail size={18} />
             contact@bumperpass.com
           </div>
         </div>

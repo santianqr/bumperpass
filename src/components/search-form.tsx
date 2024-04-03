@@ -186,10 +186,11 @@ export function SearchForm() {
                     e.target.value = e.target.value.toUpperCase();
                     field.onChange(e);
                   }}
+                  className="placeholder:text-white/50"
                 />
               </FormControl>
 
-              <FormDescription className="flex items-center space-x-2">
+              <FormDescription className="flex items-center space-x-2 text-white">
                 <span>Insert symbol</span>
                 <HandIcon
                   onClick={() => field.onChange(field.value + "🖐")}
@@ -209,7 +210,7 @@ export function SearchForm() {
                 />
               </FormDescription>
               <FormDescription>
-                <span className={cn("text-[0.8rem] text-muted-foreground")}>
+                <span className={cn("text-[0.8rem] text-white")}>
                   *Only certian specific types of plates allow including symbols
                 </span>
               </FormDescription>

@@ -6,7 +6,7 @@ import Link from "next/link";
 export function SearchSection() {
   return (
     <section
-      className="from- flex flex-col items-center space-y-8 text-white bg-no-repeat bg-cover"
+      className="from- flex flex-col items-center space-y-8 text-white bg-no-repeat bg-cover p-4"
       style={{
         backgroundImage: "url('/services_bg.webp')",
       }}
