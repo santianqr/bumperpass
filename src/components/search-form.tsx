@@ -94,7 +94,8 @@ export function SearchForm() {
 
     const resSearch = (await res.json()) as ResponseData;
     setSearchResponse(resSearch.message);
-    {/*
+    {
+      /* 
     toast({
       title: "You submitted the following values:",
       description: (
@@ -103,7 +104,8 @@ export function SearchForm() {
         </pre>
       ),
     });
-  */}
+  */
+    }
     setIsLoading(false);
   }
 

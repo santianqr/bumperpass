@@ -38,8 +38,8 @@ export async function POST(req: NextRequest) {
     }
     if (!browser) {
       browser = await puppeteer.launch({
-        headless: true,
-        executablePath: "/usr/bin/chromium",
+        headless: false,
+        //executablePath: "/usr/bin/chromium",
         args: [
           "--incognito",
           "--no-sandbox",

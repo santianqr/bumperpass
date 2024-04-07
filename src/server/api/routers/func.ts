@@ -405,19 +405,28 @@ export const funcRouter = createTRPCRouter({
       });
 
       if (existingPlate) {
-        throw new Error("Plate already exists.");
+        return ctx.db.plate.update({
+          where: { plate: input.plate },
+          data: {
+            available: input.available,
+            userId: userId,
+            createdAt: new Date(),
+            vehicleType: input.vehicleType,
+            state: input.state,
+          },
+        });
+      } else {
+        return ctx.db.plate.create({
+          data: {
+            plate: input.plate,
+            available: input.available,
+            userId: userId,
+            createdAt: new Date(),
+            vehicleType: input.vehicleType,
+            state: input.state,
+          },
+        });
       }
-
-      return ctx.db.plate.create({
-        data: {
-          plate: input.plate,
-          available: input.available,
-          userId: userId,
-          createdAt: new Date(),
-          vehicleType: input.vehicleType,
-          state: input.state,
-        },
-      });
     }),
 
   saveValidPlates: protectedProcedure
