@@ -45,7 +45,6 @@ type Props = {
   state: string | null;
   city: string | null;
   street: string | null;
-  zipCode: string | null;
   currentPlate: string | null;
 };
 

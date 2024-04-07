@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/use-toast";
+//import { toast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
@@ -102,7 +102,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
 
     setForm(data);
     setLoading(false);
-
+    {/*}
     toast({
       title: "You submitted the following values:",
       description: (
@@ -111,6 +111,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
         </pre>
       ),
     });
+  */}
   }
 
   return (
