@@ -14,6 +14,7 @@ type Body = {
   symbols: boolean;
   description: string;
   allPlates: string[];
+  type: string;
 };
 
 type ResponseCookie = {
@@ -45,6 +46,7 @@ export async function POST(req: NextRequest) {
     const spaces = body.spaces;
     const symbols = body.symbols;
     const description = body.description;
+    const type = body.type;
     let allPlates: string[] = body.allPlates;
     console.log("allPlates: in vg main", allPlates);
     // get the cookie
@@ -104,6 +106,7 @@ export async function POST(req: NextRequest) {
             spaces: spaces,
             symbols: symbols,
             used_plates: allPlates,
+            type: type
           }),
         },
       );

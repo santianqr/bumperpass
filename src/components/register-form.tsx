@@ -82,7 +82,7 @@ export function RegisterForm() {
   }
 
   return (
-    <Card>
+    <Card className="mx-auto w-1/3">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>

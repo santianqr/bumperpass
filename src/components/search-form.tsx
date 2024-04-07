@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
+//import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { SearchAvailable } from "@/components/search-available";
 import { SearchNotAvailable } from "@/components/search-not-available";
@@ -94,7 +94,7 @@ export function SearchForm() {
 
     const resSearch = (await res.json()) as ResponseData;
     setSearchResponse(resSearch.message);
-
+    {/*
     toast({
       title: "You submitted the following values:",
       description: (
@@ -103,6 +103,7 @@ export function SearchForm() {
         </pre>
       ),
     });
+  */}
     setIsLoading(false);
   }
 

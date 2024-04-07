@@ -15,7 +15,7 @@ export default function DeleteForm() {
   const deleteAccount = api.func.deleteAccount.useMutation({
     onSuccess: async () => {
       toast({
-        title: "You submitted the following values:",
+        title: "Account deleted",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">Your account has been deleted.</code>

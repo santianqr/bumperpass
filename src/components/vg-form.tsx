@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,6 +45,11 @@ const FormSchema = z.object({
     })
     .max(180, { message: "Type at most 180 characters." }),
   allPlates: z.array(z.string()),
+  type: z
+    .enum(["❤", "➕", "⭐", "🖐"], {
+      required_error: "You need to select a notification type.",
+    })
+    .optional(),
 });
 
 type ResponseVg = {
@@ -58,6 +64,7 @@ type VGFormProps = {
     plateType: string;
     spaces: boolean;
     symbols: boolean;
+    type?: string;
     description: string;
     allPlates: string[];
   }) => void;
@@ -81,6 +88,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
     console.log(data);
     const allPlates = data.allPlates.concat(plates);
     console.log(allPlates);
+
     const response: Response = await fetch("/api/vg-main", {
       method: "POST",
       headers: {
@@ -91,6 +99,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
     const responseData = (await response.json()) as ResponseVg;
     console.log(responseData.validPlates);
     setResult(responseData);
+
     setForm(data);
     setLoading(false);
 
@@ -115,7 +124,6 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel></FormLabel>
               <FormControl>
                 <Textarea placeholder="Insert your type" {...field} />
               </FormControl>
@@ -129,7 +137,6 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
           name="plateLength"
           render={({ field }) => (
             <FormItem>
-              <FormLabel></FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -155,7 +162,6 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
           name="plateType"
           render={({ field }) => (
             <FormItem>
-              <FormLabel></FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -167,7 +173,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
                   <SelectItem value="letters">Letters</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>
+              <FormDescription className="text-xs text-muted-foreground">
                 At this time DMV most number only plates are not available.
                 Please refrain from selecting only numbers.
               </FormDescription>
@@ -215,6 +221,47 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
                 <span className="text-xs text-muted-foreground">
                   *Only certian specific types of plates allow including symbols
                 </span>
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex"
+                        >
+                          <FormItem className="flex items-center space-x-1 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="❤" />
+                            </FormControl>
+                            <FormLabel>❤</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-1 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="🖐" />
+                            </FormControl>
+                            <FormLabel>🖐</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-1 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="⭐" />
+                            </FormControl>
+                            <FormLabel>⭐</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-1 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="➕" />
+                            </FormControl>
+                            <FormLabel>➕</FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </FormItem>
           )}

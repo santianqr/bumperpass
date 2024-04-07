@@ -16,6 +16,7 @@ type Body = {
   plateType: string;
   spaces: boolean;
   symbols: boolean;
+  type: string;
   used_plates: string[];
 };
 
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
     const plateType = body.plateType;
     const spaces = body.spaces;
     const symbols = body.symbols;
+    const type = body.type
     const used_plates = body.used_plates;
 
     const user_input = `Ideas: ${ideas}
@@ -50,6 +52,7 @@ export async function POST(req: NextRequest) {
     2. Type characters = ${plateType === "any" ? "Use letters and numbers." : plateType === "letters" ? "Use just letters. Numbers disabed." : ""}
     3. Space= ${spaces}
     4. Emoji= ${symbols}
+    ${symbols ? `5. Emoji type = ${type}` : ""}
     `;
     console.log(user_input);
 
