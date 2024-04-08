@@ -43,11 +43,12 @@ export default async function VerifyEmail({ searchParams }: VerifyEmailProps) {
   */
     }
     return (
-      <div>
-        <h3>
+      <div className="space-y-8">
+        <h3 className="text-center">
           Email verified for <b>{verificationToken.user.email}</b>!
-          <RegisterComplement token={verificationToken.token} />
+          
         </h3>
+        <RegisterComplement token={verificationToken.token} />
       </div>
     );
   } else {

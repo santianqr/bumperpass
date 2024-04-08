@@ -79,14 +79,14 @@ export function RegisterComplement({ token }: { token: string | undefined }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-2 text-gray-500"
+        className="grid grid-cols-2 gap-2 text-gray-500 w-1/3 mx-auto"
       >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name*</FormLabel>
+              <FormLabel>Full Name*</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
