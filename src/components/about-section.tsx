@@ -1,19 +1,22 @@
 "use client";
+
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export function AboutSection() {
   const pathname = usePathname();
   return (
-    <section className="space-y-8 ">
-      <h2 className="scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0">
+    <section
+      className={`space-y-8 ${pathname === "/" ? "border-t-2 border-border/40 py-8" : ""}`}
+    >
+      <h2 className="scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0 text-gray-500">
         About us
       </h2>
 
       <div
         className={`mx-auto text-sm ${pathname === "/about" ? "flex max-w-screen-md flex-col items-center space-y-4" : "flex items-center space-y-4"}`}
       >
-        <div className="text-gray-500">
+        <div className="text-gray-500 space-y-2">
           <p>
             We are excited to provide you a unique experience to express your
             style and personality on the road. Your vehicle deserves more than

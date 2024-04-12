@@ -17,7 +17,7 @@ export function ServicesCard() {
         <CardHeader className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-primary bg-gradient-to-r from-[#E62534] to-[#F59F0F] p-1 text-[#FFFFFF]">
           <SearchCheck size={60} />
         </CardHeader>
-        <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight">
+        <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight text-gray-500">
           Free Search
         </CardTitle>
         <CardContent className="space-y-2 text-sm text-gray-500">
@@ -44,7 +44,7 @@ export function ServicesCard() {
         <CardHeader className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-primary bg-gradient-to-r from-[#E62534] to-[#F59F0F] p-1 text-[#FFFFFF]">
           <Lightbulb size={60} />
         </CardHeader>
-        <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight">
+        <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight text-gray-500">
           Variation Generator
         </CardTitle>
         <CardContent className="text-sm text-gray-500">

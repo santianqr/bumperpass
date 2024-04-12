@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="space-y-8 border-t-2 border-border/40 py-4">
       {pathname === "/" ? (
-        <h2 className="scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0">
+        <h2 className="scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0 text-gray-500">
           Contact
         </h2>
       ) : null}

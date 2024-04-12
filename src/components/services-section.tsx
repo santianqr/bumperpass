@@ -7,7 +7,7 @@ export function ServicesSection() {
   const pathname = usePathname();
   return (
     <section
-      className={`space-y-8 ${pathname === "/services" ? "" : "border-t-2 border-[#E62534]"}`}
+      className={`space-y-8 ${pathname === "/services" ? "text-gray-500" : "border-t-2 border-[#E62534]"}`}
     >
       <div
         className={`mx-auto w-40 ${pathname === "/services" ? "" : "rounded-b-lg bg-[#E62534] p-2"}`}
