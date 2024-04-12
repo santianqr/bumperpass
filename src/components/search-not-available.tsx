@@ -10,16 +10,17 @@ export function SearchNotAvailable() {
       <p>
         Try searching for another option, or explore other creative options with
         the help of our{" "}
-        <Link href="/services/vg" className="font-medium text-primary">
+        <Link href="/services/vg" className="font-medium ">
           Variation Generator
         </Link>
+      </p>
+      <p className="font-medium">
+        Click below to get our tailored creative alternatives.
       </p>
       <Link href="/services/vg">
         <Button className="rounded-2xl">Go!</Button>
       </Link>
-      <p className="font-medium text-primary">
-        Clic below to get our tailored creative alternatives.
-      </p>
+      
     </div>
   );
 }

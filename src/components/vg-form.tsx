@@ -126,7 +126,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="Insert your type" {...field} />
+                <Textarea placeholder="Insert your description" {...field} />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
