@@ -51,12 +51,12 @@ export function SearchSection() {
               available.
             </li>
           </ul>
-          <p className="mb-4 text-xs text-muted-foreground">
+          <p className="mb-4 text-xs text-white/80">
             *Only certain specific types of plates allow including symbols
           </p>
           <Plate bpPlate="BMPRP4S" />
 
-          <p className="text-center text-xs text-muted-foreground">
+          <p className="text-center text-xs text-white/80">
             *This is not an official preview of your plate
           </p>
         </div>
