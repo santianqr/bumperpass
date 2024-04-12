@@ -47,13 +47,13 @@ export default async function VGPage() {
             </li>
           </ul>
           <p className="text-sm">
-            <span className="font-medium">SPECIFIC EXAMPLE:</span>I love dogs
+            <span className="font-medium">SPECIFIC EXAMPLE:</span> I love dogs
             and I have a beautiful labrador named Sally. I play videogames and I
             love Super Mario. I used to play soccer in high school and my
             favorite player is Messi. (168 characters)
           </p>
           <p className="text-sm">
-            <span className="font-medium">NON-SPECIFIC EXAMPLE:</span>I love
+            <span className="font-medium">NON-SPECIFIC EXAMPLE:</span> I love
             dogs, videogames, and soccer. (36 characters)
           </p>
         </div>

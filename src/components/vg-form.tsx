@@ -102,7 +102,8 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
 
     setForm(data);
     setLoading(false);
-    {/*}
+    {
+      /*}
     toast({
       title: "You submitted the following values:",
       description: (
@@ -111,7 +112,8 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
         </pre>
       ),
     });
-  */}
+  */
+    }
   }
 
   return (
@@ -222,47 +224,49 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
                 <span className="text-xs text-muted-foreground">
                   *Only certian specific types of plates allow including symbols
                 </span>
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem className="space-y-3">
-                      <FormControl>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          className="flex"
-                        >
-                          <FormItem className="flex items-center space-x-1 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="❤" />
-                            </FormControl>
-                            <FormLabel>❤</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="🖐" />
-                            </FormControl>
-                            <FormLabel>🖐</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="⭐" />
-                            </FormControl>
-                            <FormLabel>⭐</FormLabel>
-                          </FormItem>
-                          <FormItem className="flex items-center space-x-1 space-y-0">
-                            <FormControl>
-                              <RadioGroupItem value="➕" />
-                            </FormControl>
-                            <FormLabel>➕</FormLabel>
-                          </FormItem>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {field.value && (
+                  <FormField
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex"
+                          >
+                            <FormItem className="flex items-center space-x-1 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="❤" />
+                              </FormControl>
+                              <FormLabel>❤</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="🖐" />
+                              </FormControl>
+                              <FormLabel>🖐</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="⭐" />
+                              </FormControl>
+                              <FormLabel>⭐</FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-1 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="➕" />
+                              </FormControl>
+                              <FormLabel>➕</FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
               </div>
             </FormItem>
           )}
