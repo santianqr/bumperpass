@@ -56,6 +56,7 @@ const FormSchemaAccount = z.object({
   city: z.string().min(2),
   currentPlate: z.string().min(2).max(7),
   street: z.string().min(2),
+  vin: z.string().min(3).max(3),
 });
 
 const FormSchemaResetPassword = z
@@ -247,6 +248,7 @@ export const funcRouter = createTRPCRouter({
         city: true,
         street: true,
         currentPlate: true,
+        vin: true,
       },
     });
   }),

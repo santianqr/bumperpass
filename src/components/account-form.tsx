@@ -36,6 +36,10 @@ const FormSchema = z.object({
     .min(2, { message: "Type at least 2 characters." })
     .max(7, { message: "Type at most 7 characters." }),
   street: z.string().min(2, { message: "Type at least 2 characters." }),
+  vin: z
+    .string({ required_error: "Please type your VIN." })
+    .min(3, { message: "VIN must have 3 characters." })
+    .max(3, { message: "VIN must have 3 characters." }),
 });
 
 type Props = {
@@ -46,6 +50,7 @@ type Props = {
   city: string | null;
   street: string | null;
   currentPlate: string | null;
+  vin: string | null;
 };
 
 export function AccountForm({ accountData }: { accountData: Props }) {
@@ -59,6 +64,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
       currentPlate: accountData.currentPlate ?? "",
       state: accountData.state ?? "",
       phone: accountData.phone ?? "",
+      vin: accountData.vin ?? "",
     },
   });
 
@@ -196,7 +202,24 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                   placeholder={accountData.currentPlate ?? ""}
                 />
               </FormControl>
-              <FormDescription></FormDescription>
+              <FormDescription>{accountData.currentPlate === "" ? "Please, complete your Plate" : ""}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="vin"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>VIN</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder={accountData.vin ?? ""}
+                />
+              </FormControl>
+              <FormDescription>{accountData.vin === "" ? "Please, complete the VIN" : ""}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
