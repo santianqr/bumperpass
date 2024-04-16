@@ -99,7 +99,7 @@ export function RegisterForm() {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => signIn("google", { callbackUrl: "/" })}
+                onClick={() => signIn("google", { callbackUrl: "/account" })}
               >
                 <Icons.google className="mr-2 h-4 w-4" />
                 Google
