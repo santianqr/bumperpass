@@ -31,8 +31,8 @@ export const EmailForgotPassword: React.FC<
     </div>
 
     <a
-      //href={`https://www.bumperpass.com/reset-password?token=${token}`}
-      href={`http://localhost:3000/reset-password?token=${token}`}
+      href={`https://www.bumperpass.com/reset-password?token=${token}`}
+      //href={`http://localhost:3000/reset-password?token=${token}`}
     >
       <button
         style={{

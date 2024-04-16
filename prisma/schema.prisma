@@ -67,16 +67,12 @@ model User {
     email         String?             @unique
     emailVerified DateTime?
     password      String?
-    middleName    String?
-    lastName      String?
     phone         String?
     city          String?
-    zipCode       String?
     currentPlate  String?             @unique
     vin           String?             @unique
     state         String?             @default("ca")
     street        String?
-    unit          String?
     suscribe      Boolean             @default(false)
     image         String?
     accounts      Account[]
