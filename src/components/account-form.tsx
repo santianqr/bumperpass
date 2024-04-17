@@ -202,7 +202,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                   placeholder={accountData.currentPlate ?? ""}
                 />
               </FormControl>
-              <FormDescription>{accountData.currentPlate === "" ? "Please, complete your Plate" : ""}</FormDescription>
+              <FormDescription className="text-primary">{accountData.currentPlate === null ? "Please, complete your Plate" : ""}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -219,7 +219,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                   placeholder={accountData.vin ?? ""}
                 />
               </FormControl>
-              <FormDescription>{accountData.vin === "" ? "Please, complete the VIN" : ""}</FormDescription>
+              <FormDescription className="text-primary">{accountData.vin === null ? "Please, complete the VIN" : ""}</FormDescription>
               <FormMessage />
             </FormItem>
           )}

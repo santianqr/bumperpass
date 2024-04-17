@@ -116,18 +116,13 @@ export function LoginForm() {
               </span>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-6">
-            <Button variant="outline">
-              <Icons.apple className="mr-2 h-4 w-4" />
-              Apple
-            </Button>
+          <div className="">
             <Button
               variant="outline"
               onClick={() => signIn("google", { callbackUrl: "/account" })}
-              className="mb-2"
+              className="w-full mb-2"
             >
-              <Icons.google className="mr-2 h-4 w-4" />
-              Google
+              Sign In with Google <Icons.google className="m-2 h-4 w-4" />
             </Button>
           </div>
 

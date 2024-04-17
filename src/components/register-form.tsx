@@ -92,17 +92,15 @@ export function RegisterForm() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="grid gap-4">
-            <div className="grid grid-cols-2 gap-6">
-              <Button variant="outline">
-                <Icons.apple className="mr-2 h-4 w-4" />
-                Apple
-              </Button>
+            <div className="">
               <Button
                 variant="outline"
                 onClick={() => signIn("google", { callbackUrl: "/account" })}
+                className="w-full"
               >
-                <Icons.google className="mr-2 h-4 w-4" />
-                Google
+                Sign up with Google{" "}
+                <Icons.google className="m-2 h-4 w-4" />
+                
               </Button>
             </div>
             <div className="relative">
