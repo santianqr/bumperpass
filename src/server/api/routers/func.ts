@@ -279,6 +279,16 @@ export const funcRouter = createTRPCRouter({
     });
   }),
 
+  getCar: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.user.findUnique({
+      where: { id: ctx.session.user.id },
+      select: {
+        plate: true,
+        vin: true,
+      },
+    });
+  }),
+
   updateAccount: protectedProcedure
     .input(FormSchemaAccount)
     .mutation(async ({ ctx, input }) => {

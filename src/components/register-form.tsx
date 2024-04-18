@@ -82,7 +82,7 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="mx-auto w-1/3">
+    <Card className="mx-auto w-1/3 text-gray-500">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
@@ -133,7 +133,7 @@ export function RegisterForm() {
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
-                      <FormLabel className="text-sm font-normal underline decoration-foreground decoration-1 underline-offset-4">
+                      <FormLabel className="text-sm font-normal">
                         Accept terms and conditions
                       </FormLabel>
                     </div>

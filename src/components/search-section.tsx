@@ -33,12 +33,12 @@ export function SearchSection() {
               >
                 Click here to login
               </Link>{" "}
-              and start to use our search service, if you dont have and account{" "}
+              and start using our search service if you dont have an account{" "}
               <Link
                 href="/register"
                 className="font-semibold underline decoration-white"
               >
-                click here to sign up.
+                sign up here.
               </Link>
             </li>
             <li>Choose the type of vehicle your have (auto or motorcycle).</li>
