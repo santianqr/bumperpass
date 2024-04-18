@@ -119,7 +119,7 @@ export function LoginForm() {
           <div className="">
             <Button
               variant="outline"
-              onClick={() => signIn("google", { callbackUrl: "/account" })}
+              onClick={() => signIn("google", { callbackUrl: "/" })}
               className="w-full mb-2"
             >
               Sign In with Google <Icons.google className="m-2 h-4 w-4" />

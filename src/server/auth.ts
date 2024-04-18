@@ -65,9 +65,9 @@ export const authOptions: NextAuthOptions = {
         },
       };
     },
-    async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl + "/";
-    },
+    //async redirect({ url, baseUrl }) {
+    //  return url.startsWith(baseUrl) ? url : baseUrl + "/";
+    //},
   },
   session: {
     strategy: "jwt",
@@ -107,7 +107,6 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Verificar si el correo electrónico ha sido verificado
         if (!existingUser?.emailVerified) {
           return null;
         }

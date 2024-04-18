@@ -18,7 +18,7 @@ RUN apk add -q --update --no-cache \
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-RUN npm i -g pnpm
+RUN npm i -g pnpm@8.15.4
 RUN pnpm i
 
 COPY . .
