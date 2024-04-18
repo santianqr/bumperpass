@@ -89,30 +89,9 @@ export function RegisterForm() {
           Enter your email below to create your account
         </CardDescription>
       </CardHeader>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className="grid gap-4">
-            <div className="">
-              <Button
-                variant="outline"
-                onClick={() => signIn("google", { callbackUrl: "/account" })}
-                className="w-full"
-              >
-                Sign up with Google{" "}
-                <Icons.google className="m-2 h-4 w-4" />
-                
-              </Button>
-            </div>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
+      <CardContent className="space-y-2">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
               control={form.control}
               name="email"
@@ -120,7 +99,7 @@ export function RegisterForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" />
+                    <Input {...field} type="email" placeholder="m@example.com"/>
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -132,7 +111,7 @@ export function RegisterForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Create password*</FormLabel>
+                  <FormLabel>Create password</FormLabel>
                   <FormControl>
                     <Input {...field} type="password" />
                   </FormControl>
@@ -181,8 +160,7 @@ export function RegisterForm() {
                 )}
               />
             </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-1">
+
             <Button
               type="submit"
               disabled={createAccount.isLoading}
@@ -194,16 +172,36 @@ export function RegisterForm() {
                 "Create account"
               )}
             </Button>
-
-            <div className="text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link href="/login" className="underline">
-                Login
-              </Link>
-            </div>
-          </CardFooter>
-        </form>
-      </Form>
+          </form>
+        </Form>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        <div className="">
+          <Button
+            variant="outline"
+            onClick={() => signIn("google", { callbackUrl: "/account" })}
+            className="w-full"
+          >
+            Sign up with Google <Icons.google className="m-2 h-4 w-4" />
+          </Button> 
+        </div>
+      </CardContent>
+      <CardFooter className="flex flex-col">
+        <p className="text-sm text-muted-foreground">
+          Already have an account?{" "}
+          <Link href="/login" className="underline">
+            Login
+          </Link>
+        </p>
+      </CardFooter>
     </Card>
   );
 }

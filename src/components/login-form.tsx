@@ -64,8 +64,8 @@ export function LoginForm() {
   return (
     <main>
       <Card className="mx-auto w-1/3">
-        <CardHeader>
-          <CardTitle>Sign In</CardTitle>
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl">Sign In</CardTitle>
           <CardDescription>
             Enter your email below to sign in into your account
           </CardDescription>
@@ -80,7 +80,7 @@ export function LoginForm() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="m@example.com" />
+                      <Input {...field} placeholder="m@example.com" type="email" />
                     </FormControl>
                     <FormDescription></FormDescription>
                     <FormMessage />
@@ -133,7 +133,7 @@ export function LoginForm() {
             <p>Forgot your password?</p>
           </Link>
         </CardContent>
-        <CardFooter className="flex flex-col items-center space-y-2">
+        <CardFooter className="flex flex-col">
           <p className="text-sm text-muted-foreground">
             If you dont have an account{" "}
             <Link href="/register" className="underline">
