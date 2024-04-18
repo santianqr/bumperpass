@@ -166,7 +166,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           name="city"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>City</FormLabel>
+              <FormLabel>City*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={accountData.city ?? ""} />
               </FormControl>
@@ -180,7 +180,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           name="street"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Address</FormLabel>
+              <FormLabel>Address*</FormLabel>
               <FormControl>
                 <Input {...field} placeholder={accountData.street ?? ""} />
               </FormControl>
@@ -195,7 +195,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           name="currentPlate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Current Plate</FormLabel>
+              <FormLabel>Current Plate*</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -212,7 +212,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           name="vin"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>VIN</FormLabel>
+              <FormLabel>3 last digits of VIN*</FormLabel>
               <FormControl>
                 <Input
                   {...field}
