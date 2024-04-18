@@ -11,7 +11,7 @@ export function DashboardOptions() {
         <div className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-primary bg-gradient-to-r from-[#E62534] to-[#F59F0F] p-1 text-[#FFFFFF]">
           <SearchCheck size={60} />
         </div>
-        <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+        <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-gray-500">
           My Search Results
         </h4>
       </Link>
@@ -23,7 +23,7 @@ export function DashboardOptions() {
         <div className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-primary bg-gradient-to-r from-[#E62534] to-[#F59F0F] p-1 text-[#FFFFFF]">
           <Lightbulb size={60} />
         </div>
-        <h4 className="scroll-m-20 text-center text-xl font-semibold tracking-tight">
+        <h4 className="scroll-m-20 text-center text-xl font-semibold tracking-tight text-gray-500">
           My Variation
           <br />
           Generator Results
