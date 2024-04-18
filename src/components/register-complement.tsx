@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 // name
 // address -optional
 // city
@@ -48,6 +48,8 @@ const FormSchema = z.object({
 });
 
 export function RegisterComplement({ token }: { token: string | undefined }) {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -65,6 +67,7 @@ export function RegisterComplement({ token }: { token: string | undefined }) {
           title: "Account completed!",
           description: "Your account has been completed.",
         });
+        router.push("/login");
       },
       onError(error) {
         toast({
@@ -79,7 +82,7 @@ export function RegisterComplement({ token }: { token: string | undefined }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-2 text-gray-500 w-1/3 mx-auto"
+        className="mx-auto grid w-1/3 grid-cols-2 gap-2 text-gray-500"
       >
         <FormField
           control={form.control}
