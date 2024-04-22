@@ -29,6 +29,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 const FormSchema = z
   .object({
@@ -45,15 +46,22 @@ const FormSchema = z
             "Password must have 8 characters, one mayus, one symbol and one number.",
         },
       ),
+    confirmPassword: z.string(),
     terms: z.boolean().default(false),
     suscribe: z.boolean().default(true),
   })
   .refine((data) => data.terms === true, {
     message: "Please accept the terms and conditions.",
     path: ["terms"],
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
   });
 
 export function RegisterForm() {
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -81,6 +89,12 @@ export function RegisterForm() {
     });
   }
 
+  const handleSignIn = async () => {
+    setLoading(true);
+    await signIn("google", { callbackUrl: "/account" });
+    setLoading(false);
+  };
+
   return (
     <Card className="mx-auto w-1/3 text-gray-500">
       <CardHeader className="space-y-1">
@@ -99,7 +113,11 @@ export function RegisterForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input {...field} type="email" placeholder="m@example.com"/>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="m@example.com"
+                    />
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -120,6 +138,21 @@ export function RegisterForm() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm password</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="password" />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className="space-y-1">
               <FormField
                 control={form.control}
@@ -187,11 +220,18 @@ export function RegisterForm() {
         <div className="">
           <Button
             variant="outline"
-            onClick={() => signIn("google", { callbackUrl: "/account" })}
+            onClick={handleSignIn}
             className="w-full"
+            disabled={loading}
           >
-            Sign up with Google <Icons.google className="m-2 h-4 w-4" />
-          </Button> 
+            {loading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <>
+                Sign up with Google <Icons.google className="m-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col">
