@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Icons } from "./icons";
+import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -33,6 +35,9 @@ const FormSchema = z.object({
 });
 
 export function LoginForm() {
+  const [loading, setLoading] = useState(false);
+
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -60,6 +65,12 @@ export function LoginForm() {
       ),
     });
   }
+
+  const handleSignIn = async () => {
+    setLoading(true);
+    await signIn("google", { callbackUrl: "/"});
+    setLoading(false);
+  };
 
   return (
     <main>
@@ -119,10 +130,17 @@ export function LoginForm() {
           <div className="">
             <Button
               variant="outline"
-              onClick={() => signIn("google", { callbackUrl: "/" })}
+              onClick={handleSignIn}
               className="w-full mb-2"
+              disabled={loading}
             >
-              Sign In with Google <Icons.google className="m-2 h-4 w-4" />
+              {loading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <>
+                Sign In with Google <Icons.google className="m-2 h-4 w-4" />
+              </>
+            )}
             </Button>
           </div>
 

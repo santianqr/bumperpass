@@ -89,7 +89,7 @@ export function RegisterForm() {
     });
   }
 
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     setLoading(true);
     await signIn("google", { callbackUrl: "/account" });
     setLoading(false);
@@ -220,7 +220,7 @@ export function RegisterForm() {
         <div className="">
           <Button
             variant="outline"
-            onClick={handleSignIn}
+            onClick={handleSignUp}
             className="w-full"
             disabled={loading}
           >
