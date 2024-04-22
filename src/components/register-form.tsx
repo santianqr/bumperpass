@@ -28,6 +28,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { PasswordInput } from "@/components/ui/input-password";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 
@@ -131,7 +132,7 @@ export function RegisterForm() {
                 <FormItem>
                   <FormLabel>Create password</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" />
+                    <PasswordInput {...field} placeholder="password"/>
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -145,7 +146,7 @@ export function RegisterForm() {
                 <FormItem>
                   <FormLabel>Confirm password</FormLabel>
                   <FormControl>
-                    <Input {...field} type="password" />
+                    <PasswordInput {...field}/>
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
