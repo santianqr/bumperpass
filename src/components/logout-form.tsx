@@ -9,13 +9,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 export function LogoutForm() {
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const handleCancel = () => {
     router.push("/");
   };
 
+  const handleSignOut = async () => {
+    setLoading(true);
+    await signOut();
+    setLoading(false);
+  };
   return (
     <main>
       <Card className="mx-auto flex w-1/4 flex-col items-center">
@@ -33,9 +42,14 @@ export function LogoutForm() {
             </Button>
             <Button
               className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-              onClick={() => signOut()}
+              onClick={handleSignOut}
+              disabled={loading}
             >
-              Yes, sing out
+              {loading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <>Yes, sign out</>
+              )}
             </Button>
           </div>
         </CardFooter>
