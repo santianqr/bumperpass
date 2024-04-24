@@ -77,7 +77,12 @@ type ResponseData = {
   status: number;
 };
 
-export function SearchForm() {
+type SearchProps = {
+  currentPlate: string | null | undefined;
+  vin: string | null | undefined;
+};
+
+export function SearchForm({ currentPlate, vin }: SearchProps) {
   const [searchResponse, setSearchResponse] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -223,7 +228,7 @@ export function SearchForm() {
           )}
         />
         <div className="flex justify-center space-x-8">
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading || !vin || !currentPlate}>
             {isLoading ? <Loader className="animate-spin" /> : "Search"}
           </Button>
           <Button
@@ -231,6 +236,7 @@ export function SearchForm() {
             variant="outline"
             className="text-foreground"
             onClick={onClear}
+            disabled={isLoading || !vin || !currentPlate}
           >
             Clear
           </Button>

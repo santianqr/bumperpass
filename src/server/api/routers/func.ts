@@ -307,7 +307,7 @@ export const funcRouter = createTRPCRouter({
     return ctx.db.user.findUnique({
       where: { id: ctx.session.user.id },
       select: {
-        plate: true,
+        currentPlate: true,
         vin: true,
       },
     });

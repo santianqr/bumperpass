@@ -2,8 +2,10 @@ import { SearchForm } from "./search-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plate } from "./plate";
 import Link from "next/link";
+import { api } from "@/trpc/server";
 
-export function SearchSection() {
+export async function SearchSection() {
+  const carData = await api.func.getCar.query();
   return (
     <section
       className="from- flex flex-col items-center space-y-8 text-white bg-no-repeat bg-cover p-4"
@@ -17,7 +19,7 @@ export function SearchSection() {
       <div className="grid grid-cols-2 items-center justify-items-center gap-4">
         <Card className="flex max-w-sm items-center border-none bg-[#B1B1B1]/20 shadow-md">
           <CardContent className="pt-6">
-            <SearchForm />
+            <SearchForm currentPlate={carData?.currentPlate} vin={carData?.vin}/>
           </CardContent>
         </Card>
         <div>

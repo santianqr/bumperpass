@@ -274,7 +274,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
 
         <Button
           type="submit"
-          className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+          className="bg-[#E62534] hover:bg-[#E62534]/90"
           disabled={loading}
         >
           {loading ? <Loader className="animate-spin" /> : "Generate"}

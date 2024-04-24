@@ -22,6 +22,8 @@ interface Body {
   vehicleType: string;
   personalizedPlate: string;
   state: string;
+  vin: string;
+  currentPlate: string;
 }
 
 let page: puppeteer.Page | undefined;
@@ -38,8 +40,9 @@ export async function POST(req: NextRequest) {
     }
     if (!browser) {
       browser = await puppeteer.launch({
-        headless: true,
-        executablePath: "/usr/bin/chromium",
+        headless: false,
+        slowMo: 500,
+        //executablePath: "/usr/bin/chromium",
         args: [
           "--incognito",
           "--no-sandbox",
@@ -67,10 +70,22 @@ export async function POST(req: NextRequest) {
     (await page.$$("button"))[1]?.click() ??
       console.log("The button does not exist");
 
+    const carData = await api.func.getCar.query();
+    const currentPlate = carData?.currentPlate;
+    const vin = carData?.vin;
+
     await page.waitForNavigation({ waitUntil: "networkidle0" });
     await page.select("select#vehicleType", body.vehicleType.toUpperCase());
-    await page.type("input#licPlateReplaced", "06405k2");
-    await page.type("input#last3Vin", "802");
+    if (currentPlate && vin) {
+      await page.type("input#licPlateReplaced", currentPlate);
+      await page.type("input#last3Vin", vin);
+    } else {
+      return NextResponse.json(
+        { error: 'The requested car data is currently unavailable.' },
+        { status: 404 }
+      );
+    }
+
     await page.click("label[for=isRegExpire60N]");
     await page.click("label[for=isVehLeasedN]");
     const symbols = ["❤", "⭐", "🖐", "➕"];
