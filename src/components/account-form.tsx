@@ -101,7 +101,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
             <FormItem>
               <FormLabel>Full name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.name ?? ""} />
+                <Input {...field} placeholder={accountData.name ?? ""} disabled = {accountData.name !== null}/>
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -201,6 +201,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                 <Input
                   {...field}
                   placeholder={accountData.currentPlate ?? ""}
+                  disabled = {accountData.currentPlate !== null}
                 />
               </FormControl>
               <FormDescription className="text-primary">{accountData.currentPlate === null ? "Please, complete your Plate" : ""}</FormDescription>
@@ -218,6 +219,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                 <Input
                   {...field}
                   placeholder={accountData.vin ?? ""}
+                  disabled={accountData.vin !== null}
                 />
               </FormControl>
               <FormDescription className="text-primary">{accountData.vin === null ? "Please, complete the VIN" : ""}</FormDescription>

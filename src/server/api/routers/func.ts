@@ -162,6 +162,24 @@ export const funcRouter = createTRPCRouter({
         throw new Error("Invalid token");
       }
 
+      const response = await fetch("http://localhost:3000/api/search-car", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plate: data.currentPlate,
+          vin: data.vin,
+        }),
+      });
+
+      const result = (await response.json()) as SearchCarApiResponse;
+
+      if (result.message !== "OK") {
+        throw new Error("3 last digits of VIN or Plate is not valid.");
+      }
+
+
       await ctx.db.user.update({
         where: { id: verificationToken.identifier },
         data: {
