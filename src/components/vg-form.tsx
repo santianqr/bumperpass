@@ -69,9 +69,11 @@ type VGFormProps = {
     allPlates: string[];
   }) => void;
   plates: string[];
+  currentPlate: string | null | undefined;
+  vin: string | null | undefined;
 };
 
-export function VGForm({ setResult, setForm, plates }: VGFormProps) {
+export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGFormProps) {
   const [loading, setLoading] = useState(false);
   console.log("from vg form", plates);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -275,7 +277,7 @@ export function VGForm({ setResult, setForm, plates }: VGFormProps) {
         <Button
           type="submit"
           className="bg-[#E62534] hover:bg-[#E62534]/90"
-          disabled={loading}
+          disabled={loading || !vin || !currentPlate}
         >
           {loading ? <Loader className="animate-spin" /> : "Generate"}
         </Button>

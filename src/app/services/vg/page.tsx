@@ -12,6 +12,15 @@ export default async function VGPage() {
     },
   });
 
+  const vinPlate = await db.user.findUnique({
+    where: { id: session?.user.id },
+    select: {
+      vin: true,
+      currentPlate: true,
+    },
+  });
+
+
   const plates = userPlates.map((plate) => plate.plate);
   console.log(typeof userPlates);
   return (
@@ -58,7 +67,7 @@ export default async function VGPage() {
           </p>
         </div>
       </section>
-      <VGResults plates={plates} />
+      <VGResults plates={plates} currentPlate={vinPlate?.currentPlate} vin={vinPlate?.vin}/>
     </main>
   );
 }

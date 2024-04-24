@@ -22,8 +22,6 @@ interface Body {
   vehicleType: string;
   personalizedPlate: string;
   state: string;
-  vin: string;
-  currentPlate: string;
 }
 
 let page: puppeteer.Page | undefined;
@@ -41,7 +39,7 @@ export async function POST(req: NextRequest) {
     if (!browser) {
       browser = await puppeteer.launch({
         headless: false,
-        slowMo: 500,
+        //slowMo: 500,
         //executablePath: "/usr/bin/chromium",
         args: [
           "--incognito",
