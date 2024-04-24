@@ -35,13 +35,13 @@ export function LogoutForm() {
         <CardFooter>
           <div className="grid grid-cols-2 gap-4">
             <Button
-              className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+              className="bg-[#E62534] hover:bg-[#E62534]/90"
               onClick={handleCancel}
             >
               Cancel
             </Button>
             <Button
-              className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+              className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
               onClick={handleSignOut}
               disabled={loading}
             >

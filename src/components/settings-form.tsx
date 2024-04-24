@@ -91,7 +91,7 @@ export function SettingsForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full space-y-2 text-gray-500"
+        className="w-2/6 space-y-2 text-gray-500"
       >
         <FormField
           control={form.control}
@@ -139,7 +139,7 @@ export function SettingsForm() {
 
         <Button
           type="submit"
-          className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+          className="w-full bg-[#E62534] hover:bg-[#E62534]/90"
           disabled={updatePassword.isLoading}
         >
           {updatePassword.isLoading ? (

@@ -34,7 +34,7 @@ export function ServicesCard() {
         <CardDescription></CardDescription>
         <CardFooter>
           <Link href="/search">
-            <Button className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90">
+            <Button className="bg-[#E62534] hover:bg-[#E62534]/90">
               Make a search
             </Button>
           </Link>
@@ -58,7 +58,7 @@ export function ServicesCard() {
         <CardDescription></CardDescription>
         <CardFooter>
           <Link href="/services/vg">
-            <Button className="rounded-3xl bg-[#F59F0F] hover:bg-[#F59F0F]/90">
+            <Button className="bg-[#F59F0F] hover:bg-[#F59F0F]/90">
               Learn more
             </Button>
           </Link>

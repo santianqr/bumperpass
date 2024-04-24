@@ -223,13 +223,13 @@ export function SearchForm() {
           )}
         />
         <div className="flex justify-center space-x-8">
-          <Button type="submit" className="rounded-3xl" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading ? <Loader className="animate-spin" /> : "Search"}
           </Button>
           <Button
             type="button"
             variant="outline"
-            className="rounded-3xl text-foreground"
+            className="text-foreground"
             onClick={onClear}
           >
             Clear
