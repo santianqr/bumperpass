@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Loader } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -226,10 +227,10 @@ export function AccountForm({ accountData }: { accountData: Props }) {
         />
         <Button
           type="submit"
-          className="self-end rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+          className="w-full bg-[#E62534] hover:bg-[#E62534]/90"
           disabled={updateUser.isLoading}
         >
-          {updateUser.isLoading ? "Loading..." : "Save"}
+          {updateUser.isLoading ? <Loader className="animate-spin"/> : "Save"}
         </Button>
       </form>
     </Form>
