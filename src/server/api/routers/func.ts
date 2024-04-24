@@ -98,6 +98,12 @@ const FormSchemaUpdatePassword = z.object({
   token: z.string(),
 });
 
+type SearchCarApiResponse = {
+  message: string;
+  status: number;
+};
+
+
 export const funcRouter = createTRPCRouter({
   createAccount: publicProcedure
     .input(FormSchemaRegister)
@@ -300,6 +306,23 @@ export const funcRouter = createTRPCRouter({
 
       if (existingPlate && existingPlate.id !== ctx.session.user.id) {
         throw new Error("Plate already exists.");
+      }
+
+      const response = await fetch("http://localhost:3000/api/search-car", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plate: data.currentPlate,
+          vin: data.vin,
+        }),
+      });
+
+      const result = (await response.json()) as SearchCarApiResponse;
+
+      if (result.message !== "OK") {
+        throw new Error("3 last digits of VIN or Plate is not valid.");
       }
 
       return ctx.db.user.update({
