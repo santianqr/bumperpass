@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { set, z } from "zod";
 import { Icons } from "./icons";
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,7 @@ export function LoginForm() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    setLoading(true);
     const loginData = await signIn("credentials", {
       email: data.email,
       password: data.password,
@@ -64,6 +65,7 @@ export function LoginForm() {
         </pre>
       ),
     });
+    setLoading(false);
   }
 
   const handleSignIn = async () => {
@@ -112,8 +114,14 @@ export function LoginForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
-                Sign In with credentials
+              <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? (
+              <Loader className="animate-spin" />
+            ) : (
+              <>
+                Sign In with Credentials
+              </>
+            )}
               </Button>
             </form>
           </Form>

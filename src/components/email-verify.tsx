@@ -28,8 +28,8 @@ export const EmailVerify: React.FC<Readonly<EmailVerifyProps>> = ({
     </div>
 
     <a
-      href={`https://www.bumperpass.com/verify-email?token=${token}`}
-      //href={`http://localhost:3000/verify-email?token=${token}`}
+      //href={`https://www.bumperpass.com/verify-email?token=${token}`}
+      href={`http://localhost:3000/verify-email?token=${token}`}
     >
       <button
         style={{
