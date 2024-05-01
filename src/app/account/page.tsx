@@ -12,11 +12,19 @@ export default async function Account() {
         <CircleUser size={128} />
       </aside>
       <section className="space-y-4 p-8">
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-gray-500">
           Account Information
         </h3>
         {accountData ? (
-          <AccountForm accountData={accountData} />
+          <>
+            {!accountData.vin || !accountData.currentPlate ? (
+              <p className="text-primary/90 text-sm">
+                The last three digits of the VIN and the license plate must
+                match to save the data.
+              </p>
+            ) : null}
+            <AccountForm accountData={accountData} />
+          </>
         ) : (
           <div>Loading...</div>
         )}

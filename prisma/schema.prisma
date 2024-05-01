@@ -69,8 +69,8 @@ model User {
     password      String?
     phone         String?
     city          String?
-    currentPlate  String?             @unique
-    vin           String?             @unique
+    currentPlate  String?             
+    vin           String?             
     state         String?             @default("ca")
     street        String?
     suscribe      Boolean             @default(false)

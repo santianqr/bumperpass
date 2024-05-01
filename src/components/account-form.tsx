@@ -25,6 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string({ required_error: "Please type a valid email." }).email(),
@@ -55,6 +56,7 @@ type Props = {
 };
 
 export function AccountForm({ accountData }: { accountData: Props }) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -73,13 +75,14 @@ export function AccountForm({ accountData }: { accountData: Props }) {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     updateUser.mutate(data, {
-      onSuccess: () => {
+      onSuccess() {
         toast({
           title: "Account updated!",
           description: "Your account has been successfully updated.",
         });
+        router.refresh();
       },
-      onError: (error) => {
+      onError(error) {
         toast({
           title: "Error",
           description: error.message,
@@ -101,7 +104,11 @@ export function AccountForm({ accountData }: { accountData: Props }) {
             <FormItem>
               <FormLabel>Full name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder={accountData.name ?? ""} disabled = {accountData.name !== null}/>
+                <Input
+                  {...field}
+                  placeholder={accountData.name ?? ""}
+                  disabled={accountData.name !== null}
+                />
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -201,10 +208,14 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                 <Input
                   {...field}
                   placeholder={accountData.currentPlate ?? ""}
-                  disabled = {accountData.currentPlate !== null}
+                  disabled={accountData.currentPlate !== null}
                 />
               </FormControl>
-              <FormDescription className="text-primary">{accountData.currentPlate === null ? "Please, complete your Plate" : ""}</FormDescription>
+              <FormDescription className="text-primary">
+                {accountData.currentPlate === null
+                  ? "Please, complete your Plate"
+                  : ""}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -222,7 +233,9 @@ export function AccountForm({ accountData }: { accountData: Props }) {
                   disabled={accountData.vin !== null}
                 />
               </FormControl>
-              <FormDescription className="text-primary">{accountData.vin === null ? "Please, complete the VIN" : ""}</FormDescription>
+              <FormDescription className="text-primary">
+                {accountData.vin === null ? "Please, complete the VIN" : ""}
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -232,7 +245,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
           className="w-full bg-[#E62534] hover:bg-[#E62534]/90"
           disabled={updateUser.isLoading}
         >
-          {updateUser.isLoading ? <Loader className="animate-spin"/> : "Save"}
+          {updateUser.isLoading ? <Loader className="animate-spin" /> : "Save"}
         </Button>
       </form>
     </Form>

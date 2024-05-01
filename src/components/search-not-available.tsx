@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export function SearchNotAvailable() {
   return (
-    <div className="mt-2 flex flex-col items-center space-y-2 text-center text-sm">
+    <div className="mt-2 flex flex-col items-center space-y-2 text-center text-sm text-white">
       <p className="text-xl font-semibold">Sorry!</p>
       <p>It seems this plate is already taken</p>
 
@@ -18,7 +18,7 @@ export function SearchNotAvailable() {
         Click below to get our tailored creative alternatives.
       </p>
       <Link href="/services/vg">
-        <Button className="rounded-2xl">Go!</Button>
+        <Button>Go!</Button>
       </Link>
       
     </div>
