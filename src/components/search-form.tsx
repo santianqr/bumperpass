@@ -240,6 +240,12 @@ export function SearchForm({ currentPlate, vin }: SearchProps) {
           >
             Clear
           </Button>
+          {(!vin || !currentPlate) && (
+            <p className="text-xs">
+              You must to complete 3 last digits of VIN and the plate before to
+              use the Search.
+            </p>
+          )}
         </div>
       </form>
       {searchResponse && (

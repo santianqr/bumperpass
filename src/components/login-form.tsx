@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { set, z } from "zod";
+import { z } from "zod";
 import { Icons } from "./icons";
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";

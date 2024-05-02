@@ -281,6 +281,10 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
         >
           {loading ? <Loader className="animate-spin" /> : "Generate"}
         </Button>
+        {(!vin || !currentPlate) && (
+            <p className="text-xs text-primary">You must to complete 3 last digits of VIN and the plate before to use the Variation Generator.</p>
+          )}
+
       </form>
     </Form>
   );

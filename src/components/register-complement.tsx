@@ -73,6 +73,7 @@ export function RegisterComplement({ token }: { token: string | undefined }) {
         toast({
           title: "Error finishing your account",
           description: error.message,
+          variant: "destructive",
         });
       },
     });

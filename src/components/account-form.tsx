@@ -84,6 +84,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
       },
       onError(error) {
         toast({
+          variant: "destructive",
           title: "Error",
           description: error.message,
         });

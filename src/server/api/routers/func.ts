@@ -318,14 +318,6 @@ export const funcRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const data = FormSchemaAccount.parse(input);
 
-      const existingPlate = await ctx.db.user.findUnique({
-        where: { currentPlate: data.currentPlate },
-      });
-
-      if (existingPlate && existingPlate.id !== ctx.session.user.id) {
-        throw new Error("Plate already exists.");
-      }
-
       const response = await fetch("http://localhost:3000/api/search-car", {
         method: "POST",
         headers: {
