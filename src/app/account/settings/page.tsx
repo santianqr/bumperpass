@@ -16,7 +16,7 @@ export default async function Settings() {
         <CircleUser size={128} />
       </aside>
       <section className="space-y-4 p-8">
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight text-gray-500">
           Settings & Preferences
         </h3>
         <SettingsForm />

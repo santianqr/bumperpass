@@ -49,7 +49,7 @@ export function NotificactionsForm({ suscribe }: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="space-y-2">
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-gray-500">
             Notifications
           </h4>
           <div className="space-y-2">
