@@ -3,8 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Plate } from "./plate";
 import Link from "next/link";
 import { api } from "@/trpc/server";
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function SearchSection() {
+  noStore();
   const carData = await api.func.getCar.query();
   return (
     <section

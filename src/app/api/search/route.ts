@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import * as puppeteer from "puppeteer";
 import { api } from "@/trpc/server";
+import { unstable_noStore as noStore } from "next/cache";
 
 const symbolMap: Record<string, string> = {
   "❤": "heart",
@@ -28,6 +29,7 @@ let page: puppeteer.Page | undefined;
 let browser: puppeteer.Browser | undefined;
 
 export async function POST(req: NextRequest) {
+  noStore();
   try {
     const body = (await req.json()) as Body;
     if (!("vehicleType" in body) || !("personalizedPlate" in body)) {

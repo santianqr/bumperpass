@@ -75,6 +75,7 @@ type VGFormProps = {
 
 export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGFormProps) {
   const [loading, setLoading] = useState(false);
+  const [plateType, setPlateType] = useState("");
   console.log("from vg form", plates);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -142,7 +143,7 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
           name="plateLength"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={plateType === 'numbers'}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select the number of characters" />
@@ -167,7 +168,7 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
           name="plateType"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={(value) => { field.onChange(value); setPlateType(value); }} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select the type of characters" />
@@ -176,6 +177,7 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
                 <SelectContent>
                   <SelectItem value="any">Letters and numbers</SelectItem>
                   <SelectItem value="letters">Letters</SelectItem>
+                  <SelectItem value="numbers">Numbers</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription className="text-xs text-muted-foreground">
