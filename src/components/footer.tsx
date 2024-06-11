@@ -15,7 +15,7 @@ export function Footer() {
           Contact
         </h2>
       ) : null}
-      <div className="grid grid-cols-2 justify-items-center gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 justify-items-center gap-4">
         <Image src="/bp_logo.webp" width={60} height={60} alt="bp_logo" />
         <div className="space-y-4 text-xs text-primary">
           <div className="flex items-center gap-x-2">

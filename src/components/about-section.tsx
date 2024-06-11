@@ -14,7 +14,7 @@ export function AboutSection() {
       </h2>
 
       <div
-        className={`mx-auto text-sm ${pathname === "/about" ? "flex max-w-screen-md flex-col items-center space-y-4" : "flex items-center space-y-4"}`}
+        className={`mx-auto text-sm ${pathname === "/about" ? "flex max-w-screen-md flex-col items-center space-y-4" : "flex items-center space-y-4 flex-col md:flex-row"}`}
       >
         <div className="text-gray-500 space-y-2">
           <p>
