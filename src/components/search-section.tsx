@@ -20,8 +20,7 @@ export async function SearchSection() {
       </h2>
       <div className="grid grid-cols-1 items-center justify-items-center gap-4 md:grid-cols-2">
         <div className="order-2 md:order-1">
-          {" "}
-          <Card className="flex items-center border-none bg-[#B1B1B1]/20 shadow-md md:max-w-sm">
+          <Card className="flex items-center border-none bg-[#B1B1B1]/20 shadow-md md:max-w-md">
             <CardContent className="pt-6">
               <SearchForm
                 currentPlate={carData?.currentPlate}

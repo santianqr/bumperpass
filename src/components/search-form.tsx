@@ -227,7 +227,7 @@ export function SearchForm({ currentPlate, vin }: SearchProps) {
             </FormItem>
           )}
         />
-        <div className="flex justify-center space-x-8">
+        <div className="flex justify-center space-y-2 md:space-x-8 flex-col md:flex-row">
           <Button type="submit" disabled={isLoading || !vin || !currentPlate}>
             {isLoading ? <Loader className="animate-spin" /> : "Search"}
           </Button>

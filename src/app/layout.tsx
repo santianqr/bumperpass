@@ -42,7 +42,7 @@ export default async function RootLayout({
       >
         <TRPCReactProvider>
           {session ? <Header /> : null}
-          <div className="mx-auto flex w-full max-w-screen-2xl flex-grow flex-col justify-center px-4">
+          <div className="mx-auto flex max-w-screen-2xl flex-grow flex-col justify-center px-4">
             {children}
           </div>
           {session ? <Footer /> : null}
