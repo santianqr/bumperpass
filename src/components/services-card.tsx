@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export function ServicesCard() {
   return (
-    <div className="grid grid-cols-2 justify-items-center gap-4">
+    <div className="grid grid-cols-1 justify-items-center gap-4 md:grid-cols-2">
       <Card className="grid max-w-xs grid-cols-1 justify-items-center border-none shadow-none">
         <CardHeader className="flex h-[75px] w-[75px] items-center justify-center rounded-full bg-primary bg-gradient-to-r from-[#E62534] to-[#F59F0F] p-1 text-[#FFFFFF]">
           <SearchCheck size={60} />
