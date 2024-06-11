@@ -83,7 +83,7 @@ export function RegisterComplement({ token }: { token: string | undefined }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mx-auto grid w-1/3 grid-cols-2 gap-2 text-gray-500"
+        className="mx-auto grid max-w-sm md:max-w-md grid-cols-2 gap-2 text-gray-500"
       >
         <FormField
           control={form.control}
