@@ -29,7 +29,7 @@ export function VGResults({ plates, vin, currentPlate }: VGResultsProps) {
 
   return (
     <section className="flex justify-center ">
-      <div className="w-full max-w-screen-sm space-y-4">
+      <div className="space-y-4">
         <VGForm plates={plates} setResult={setResult} setForm={setForm} currentPlate={currentPlate} vin={vin} />
         {result && form ? (
           <>

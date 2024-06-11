@@ -123,7 +123,7 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-stretch space-y-1"
+        className="flex flex-col space-y-1"
       >
         <FormField
           control={form.control}

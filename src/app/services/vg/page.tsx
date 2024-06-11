@@ -27,15 +27,15 @@ export default async function VGPage() {
     <main className="flex flex-col justify-center space-y-8">
       <section className="flex justify-center bg-gradient-to-r from-[#E62534] to-[#F59F0F] py-12 text-background">
         <div>
-          <p className="text-5xl font-medium tracking-tighter">
+          <p className="text-3xl sm:text-5xl font-medium tracking-tighter">
             Welcome to our
           </p>
-          <h2 className="text-6xl font-bold tracking-wide">
+          <h2 className="text-4xl sm:text-6xl font-bold tracking-wide">
             Variation Generator
           </h2>
         </div>
       </section>
-      <section className="mx-auto flex max-w-screen-sm justify-center">
+      <section className="flex justify-center">
         <div className="space-y-2">
           <p className="text-lg font-semibold text-primary">Instructions</p>
           <ul className="list-inside list-disc text-sm marker:text-foreground/60">
