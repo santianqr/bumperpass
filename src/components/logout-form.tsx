@@ -27,7 +27,7 @@ export function LogoutForm() {
   };
   return (
     <main>
-      <Card className="mx-auto flex w-1/4 flex-col items-center">
+      <Card className="mx-auto flex max-w-xs flex-col items-center">
         <CardHeader>
           <CardTitle className="text-center text-2xl">Logout</CardTitle>
           <CardDescription>Are you sure you want to log out?</CardDescription>

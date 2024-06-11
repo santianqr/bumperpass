@@ -24,7 +24,7 @@ export default async function MySearch() {
 
   return (
     <main className="space-y-8">
-      <h2 className="col-span-2 scroll-m-20 text-center text-3xl font-semibold tracking-tight first:mt-0">
+      <h2 className="col-span-2 scroll-m-20 text-center text-3xl font-semibold tracking-tight text-gray-500 first:mt-0">
         Search Results
       </h2>
       <Table>

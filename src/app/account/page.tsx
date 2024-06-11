@@ -8,7 +8,7 @@ export default async function Account() {
   const accountData = await api.func.getAccount.query();
   return (
     <main className="flex">
-      <aside className="bg-foreground/15 p-8 text-primary">
+      <aside className="hidden bg-foreground/15 p-8 text-primary sm:block">
         <CircleUser size={128} />
       </aside>
       <section className="space-y-4 p-8">
@@ -18,7 +18,7 @@ export default async function Account() {
         {accountData ? (
           <>
             {!accountData.vin || !accountData.currentPlate ? (
-              <p className="text-primary/90 text-sm">
+              <p className="text-sm text-primary/90">
                 The last three digits of the VIN and the license plate must
                 match to save the data.
               </p>

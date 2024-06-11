@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function DashboardOptions() {
   return (
-    <div className="grid grid-cols-3 justify-items-stretch ">
+    <div className="grid grid-cols-1 sm:grid-cols-3 justify-items-stretch sm:py-0 space-y-2">
       <Link
         className="flex flex-col items-center justify-self-end"
         href="/account/dashboard/my-search"
