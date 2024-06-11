@@ -1,6 +1,6 @@
-import { AboutSection } from "@/components/about-section";
+//import { AboutSection } from "@/components/about-section";
 import { SearchSection } from "@/components/search-section";
-import { ServicesSection } from "@/components/services-section";
+//import { ServicesSection } from "@/components/services-section";
 import { getServerAuthSession } from "@/server/auth";
 import Image from "next/image";
 
@@ -10,8 +10,7 @@ export default async function Home() {
     return (
       <main className="space-y-16">
         <SearchSection />
-        <AboutSection />
-        <ServicesSection />
+        
       </main>
     );
   } else {

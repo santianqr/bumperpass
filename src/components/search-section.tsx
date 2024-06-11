@@ -10,7 +10,7 @@ export async function SearchSection() {
   const carData = await api.func.getCar.query();
   return (
     <section
-      className="from- flex flex-col items-center space-y-8 text-white bg-no-repeat bg-cover p-4"
+      className="from- flex flex-col items-center space-y-8 bg-cover bg-no-repeat p-4 text-white"
       style={{
         backgroundImage: "url('/services_bg.webp')",
       }}
@@ -18,13 +18,19 @@ export async function SearchSection() {
       <h2 className="col-span-2 scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
         Search Now!
       </h2>
-      <div className="grid grid-cols-2 items-center justify-items-center gap-4">
-        <Card className="flex max-w-sm items-center border-none bg-[#B1B1B1]/20 shadow-md">
-          <CardContent className="pt-6">
-            <SearchForm currentPlate={carData?.currentPlate} vin={carData?.vin}/>
-          </CardContent>
-        </Card>
-        <div>
+      <div className="grid grid-cols-1 items-center justify-items-center gap-4 md:grid-cols-2">
+        <div className="order-2 md:order-1">
+          {" "}
+          <Card className="flex items-center border-none bg-[#B1B1B1]/20 shadow-md md:max-w-sm">
+            <CardContent className="pt-6">
+              <SearchForm
+                currentPlate={carData?.currentPlate}
+                vin={carData?.vin}
+              />
+            </CardContent>
+          </Card>
+        </div>
+        <div className="order-1 md:order-2">
           <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
             How it works?
           </h3>

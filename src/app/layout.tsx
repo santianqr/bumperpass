@@ -44,7 +44,6 @@ export default async function RootLayout({
           <div className="mx-auto flex w-full max-w-screen-2xl flex-grow flex-col justify-center px-4">
             {session ? <Header /> : null}
             {children}
-            {session ? <Footer /> : null}
           </div>
 
           <Toaster />
