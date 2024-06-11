@@ -91,7 +91,7 @@ export function SettingsForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-2/6 space-y-2 text-gray-500"
+        className="sm:w-2/6 space-y-2 text-gray-500"
       >
         <FormField
           control={form.control}

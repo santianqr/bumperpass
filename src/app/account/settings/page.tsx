@@ -12,7 +12,7 @@ export default async function Settings() {
   const suscribe = suscribeData?.suscribe ?? false;
   return (
     <main className="flex">
-      <aside className="bg-foreground/15 p-8 text-primary">
+      <aside className="bg-foreground/15 p-8 text-primary md:block hidden">
         <CircleUser size={128} />
       </aside>
       <section className="space-y-4 p-8">
