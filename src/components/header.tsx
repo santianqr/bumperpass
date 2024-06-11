@@ -2,11 +2,13 @@ import Image from "next/image";
 import { Navbar } from "@/components/header-navbar";
 import { HeaderPopover } from "@/components/header-popover";
 import Link from "next/link";
+import { HeaderButton } from "./header-button";
 
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between">
+      <div className="flex h-14 items-center justify-center md:justify-between">
+        <HeaderButton classname="cursor-pointer block md:hidden absolute left-0" />
         <Link href="/">
           <Image
             src="/logo_long.webp"
@@ -15,7 +17,7 @@ export default function Header() {
             height={150}
           />
         </Link>
-        <div className="flex items-center space-x-6">
+        <div className="hidden items-center space-x-6 md:flex">
           <Navbar />
           <HeaderPopover />
         </div>

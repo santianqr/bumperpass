@@ -41,11 +41,12 @@ export default async function RootLayout({
         )}
       >
         <TRPCReactProvider>
-          {session ? <Header /> : null}
-          <div className="mx-auto w-full max-w-screen-xl flex-grow flex flex-col justify-center">
+          <div className="mx-auto flex w-full max-w-screen-2xl flex-grow flex-col justify-center px-4">
+            {session ? <Header /> : null}
             {children}
+            {session ? <Footer /> : null}
           </div>
-          {session ? <Footer /> : null}
+
           <Toaster />
         </TRPCReactProvider>
       </body>
