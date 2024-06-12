@@ -1,6 +1,6 @@
 "use client";
 
-import { z } from "zod";
+import type { z } from "zod";
 import {
   Form,
   FormControl,
@@ -25,33 +25,13 @@ import {
 } from "@/components/ui/select";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-// name
-// address -optional
-// city
-// state
-// phone - optional
-// vin
-// current plate
-
-const FormSchema = z.object({
-  name: z.string({ required_error: "Please type your name." }),
-  address: z.string().optional(),
-  city: z.string({ required_error: "Please type your city." }),
-  state: z.string({ required_error: "Please select a valid option." }),
-  phone: z.string().optional(),
-  vin: z
-    .string({ required_error: "Please type your VIN." })
-    .min(3, { message: "VIN must have 3 characters." })
-    .max(3, { message: "VIN must have 3 characters." }),
-  currentPlate: z.string({ required_error: "Please type your current plate." }),
-  token: z.string(),
-});
+import { RegisterComplementFormSchema } from "@/lib/formSchemas";
 
 export function RegisterComplement({ token }: { token: string | undefined }) {
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof RegisterComplementFormSchema>>({
+    resolver: zodResolver(RegisterComplementFormSchema),
     defaultValues: {
       state: "ca",
       token: token,
@@ -60,7 +40,7 @@ export function RegisterComplement({ token }: { token: string | undefined }) {
 
   const finishRegister = api.func.finishRegister.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof RegisterComplementFormSchema>) {
     finishRegister.mutate(data, {
       onSuccess() {
         toast({

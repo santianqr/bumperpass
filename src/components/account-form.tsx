@@ -2,9 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Loader } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,23 +25,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
-
-const FormSchema = z.object({
-  email: z.string({ required_error: "Please type a valid email." }).email(),
-  name: z.string().min(2, { message: "Type at least 2 characters." }),
-  state: z.string({ required_error: "Please select a valid option." }),
-  phone: z.string().optional(),
-  city: z.string().min(2, { message: "Type at least 2 characters." }),
-  currentPlate: z
-    .string()
-    .min(2, { message: "Type at least 2 characters." })
-    .max(7, { message: "Type at most 7 characters." }),
-  street: z.string().min(2, { message: "Type at least 2 characters." }),
-  vin: z
-    .string({ required_error: "Please type your VIN." })
-    .min(3, { message: "VIN must have 3 characters." })
-    .max(3, { message: "VIN must have 3 characters." }),
-});
+import { AccountFormSchema } from "@/lib/formSchemas";
 
 type Props = {
   name: string | null;
@@ -57,8 +40,8 @@ type Props = {
 
 export function AccountForm({ accountData }: { accountData: Props }) {
   const router = useRouter();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof AccountFormSchema>>({
+    resolver: zodResolver(AccountFormSchema),
     defaultValues: {
       name: accountData.name ?? "",
       email: accountData.email ?? "",
@@ -73,7 +56,7 @@ export function AccountForm({ accountData }: { accountData: Props }) {
 
   const updateUser = api.func.updateAccount.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof AccountFormSchema>) {
     updateUser.mutate(data, {
       onSuccess() {
         toast({

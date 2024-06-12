@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Loader } from "lucide-react";
 
 import {
@@ -25,23 +25,15 @@ import {
 } from "@/components/ui/form";
 import { api } from "@/trpc/react";
 import { toast } from "@/components/ui/use-toast";
-
-const FormSchema = z.object({
-  password: z
-    .string()
-    .refine((value) =>
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(value),
-    ),
-  token: z.string(),
-});
+import { ForgotPasswordFormSchema } from "@/lib/formSchemas";
 
 type Props = {
   token: string;
 };
 
 export function ForgotPasswordForm({ token }: Props) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof ForgotPasswordFormSchema>>({
+    resolver: zodResolver(ForgotPasswordFormSchema),
     defaultValues: {
       token: token,
     },
@@ -49,7 +41,7 @@ export function ForgotPasswordForm({ token }: Props) {
 
   const updatePassword = api.func.updatePassword.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof ForgotPasswordFormSchema>) {
     updatePassword.mutate(data, {
       onSuccess() {
         toast({
@@ -66,14 +58,14 @@ export function ForgotPasswordForm({ token }: Props) {
     });
   }
   return (
-    <Card className="">
-      <CardHeader className="">
-        <CardTitle className="">Reset password</CardTitle>
+    <Card >
+      <CardHeader >
+        <CardTitle>Reset password</CardTitle>
         <CardDescription>Enter your new password below</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="password"

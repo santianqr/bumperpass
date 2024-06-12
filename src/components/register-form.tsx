@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Loader } from "lucide-react";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
@@ -31,40 +31,13 @@ import {
 import { PasswordInput } from "@/components/ui/input-password";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-
-const FormSchema = z
-  .object({
-    email: z.string({ required_error: "Please type a valid email." }).email(),
-    password: z
-      .string()
-      .refine(
-        (value) =>
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(
-            value,
-          ),
-        {
-          message:
-            "Password must have 8 characters, one mayus, one symbol and one number.",
-        },
-      ),
-    confirmPassword: z.string(),
-    terms: z.boolean().default(false),
-    suscribe: z.boolean().default(true),
-  })
-  .refine((data) => data.terms === true, {
-    message: "Please accept the terms and conditions.",
-    path: ["terms"],
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
+import { RegisterFormSchema} from "@/lib/formSchemas";
 
 export function RegisterForm() {
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof RegisterFormSchema>>({
+    resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
       suscribe: false,
       terms: true,
@@ -73,7 +46,7 @@ export function RegisterForm() {
 
   const createAccount = api.func.createAccount.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof RegisterFormSchema>) {
     createAccount.mutate(data, {
       onSuccess() {
         toast({
