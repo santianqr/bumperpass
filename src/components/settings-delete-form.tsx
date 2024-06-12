@@ -38,8 +38,9 @@ export default function DeleteForm() {
   }
 
   function onClickYes() {
-    const res = deleteAccount.mutate();
-    console.log(res);
+    //const res = deleteAccount.mutate();
+    deleteAccount.mutate();
+    //console.log(res);
     setShowConfirm(false);
   }
 

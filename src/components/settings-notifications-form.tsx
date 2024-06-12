@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
+import type { z } from "zod";
+import { SettingsNotificationFormSchema } from "@/lib/formSchemas";
 import {
   Form,
   FormControl,
@@ -16,17 +16,13 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
 
-const FormSchema = z.object({
-  suscribe: z.boolean(),
-});
-
 type Props = {
   suscribe: boolean;
 };
 
 export function NotificactionsForm({ suscribe }: Props) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof SettingsNotificationFormSchema>>({
+    resolver: zodResolver(SettingsNotificationFormSchema),
     defaultValues: {
       suscribe: suscribe,
     },
@@ -34,7 +30,7 @@ export function NotificactionsForm({ suscribe }: Props) {
 
   const updateSuscribe = api.func.updateSuscribe.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof SettingsNotificationFormSchema>) {
     updateSuscribe.mutate(data, {
       onError(error) {
         toast({

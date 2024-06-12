@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Loader } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -18,49 +18,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { api } from "@/trpc/react";
-
-const FormSchema = z
-  .object({
-    currentPassword: z
-      .string()
-      .refine(
-        (value) =>
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(
-            value,
-          ),
-        {
-          message:
-            "Password must have 8 characters, one mayus, one symbol and one number.",
-        },
-      ),
-    newPassword: z
-      .string()
-      .refine(
-        (value) =>
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]{8,}$/.test(
-            value,
-          ),
-        {
-          message:
-            "Password must have 8 characters, one mayus, one symbol and one number.",
-        },
-      ),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords must match.",
-    path: ["confirmPassword"],
-  });
+import { SettingsFormSchema } from "@/lib/formSchemas";
 
 export function SettingsForm() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof SettingsFormSchema>>({
+    resolver: zodResolver(SettingsFormSchema),
     defaultValues: {},
   });
 
   const updatePassword = api.func.resetPassword.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  function onSubmit(data: z.infer<typeof SettingsFormSchema>) {
     updatePassword.mutate(data, {
       onSuccess() {
         toast({

@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Icons } from "./icons";
 import { Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,25 +27,22 @@ import { toast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
-
-const FormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+import { LoginFormSchema } from "@/lib/formSchemas";
+import type { z } from "zod";
 
 export function LoginForm() {
   const [loading, setLoading] = useState(false);
 
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof LoginFormSchema>>({
+    resolver: zodResolver(LoginFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof LoginFormSchema>) {
     setLoading(true);
     const loginData = await signIn("credentials", {
       email: data.email,
@@ -54,7 +50,7 @@ export function LoginForm() {
       redirect: true,
       callbackUrl: "/",
     });
-    console.log(loginData);
+    //console.log(loginData);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -118,9 +114,9 @@ export function LoginForm() {
               {loading ? (
               <Loader className="animate-spin" />
             ) : (
-              <>
-                Sign In with Credentials
-              </>
+              
+                "Sign In with Credentials"
+              
             )}
               </Button>
             </form>

@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Card,
   CardDescription,
@@ -48,7 +49,7 @@ export function LogoutForm() {
               {loading ? (
                 <Loader className="animate-spin" />
               ) : (
-                <>Yes, sign out</>
+                "Yes, sign out"
               )}
             </Button>
           </div>
