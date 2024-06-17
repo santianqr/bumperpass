@@ -48,28 +48,30 @@ export async function POST(req: NextRequest) {
 
     Parameters:
     1. Number characters = ${plateLength === "any" ? "between 2 and 7 characters." : `exactly ${plateLength} characters.`}
-    2. Type characters = ${plateType === "any" ? "use letters and numbers." : plateType === "letters" ? "use letters. Numbers disabled." : "use numbers. Letters disabled."}
-    3. Space = ${spaces ? "enabled" : "disabled"}
-    4. Emoji = ${symbols ? "enabled" : "disabled"}
-    ${symbols ? `5. Emoji type = ${type}` : ""}
+    2. Letters = ${plateType === "any" || plateType === "letters" ? "enabled" : "disabled"}
+    3. Numbers = ${plateType === "any" || plateType === "numbers" ? "enabled" : "disabled"}
+    4. Space = ${spaces ? "enabled" : "disabled"}
+    5. Emoji = ${symbols ? "enabled" : "disabled"}
+    ${symbols ? `6. Emoji type = ${type}` : ""}
 `;
     console.log(user_input);
 
-    const TEMPLATE = `Create ${num_ideas} creative custom plates based on input preferences following the input parameters. ${plateType === "any" || plateType === "numbers" ? "Include statistics, measurements, quantities, rankings, dates and any other numerical information that could be relevant and interesting for the plates." : ""}
+    const TEMPLATE = `Create ${num_ideas} plates based on input preferences following the input parameters. ${plateType === "any" || plateType === "numbers" ? "Numbers on plates must be related to topics and linked topics." : null}
 
     Consider if is the case:
-    Number 0 are not allowed in the plates.
-    The space " " counts as character.
-    Emojis allowed: ❤, ⭐, 🖐, ➕.
-    Replace ❤: ~, ⭐: *, 🖐: =, ➕: +.
-    Just one space in middle of plate.
-    Just one emoji per plate.
-    ${used_plates.length > 0 ? `Plates already in use: ${used_plates.join(", ")}` : ""}
+    ${plateType === "any" || plateType === "numbers" ? "Number 0 are not allowed in the plates." : ""}
+    ${spaces ? 'The space " " counts as character.' : ""}
+    ${symbols ? "Emoji counts as character." : ""}
+    ${symbols ? "Emojis allowed: ❤, ⭐, 🖐, ➕." : ""}
+    ${symbols ? "Replace ❤: ~, ⭐: *, 🖐: =, ➕: +." : ""}
+    ${spaces ? "Just one space in middle of plate." : ""}
+    ${symbols ? "Just one emoji per plate." : ""}
+    ${used_plates.length > 0 ? `Plates already in use: ${used_plates.join(", ")}` : null}
 
     Steps:
     1. Analyze input preferences for links, keywords, and specific details.
     2. Analyze other information into the main topic for the ideas.
-    3. Analyze and follow input parameters.
+    3. Follow input parameters.
     4. Use input preferences to create unique, relevant, and personalized plates.
     5. Generate ${num_ideas} plates.
 
@@ -93,10 +95,10 @@ export async function POST(req: NextRequest) {
             .string()
             .min(3)
             .max(7)
-            .describe("Unique plate using input ideas and parameters."),
+            .describe("Plate based on input preferences and parameters."),
         )
         .length(num_ideas)
-        .describe("Plates"),
+        .describe("Plates based on input preferences and parameters."),
     });
 
     const functionCallingModel = model.bind({
