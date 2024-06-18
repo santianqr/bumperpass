@@ -53,27 +53,26 @@ export async function POST(req: NextRequest) {
     4. Space = ${spaces ? "enabled" : "disabled"}
     5. Emoji = ${symbols ? "enabled" : "disabled"}
     ${symbols ? `6. Emoji type = ${type}` : ""}
-`;
+    `;
     console.log(user_input);
 
-    const TEMPLATE = `Create ${num_ideas} plates based on input preferences following the input parameters. ${plateType === "any" || plateType === "numbers" ? "Numbers on plates must be related to topics and linked topics." : null}
+    const TEMPLATE = `Create ${num_ideas} plates for CA based on input preferences following the input parameters. 
 
     Consider if is the case:
     ${plateType === "any" || plateType === "numbers" ? "Number 0 are not allowed in the plates." : ""}
-    ${spaces ? 'The space " " counts as character.' : ""}
+    ${spaces ? 'Space " " counts as character.' : ""}
     ${symbols ? "Emoji counts as character." : ""}
     ${symbols ? "Emojis allowed: ❤, ⭐, 🖐, ➕." : ""}
     ${symbols ? "Replace ❤: ~, ⭐: *, 🖐: =, ➕: +." : ""}
-    ${spaces ? "Just one space in middle of plate." : ""}
-    ${symbols ? "Just one emoji per plate." : ""}
-    ${used_plates.length > 0 ? `Plates already in use: ${used_plates.join(", ")}` : null}
+    ${spaces ? "Max one space in middle of plate." : ""}
+    ${symbols ? "Max one emoji per plate." : ""}
+    ${used_plates.length > 0 ? `Plates already in use: ${used_plates.join(", ")}` : ""}
 
     Steps:
     1. Analyze input preferences for links, keywords, and specific details.
-    2. Analyze other information into the main topic for the ideas.
-    3. Follow input parameters.
-    4. Use input preferences to create unique, relevant, and personalized plates.
-    5. Generate ${num_ideas} plates.
+    2. Follow input parameters.
+    3. Add creativity.
+    4. Generate ${num_ideas} plates.
 
     Input: 
     {input}
@@ -83,7 +82,7 @@ export async function POST(req: NextRequest) {
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
     const model = new ChatOpenAI({
-      temperature: 0.8,
+      temperature: 0.2,
       modelName: "gpt-4o",
       openAIApiKey: process.env.OPENAI_API_KEY,
     });

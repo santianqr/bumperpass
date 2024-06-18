@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
-//import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 
@@ -55,6 +55,7 @@ const FormSchema = z.object({
 type ResponseVg = {
   validPlates: string[];
   allPlates: string[];
+  message?: string;
 };
 
 type VGFormProps = {
@@ -73,7 +74,13 @@ type VGFormProps = {
   vin: string | null | undefined;
 };
 
-export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGFormProps) {
+export function VGForm({
+  setResult,
+  setForm,
+  plates,
+  currentPlate,
+  vin,
+}: VGFormProps) {
   const [loading, setLoading] = useState(false);
   const [plateType, setPlateType] = useState("");
   console.log("from vg form", plates);
@@ -92,33 +99,36 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
     const allPlates = data.allPlates.concat(plates);
     console.log(allPlates);
 
-    const response: Response = await fetch("/api/vg-main", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...data, allPlates }),
-    });
-    const responseData = (await response.json()) as ResponseVg;
-    console.log(responseData.validPlates);
-    setResult(responseData);
+    try {
+      const response: Response = await fetch("/api/vg-main", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...data, allPlates }),
+      });
+      const responseData = (await response.json()) as ResponseVg;
 
-    setForm(data);
-    setLoading(false);
-    {
-      /*}
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md p-4">
-          <code className="text-black">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  */
+      if (responseData.message) {
+        toast({
+          title: "Maximum Iterations Reached",
+          description: responseData.message,
+        });
+      } else {
+        console.log(responseData.validPlates);
+        setResult(responseData);
+        setForm(data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred while processing your request.",
+      });
+    } finally {
+      setLoading(false);
     }
   }
-
   return (
     <Form {...form}>
       <form
@@ -143,7 +153,11 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
           name="plateLength"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={plateType === 'numbers'}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                //disabled={plateType === "numbers"}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select the number of characters" />
@@ -168,7 +182,13 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
           name="plateType"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={(value) => { field.onChange(value); setPlateType(value); }} defaultValue={field.value}>
+              <Select
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  setPlateType(value);
+                }}
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select the type of characters" />
@@ -284,9 +304,11 @@ export function VGForm({ setResult, setForm, plates, currentPlate, vin }: VGForm
           {loading ? <Loader className="animate-spin" /> : "Generate"}
         </Button>
         {(!vin || !currentPlate) && (
-            <p className="text-xs text-primary">You must to complete 3 last digits of VIN and the plate before to use the Variation Generator.</p>
-          )}
-
+          <p className="text-xs text-primary">
+            You must complete the last 3 digits of the VIN and the plate before
+            using the Variation Generator.
+          </p>
+        )}
       </form>
     </Form>
   );

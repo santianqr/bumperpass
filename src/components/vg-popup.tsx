@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader } from "lucide-react";
 import { VGCard } from "./vg-card";
+import { toast } from "@/components/ui/use-toast";
 
 type VGPopupProps = {
   form: {
@@ -21,6 +22,7 @@ type VGPopupProps = {
 type ResponseVg = {
   validPlates: string[];
   allPlates: string[];
+  message?: string;
 };
 
 export function VGPopup({ form, allPlates }: VGPopupProps) {
@@ -32,23 +34,40 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
 
   const handleYesClick = async () => {
     setLoading(true);
-    const response = await fetch("/api/vg-main", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        plateLength: form?.plateLength,
-        plateType: form?.plateType,
-        spaces: form?.spaces,
-        symbols: form?.symbols,
-        description: form?.description,
-        allPlates: allPlates,
-      }),
-    });
-    const responseData = (await response.json()) as ResponseVg;
-    setResponseYes(responseData);
-    setLoading(false);
+    try {
+      const response = await fetch("/api/vg-main", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plateLength: form?.plateLength,
+          plateType: form?.plateType,
+          spaces: form?.spaces,
+          symbols: form?.symbols,
+          description: form?.description,
+          allPlates: allPlates,
+        }),
+      });
+      const responseData = (await response.json()) as ResponseVg;
+
+      if (responseData.message) {
+        toast({
+          title: "Maximum Iterations Reached",
+          description: responseData.message,
+        });
+      } else {
+        setResponseYes(responseData);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred while processing your request.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleNoClick = () => {
@@ -57,23 +76,40 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
 
   const handleSendClick = async () => {
     setLoading(true);
-    const response = await fetch("/api/vg-main", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        plateLength: form?.plateLength,
-        plateType: form?.plateType,
-        spaces: form?.spaces,
-        symbols: form?.symbols,
-        description: textareaValue,
-        allPlates: allPlates,
-      }),
-    });
-    const responseData = (await response.json()) as ResponseVg;
-    setResponseSend(responseData);
-    setLoading(false);
+    try {
+      const response = await fetch("/api/vg-main", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          plateLength: form?.plateLength,
+          plateType: form?.plateType,
+          spaces: form?.spaces,
+          symbols: form?.symbols,
+          description: textareaValue,
+          allPlates: allPlates,
+        }),
+      });
+      const responseData = (await response.json()) as ResponseVg;
+
+      if (responseData.message) {
+        toast({
+          title: "Maximum Iterations Reached",
+          description: responseData.message,
+        });
+      } else {
+        setResponseSend(responseData);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast({
+        title: "Error",
+        description: "An error occurred while processing your request.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

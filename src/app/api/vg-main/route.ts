@@ -65,48 +65,31 @@ export async function POST(req: NextRequest) {
     console.log("cookies: ", cookies);
 
     let validPlates: string[] = [];
+    let iterationsCount = 0;
 
     console.log("validPlates.length: ", validPlates.length);
-    while (validPlates.length < 5) {
+    while (validPlates.length < 5 && iterationsCount < 10) {
+      iterationsCount++;
       const num_ideas = 5 - validPlates.length;
-      // get the ideas
-      const response_ideas: Response = await fetch(
-        "http://localhost:3000/api/vg-ideas",
-        {
-          method: "POST",
-          headers: {
-            Accept:
-              "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.7",
-          },
-          body: JSON.stringify({
-            description: description,
-            num_ideas: num_ideas,
-            plateType: plateType,
-          }),
-        },
-      );
-      const data_ideas = (await response_ideas.json()) as ResponseIdeas;
-      const ideas = data_ideas.ideas;
-      console.log("ideas: ", ideas);
 
       console.log("all plates", allPlates);
       // get the plates
       const response_plates: Response = await fetch(
-        "http://localhost:3000/api/vg-plates",
+        "http://localhost:3000/api/vg-testing",
         {
           method: "POST",
           headers: {
             Accept: "*/*",
           },
           body: JSON.stringify({
-            ideas: ideas,
+            ideas: description,
             num_ideas: num_ideas,
             plateLength: plateLength,
             plateType: plateType,
             spaces: spaces,
             symbols: symbols,
             used_plates: allPlates,
-            type: type
+            type: type,
           }),
         },
       );
@@ -157,6 +140,16 @@ export async function POST(req: NextRequest) {
       console.log("search plates: ", search_plates);
       validPlates = validPlates.concat(search_plates);
     }
+    // Check if max iterations were reached without finding enough valid plates
+    if (iterationsCount >= 10 && validPlates.length < 5) {
+      return NextResponse.json({
+        message:
+          "Reached maximum iterations without finding enough valid plates.",
+        validPlates,
+        allPlates,
+      });
+    }
+
     await api.func.saveValidPlates.mutate({ plates: validPlates, description });
 
     return NextResponse.json({
