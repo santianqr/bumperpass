@@ -82,7 +82,7 @@ export function VGForm({
   vin,
 }: VGFormProps) {
   const [loading, setLoading] = useState(false);
-  const [plateType, setPlateType] = useState("");
+  //const [plateType, setPlateType] = useState("");
   console.log("from vg form", plates);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -185,7 +185,7 @@ export function VGForm({
               <Select
                 onValueChange={(value) => {
                   field.onChange(value);
-                  setPlateType(value);
+                  //setPlateType(value);
                 }}
                 defaultValue={field.value}
               >
