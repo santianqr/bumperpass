@@ -144,7 +144,7 @@ export async function POST(req: NextRequest) {
     if (iterationsCount >= 10 && validPlates.length < 5) {
       return NextResponse.json({
         message:
-          "Reached maximum iterations without finding enough valid plates.",
+          "Reached maximum iterations without finding enough valid plates. Please try again.",
         validPlates,
         allPlates,
       });

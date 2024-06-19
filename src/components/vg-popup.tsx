@@ -95,7 +95,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
 
       if (responseData.message) {
         toast({
-          title: "Maximum Iterations Reached",
+          title: "Maximum Iterations Reached. Please try again.",
           description: responseData.message,
         });
       } else {
