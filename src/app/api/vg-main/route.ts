@@ -21,9 +21,9 @@ type ResponseCookie = {
   message: string;
 };
 
-type ResponseIdeas = {
-  ideas: string[];
-};
+//type ResponseIdeas = {
+//  ideas: string[];
+//};
 
 type ResponsePlates = {
   plates: string[];
