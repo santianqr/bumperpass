@@ -8,6 +8,7 @@ import {
   CardContent,
 } from "./ui/card";
 import { PayButton } from "./pay-button";
+import { CouponField } from "./coupon-field";
 
 export async function TestingComponent() {
   const stripe = new Stripe(env.STRIPE_SECRET_KEY);
@@ -28,9 +29,12 @@ export async function TestingComponent() {
         <CardTitle>{nickname}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-row justify-between">
-        <h3 className="text-2xl font-bold">${unitAmount}</h3>
-        <PayButton id={product?.id ?? ""} />
+      <CardContent className="flex flex-col space-y-2">
+        <div className="flex flex-row justify-between">
+          <h3 className="text-2xl font-bold">${unitAmount}</h3>
+          <PayButton id={product?.id ?? ""} />
+        </div>
+        <CouponField />
       </CardContent>
     </Card>
   );

@@ -80,6 +80,15 @@ model User {
     plate         Plate[]
     customPlate   CustomPlate[]
     tokens        VerificationToken[]
+    payments      Payment[]
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  services    Int      @default(2)
+  createdAt   DateTime @default(now())
 }
 
 model VerificationToken {

@@ -103,7 +103,6 @@ type SearchCarApiResponse = {
   status: number;
 };
 
-
 export const funcRouter = createTRPCRouter({
   createAccount: publicProcedure
     .input(FormSchemaRegister)
@@ -178,7 +177,6 @@ export const funcRouter = createTRPCRouter({
       if (result.message !== "OK") {
         throw new Error("3 last digits of VIN or Plate is not valid.");
       }
-
 
       await ctx.db.user.update({
         where: { id: verificationToken.identifier },
@@ -499,4 +497,12 @@ export const funcRouter = createTRPCRouter({
 
       return createdPlates;
     }),
+  saveServices: protectedProcedure.mutation(async ({ ctx }) => {
+    return ctx.db.payment.create({
+      data: {
+        userId: ctx.session.user.id,
+        createdAt: new Date(),
+      },
+    });
+  }),
 });
