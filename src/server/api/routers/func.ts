@@ -525,4 +525,11 @@ export const funcRouter = createTRPCRouter({
       });
     }
   }),
+  deleteServices: protectedProcedure.mutation(async ({ ctx }) => {
+    await ctx.db.payment.delete({
+      where: {
+        userId: ctx.session.user.id,
+      },
+    });
+  }),
 });

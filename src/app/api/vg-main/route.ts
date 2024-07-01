@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
     }
 
     await api.func.saveValidPlates.mutate({ plates: validPlates, description });
-
+    await api.func.deleteServices.mutate();
     return NextResponse.json({
       validPlates,
       allPlates,
