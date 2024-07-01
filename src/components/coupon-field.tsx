@@ -38,7 +38,7 @@ export function CouponField() {
       <Button onClick={handleRedeem}>Redeem Coupon</Button>
       {isCouponApplied && (
         <p className="text-sm">
-          Coupon applied successfully! Try on: <a href="/services/vg" />
+          Coupon applied successfully! Try on: <a href="/services/vg">Variation Generator</a>
         </p>
       )}
       {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}

@@ -498,11 +498,31 @@ export const funcRouter = createTRPCRouter({
       return createdPlates;
     }),
   saveServices: protectedProcedure.mutation(async ({ ctx }) => {
-    return ctx.db.payment.create({
-      data: {
+    const existingPayment = await ctx.db.payment.findUnique({
+      where: {
         userId: ctx.session.user.id,
-        createdAt: new Date(),
       },
     });
+
+    if (existingPayment) {
+      // Si ya existe una entrada para el usuario, actualiza el número de servicios
+      return ctx.db.payment.update({
+        where: {
+          userId: ctx.session.user.id,
+        },
+        data: {
+          services: existingPayment.services + 2, // Sumar 2 servicios
+        },
+      });
+    } else {
+      // Si no existe una entrada, crea una nueva
+      return ctx.db.payment.create({
+        data: {
+          userId: ctx.session.user.id,
+          services: 2, // Iniciar con 2 servicios
+          createdAt: new Date(),
+        },
+      });
+    }
   }),
 });
