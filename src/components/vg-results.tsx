@@ -14,9 +14,15 @@ type VGResultsProps = {
   plates: string[];
   vin: string | null | undefined;
   currentPlate: string | null | undefined;
+  services: number | null | undefined;
 };
 
-export function VGResults({ plates, vin, currentPlate }: VGResultsProps) {
+export function VGResults({
+  plates,
+  vin,
+  currentPlate,
+  services,
+}: VGResultsProps) {
   const [result, setResult] = useState<ResponseVg | null>(null);
   const [form, setForm] = useState<{
     plateLength: string;
@@ -30,7 +36,14 @@ export function VGResults({ plates, vin, currentPlate }: VGResultsProps) {
   return (
     <section className="flex justify-center ">
       <div className="space-y-4">
-        <VGForm plates={plates} setResult={setResult} setForm={setForm} currentPlate={currentPlate} vin={vin} />
+        <VGForm
+          plates={plates}
+          setResult={setResult}
+          setForm={setForm}
+          currentPlate={currentPlate}
+          vin={vin}
+          services={services}
+        />
         {result && form ? (
           <>
             <VGCard

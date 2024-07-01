@@ -19,9 +19,16 @@ export default async function VGPage() {
       currentPlate: true,
     },
   });
-
+  
+  const num_services = await db.payment.findUnique({
+    where: { userId: session?.user.id },
+    select: {
+      services: true,
+    },
+  });
 
   const plates = userPlates.map((plate) => plate.plate);
+  console.log(num_services?.services)
   console.log(typeof userPlates);
   return (
     <main className="flex flex-col justify-center space-y-8">
@@ -67,7 +74,7 @@ export default async function VGPage() {
           </p>
         </div>
       </section>
-      <VGResults plates={plates} currentPlate={vinPlate?.currentPlate} vin={vinPlate?.vin}/>
+      <VGResults plates={plates} currentPlate={vinPlate?.currentPlate} vin={vinPlate?.vin} services={num_services?.services}/>
     </main>
   );
 }

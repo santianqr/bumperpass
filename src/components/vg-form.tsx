@@ -72,6 +72,7 @@ type VGFormProps = {
   plates: string[];
   currentPlate: string | null | undefined;
   vin: string | null | undefined;
+  services: number | null | undefined;
 };
 
 export function VGForm({
@@ -80,6 +81,7 @@ export function VGForm({
   plates,
   currentPlate,
   vin,
+  services,
 }: VGFormProps) {
   const [loading, setLoading] = useState(false);
   //const [plateType, setPlateType] = useState("");
@@ -299,7 +301,7 @@ export function VGForm({
         <Button
           type="submit"
           className="bg-[#E62534] hover:bg-[#E62534]/90"
-          disabled={loading || !vin || !currentPlate}
+          disabled={loading || !vin || !currentPlate || !services}
         >
           {loading ? <Loader className="animate-spin" /> : "Generate"}
         </Button>
@@ -307,6 +309,11 @@ export function VGForm({
           <p className="text-xs text-primary">
             You must complete the last 3 digits of the VIN and the plate before
             using the Variation Generator.
+          </p>
+        )}
+        {(!services) && (
+          <p className="text-xs text-primary">
+            You must to have at least one service to use the Variation Generator.
           </p>
         )}
       </form>
