@@ -60,6 +60,7 @@ export async function POST(req: NextRequest) {
 
     Consider if is the case:
     ${plateType === "any" || plateType === "numbers" ? "Number 0 are not allowed in the plates." : ""}
+    ${plateType === "any" || plateType === "numbers" ? "Do not use logic sequences like: 1234, 2345. Instead of this, use numbers related to the topics of inputs." : ""}
     ${spaces ? 'Space " " counts as character.' : ""}
     ${symbols ? "Emoji counts as character." : ""}
     ${symbols ? "Emojis allowed: ❤, ⭐, 🖐, ➕." : ""}

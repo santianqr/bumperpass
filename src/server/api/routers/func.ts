@@ -497,6 +497,50 @@ export const funcRouter = createTRPCRouter({
 
       return createdPlates;
     }),
+
+  saveServicesStripe: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existingUser = await ctx.db.user.findUnique({
+        where: {
+          email: input.email,
+        },
+      });
+
+      if (!existingUser) {
+        throw new Error("User not found");
+      }
+
+      const existingPayment = await ctx.db.payment.findUnique({
+        where: {
+          userId: existingUser.id,
+        },
+      });
+
+      if (existingPayment) {
+        return ctx.db.payment.update({
+          where: {
+            userId: existingUser.id,
+          },
+          data: {
+            services: existingPayment.services + 2,
+          },
+        });
+      } else {
+        return ctx.db.payment.create({
+          data: {
+            userId: existingUser.id,
+            services: 2,
+            createdAt: new Date(),
+          },
+        });
+      }
+    }),
+
   saveServices: protectedProcedure.mutation(async ({ ctx }) => {
     const existingPayment = await ctx.db.payment.findUnique({
       where: {

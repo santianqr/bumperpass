@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { Stripe } from "stripe";
 import { env } from "@/env";
-import { api } from "@/trpc/server";
+//import { api } from "@/trpc/server";
 
 type Body = {
   id: string;
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     success_url: "http://localhost:3000/services/vg",
     cancel_url: "http://localhost:3000/",
   });
-  await api.func.saveServices.mutate();
+  //await api.func.saveServices.mutate();
   return NextResponse.json({
     url: session.url,
   });
