@@ -185,7 +185,7 @@ export function SearchForm({ currentPlate, vin }: SearchProps) {
             </FormItem>
           )}
         />
-        <div className="flex justify-center space-y-2 md:space-x-8 flex-col md:flex-row">
+        <div className="flex flex-col items-center justify-center space-y-2 md:flex-row md:space-x-8 md:space-y-0">
           <Button type="submit" disabled={isLoading || !vin || !currentPlate}>
             {isLoading ? <Loader className="animate-spin" /> : "Search"}
           </Button>
@@ -199,7 +199,7 @@ export function SearchForm({ currentPlate, vin }: SearchProps) {
             Clear
           </Button>
           {(!vin || !currentPlate) && (
-            <p className="text-xs">
+            <p className="text-xs mt-2 md:mt-0">
               You must to complete 3 last digits of VIN and the plate before to
               use the Search.
             </p>
