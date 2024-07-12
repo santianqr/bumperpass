@@ -35,7 +35,7 @@ export function ServicesCard() {
         </CardContent>
         <CardDescription></CardDescription>
         <CardFooter>
-          <Link href="/search">
+          <Link href="/#search">
             <Button className="bg-[#E62534] hover:bg-[#E62534]/90">
               Make a search
             </Button>

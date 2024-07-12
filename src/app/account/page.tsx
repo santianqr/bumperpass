@@ -8,7 +8,7 @@ export default async function Account() {
   const accountData = await api.func.getAccount.query();
   return (
     <main className="flex">
-      <aside className="hidden bg-foreground/15 p-8 text-primary sm:block">
+      <aside className="hidden  p-8 text-primary sm:block">
         <CircleUser size={128} />
       </aside>
       <section className="space-y-4 p-8">
