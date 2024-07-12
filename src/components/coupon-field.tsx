@@ -23,12 +23,12 @@ export function CouponField() {
       saveServices.mutate();
     } else {
       setIsCouponApplied(false);
-      setErrorMessage("Invalid coupon, try another.");
+      setErrorMessage("Invalid coupon, try another one.");
     }
   }
 
   return (
-    <>
+    <div className="space-y-2 flex flex-col">
       <Input
         placeholder="Type your coupon"
         value={coupon}
@@ -38,10 +38,10 @@ export function CouponField() {
       <Button onClick={handleRedeem}>Redeem Coupon</Button>
       {isCouponApplied && (
         <p className="text-sm">
-          Coupon applied successfully! Try on: <a href="/services/vg">Variation Generator</a>
+          Coupon applied successfully! Try on: <a href="/services/vg" className="font-bold">Variation Generator</a>
         </p>
       )}
       {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
-    </>
+      </div>
   );
 }

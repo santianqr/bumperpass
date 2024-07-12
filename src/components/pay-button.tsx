@@ -23,8 +23,8 @@ export async function PayButton({ id }: PayButtonProps) {
     window.location.href = response.url;
   }
   return (
-    <Button size="lg" onClick={onSubmit}>
-      Buy
+    <Button onClick={onSubmit} className="bg-[#F59F0F] hover:bg-[#F59F0F]/90">
+      Learn More
     </Button>
   );
 }

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       },
     ],
     success_url: "http://localhost:3000/services/vg",
-    cancel_url: "http://localhost:3000/testing-page",
+    cancel_url: "http://localhost:3000/",
   });
 
   return NextResponse.json({
