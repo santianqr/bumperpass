@@ -505,31 +505,48 @@ export const funcRouter = createTRPCRouter({
     });
 
     if (existingPayment) {
-      // Si ya existe una entrada para el usuario, actualiza el número de servicios
       return ctx.db.payment.update({
         where: {
           userId: ctx.session.user.id,
         },
         data: {
-          services: existingPayment.services + 2, // Sumar 2 servicios
+          services: existingPayment.services + 2,
         },
       });
     } else {
-      // Si no existe una entrada, crea una nueva
       return ctx.db.payment.create({
         data: {
           userId: ctx.session.user.id,
-          services: 2, // Iniciar con 2 servicios
+          services: 2,
           createdAt: new Date(),
         },
       });
     }
   }),
   deleteServices: protectedProcedure.mutation(async ({ ctx }) => {
-    await ctx.db.payment.delete({
+    const existingPayment = await ctx.db.payment.findUnique({
       where: {
         userId: ctx.session.user.id,
       },
     });
+
+    if (existingPayment && existingPayment.services > 1) {
+      return ctx.db.payment.update({
+        where: {
+          userId: ctx.session.user.id,
+        },
+        data: {
+          services: existingPayment.services - 1,
+        },
+      });
+    } else if (existingPayment && existingPayment.services === 1) {
+      return ctx.db.payment.delete({
+        where: {
+          userId: ctx.session.user.id,
+        },
+      });
+    } else {
+      throw new Error("No services to delete");
+    }
   }),
 });
