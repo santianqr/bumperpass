@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
@@ -44,36 +42,34 @@ export async function POST(req: NextRequest) {
     const type = body.type;
     const used_plates = body.used_plates;
 
-    const user_input = `Preferences: ${ideas}
-
+    const user_input = `
+    Preferences: ${ideas}
     Parameters:
-    1. Number characters = ${plateLength === "any" ? "between 2 and 7 characters." : `exactly ${plateLength} characters.`}
-    2. Letters = ${plateType === "any" || plateType === "letters" ? "enabled" : "disabled"}
-    3. Numbers = ${plateType === "any" || plateType === "numbers" ? "enabled" : "disabled"}
-    4. Space = ${spaces ? "enabled" : "disabled"}
-    5. Emoji = ${symbols ? "enabled" : "disabled"}
-    ${symbols ? `6. Emoji type = ${type}` : ""}
+    - Number characters = ${plateLength === "any" ? "between 2 and 7 characters." : `exactly ${plateLength} characters.`}
+    - Letters = ${plateType === "any" || plateType === "letters" ? "enabled" : "disabled"}
+    - Numbers = ${plateType === "any" || plateType === "numbers" ? "enabled" : "disabled"}
+    - Space = ${spaces ? "enabled" : "disabled"}
+    - Emoji = ${symbols ? "enabled" : "disabled"}
+    ${symbols ? `- Emoji type = ${type}` : ""}
     `;
     console.log(user_input);
 
-    const TEMPLATE = `Create ${num_ideas} plates for CA based on input preferences following the input parameters. 
-
-    Consider if is the case:
-    ${plateType === "any" || plateType === "numbers" ? "Number 0 are not allowed in the plates." : ""}
-    ${plateType === "any" || plateType === "numbers" ? "Do not use logic sequences like: 1234, 2345. Instead of this, use numbers related to the topics of inputs." : ""}
+    const TEMPLATE = `
+    Consider:
+    ${plateType === "any" || plateType === "numbers" ? "Number 0 not allowed." : ""}
     ${spaces ? 'Space " " counts as character.' : ""}
+    ${spaces ? "Max one space within the text but not at the edges." : ""}
     ${symbols ? "Emoji counts as character." : ""}
     ${symbols ? "Emojis allowed: ❤, ⭐, 🖐, ➕." : ""}
     ${symbols ? "Replace ❤: ~, ⭐: *, 🖐: =, ➕: +." : ""}
-    ${spaces ? "Max one space in middle of plate." : ""}
     ${symbols ? "Max one emoji per plate." : ""}
     ${used_plates.length > 0 ? `Plates already in use: ${used_plates.join(", ")}` : ""}
 
     Steps:
-    1. Analyze input preferences for links, keywords, and specific details.
-    2. Follow input parameters.
+    1. Build a plate based on input preferences.
+    2. Apply input parameters.
     3. Add creativity.
-    4. Generate ${num_ideas} plates.
+    4. Generate ${num_ideas} plates based on input preferences.
 
     Input: 
     {input}
@@ -83,7 +79,7 @@ export async function POST(req: NextRequest) {
     const prompt = PromptTemplate.fromTemplate(TEMPLATE);
 
     const model = new ChatOpenAI({
-      temperature: 0.2,
+      temperature: 0.5,
       modelName: "gpt-4o",
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
