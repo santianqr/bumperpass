@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       },
     ],
-    success_url: "http://localhost:3000/services/vg",
-    cancel_url: "http://localhost:3000/",
+    success_url: "https://www.bumperpass.com/services/vg",
+    cancel_url: "https://www.bumperpass.com/",
   });
   //await api.func.saveServices.mutate();
   return NextResponse.json({
