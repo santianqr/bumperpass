@@ -113,7 +113,7 @@ export function VGForm({
 
       if (responseData.message) {
         toast({
-          title: "Maximum Iterations Reached. Please try again.",
+          title: "*Oops! Something went wrong.*\n We're sorry, but it looks like there is an issue with your request. Please go back to the VG page and try a different input. Don't worry about the costs, it's on us! If the problem persists, please contact us.",
           description: responseData.message,
         });
       } else {
@@ -125,7 +125,7 @@ export function VGForm({
       console.error("Error:", error);
       toast({
         title: "Error",
-        description: "An error occurred while processing your request.",
+        description: "An unexpected error occurred while processing your request. Please go back to the VG page and perform a new generation, it's on us!",
       });
     } finally {
       setLoading(false);
