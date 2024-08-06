@@ -143,7 +143,7 @@ export function VGForm({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="Insert your description" {...field} />
+                <Textarea placeholder="Insert your description" {...field} disabled={!services}/>
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />
@@ -158,7 +158,7 @@ export function VGForm({
               <Select
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                //disabled={plateType === "numbers"}
+                disabled={!services}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -190,6 +190,7 @@ export function VGForm({
                   //setPlateType(value);
                 }}
                 defaultValue={field.value}
+                disabled={!services}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -219,6 +220,7 @@ export function VGForm({
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={!services}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
@@ -239,6 +241,7 @@ export function VGForm({
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
+                  disabled={!services}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">

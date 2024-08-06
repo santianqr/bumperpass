@@ -9,8 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { PayButton } from "./pay-button";
-import { CouponField } from "./coupon-field";
 
 export function ServicesCard() {
   return (
@@ -60,9 +58,10 @@ export function ServicesCard() {
         <CardDescription></CardDescription>
         <CardFooter className="flex flex-col space-y-2">
           <Link href="/services/vg">
-            <PayButton id={"price_1PV2lJ03f3Kk4V9MKjOMT1Li"} />
+            <Button className="bg-[#F59F0F] hover:bg-[#F59F0F]/90">
+              Learn more
+            </Button>
           </Link>
-          <CouponField />
         </CardFooter>
       </Card>
     </div>
