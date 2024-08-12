@@ -32,6 +32,7 @@ model CustomPlate {
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now())
     description String
+    completed   Boolean  @default(true)
 }
 
 // Necessary for Next auth

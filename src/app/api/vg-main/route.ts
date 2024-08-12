@@ -21,10 +21,6 @@ type ResponseCookie = {
   message: string;
 };
 
-//type ResponseIdeas = {
-//  ideas: string[];
-//};
-
 type ResponsePlates = {
   plates: string[];
 };
@@ -49,7 +45,8 @@ export async function POST(req: NextRequest) {
     const type = body.type;
     let allPlates: string[] = body.allPlates;
     console.log("allPlates: in vg main", allPlates);
-    // get the cookie
+
+    // Obtener la cookie
     const response_cookie: Response = await fetch(
       "http://localhost:3000/api/vg-cookie",
       {
@@ -73,7 +70,7 @@ export async function POST(req: NextRequest) {
       const num_ideas = 5 - validPlates.length;
 
       console.log("all plates", allPlates);
-      // get the plates
+      // Obtener las placas
       const response_plates: Response = await fetch(
         "http://localhost:3000/api/vg-testing",
         {
@@ -97,7 +94,7 @@ export async function POST(req: NextRequest) {
       const plates = data_plates.plates;
       console.log("plates:", plates);
 
-      // validate each plate by algorithm
+      // Validar cada placa mediante algoritmo
       const response_valid: Response = await fetch(
         "http://localhost:3000/api/vg-valid",
         {
@@ -121,7 +118,7 @@ export async function POST(req: NextRequest) {
 
       allPlates = allPlates.concat(plates);
       console.log("allPlates:", allPlates);
-      // second validation with search vg
+      // Segunda validación con búsqueda vg
       const response_search: Response = await fetch(
         "http://localhost:3000/api/vg-search",
         {
@@ -140,21 +137,39 @@ export async function POST(req: NextRequest) {
       console.log("search plates: ", search_plates);
       validPlates = validPlates.concat(search_plates);
     }
-    // Check if max iterations were reached without finding enough valid plates
-    if (iterationsCount >= 10 && validPlates.length < 5) {
+
+    // Verificar si hay al menos una placa válida
+    if (validPlates.length > 0) {
+      // Determinar si el proceso se completó correctamente
+      const completed = validPlates.length >= 5;
+
+      // Guardar las placas y su estado de finalización
+      await api.func.saveValidPlates.mutate({
+        plates: validPlates,
+        description,
+        completed,
+      });
+
+      // Responder dependiendo del estado de completitud
+      if (!completed) {
+        return NextResponse.json({
+          message:
+            "Incomplete process, but the available plates have been saved.",
+          validPlates,
+          allPlates,
+        });
+      }
+
       return NextResponse.json({
-        message:
-          "Reached maximum iterations without finding enough valid plates. Please try again.",
         validPlates,
         allPlates,
       });
     }
 
-    await api.func.saveValidPlates.mutate({ plates: validPlates, description });
-    await api.func.deleteServices.mutate();
+    // Si no hay placas válidas, enviar solo el mensaje de error
     return NextResponse.json({
-      validPlates,
-      allPlates,
+      message:
+        "Maximum iterations reached without finding valid plates. Please try again.",
     });
   } catch (error) {
     return NextResponse.json({

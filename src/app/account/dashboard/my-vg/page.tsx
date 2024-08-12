@@ -11,6 +11,7 @@ type PlateData = {
   createdAt: Date;
   description: string;
   plate: string;
+  completed: boolean;
 };
 import { unstable_noStore as noStore } from "next/cache";
 
@@ -25,11 +26,14 @@ export default async function MyVG() {
   const groupedData = vgData.reduce<Record<string, PlateData[]>>(
     (acc, plate) => {
       if (plate.createdAt && plate.description) {
-        const key = `${plate.createdAt.toLocaleDateString()} - ${plate.description}`;
+        // Determine if any plate is not completed
+        const completionStatus = plate.completed ? "" : " - Not Completed";
+        const key = `${plate.createdAt.toLocaleDateString()} - ${plate.description}${completionStatus}`;
+        
         if (!acc[key]) {
           acc[key] = [];
         }
-        acc[key]!.push(plate);
+        acc[key].push(plate);
       }
       return acc;
     },

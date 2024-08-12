@@ -297,10 +297,11 @@ export const funcRouter = createTRPCRouter({
         plate: true,
         createdAt: true,
         description: true,
+        completed: true,
       },
     });
   }),
-
+  
   getCar: protectedProcedure.query(({ ctx }) => {
     return ctx.db.user.findUnique({
       where: { id: ctx.session.user.id },
@@ -472,16 +473,17 @@ export const funcRouter = createTRPCRouter({
       }
     }),
 
-  saveValidPlates: protectedProcedure
+    saveValidPlates: protectedProcedure
     .input(
       z.object({
         plates: z.array(z.string()),
         description: z.string(),
+        completed: z.boolean(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
-
+  
       const createdPlates = await Promise.all(
         input.plates.map((plate) =>
           ctx.db.customPlate.create({
@@ -490,14 +492,15 @@ export const funcRouter = createTRPCRouter({
               userId,
               createdAt: new Date(),
               description: input.description,
+              completed: input.completed, // Guardar el estado de completitud
             },
           }),
         ),
       );
-
+  
       return createdPlates;
     }),
-
+  
   saveServicesStripe: publicProcedure
     .input(
       z.object({
