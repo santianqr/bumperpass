@@ -21,7 +21,7 @@ export async function PayButton() {
   }
   return (
     <Button onClick={onSubmit} className="bg-[#F59F0F] hover:bg-[#F59F0F]/90">
-      Purchase
+      Purchase NOW!
     </Button>
   );
 }

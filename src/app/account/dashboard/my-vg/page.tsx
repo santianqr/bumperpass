@@ -30,16 +30,14 @@ export default async function MyVG() {
         const completionStatus = plate.completed ? "" : " - Not Completed";
         const key = `${plate.createdAt.toLocaleDateString()} - ${plate.description}${completionStatus}`;
         
-        if (!acc[key]) {
-          acc[key] = [];
-        }
-        acc[key].push(plate);
+        // Utilizando coalescencia nula para asegurar que acc[key] siempre sea un array
+        (acc[key] ??= []).push(plate);
       }
       return acc;
     },
     {},
   );
-
+  
   return (
     <main>
       <Accordion type="single" collapsible>

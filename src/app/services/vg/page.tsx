@@ -1,20 +1,7 @@
 import { VGResults } from "@/components/vg-results";
 import { db } from "@/server/db";
 import { getServerAuthSession } from "@/server/auth";
-import { PayButton } from "@/components/pay-button";
-
-import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { CouponField } from "@/components/coupon-field";
+import { VGPayment } from "@/components/vg-payment";
 
 export default async function VGPage() {
   const session = await getServerAuthSession();
@@ -58,29 +45,7 @@ export default async function VGPage() {
       </section>
       <section className="flex justify-center">
         <div className="space-y-2">
-        {num_services?.services === undefined && (
-            <div>
-              <PayButton /> 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button>Redeem Coupon</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Do you have a coupon?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      If you have a coupon, you can redeem it here.
-                      <CouponField />
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          )}
-
+          <VGPayment />
           <p className="text-lg font-semibold text-primary">Instructions</p>
           <ul className="list-inside list-disc text-sm marker:text-foreground/60">
             <li>
