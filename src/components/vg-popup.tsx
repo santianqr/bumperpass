@@ -158,10 +158,11 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         <VGCard
           result={responseYes.validPlates}
           description={form.description}
+          attempt={2}
         />
       ) : null}
       {responseSend && form ? (
-        <VGCard result={responseSend.validPlates} description={textareaValue} />
+        <VGCard result={responseSend.validPlates} description={textareaValue} attempt={2}/>
       ) : null}
     </>
   );

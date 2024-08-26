@@ -34,7 +34,7 @@ export function VGResults({
   } | null>(null);
 
   return (
-    <section className="flex justify-center ">
+    <section className="flex justify-center">
       <div className="space-y-4">
         <VGForm
           plates={plates}
@@ -49,6 +49,7 @@ export function VGResults({
             <VGCard
               result={result.validPlates}
               description={form.description}
+              attempt={1}
             />
             {form.allPlates}
             <VGPopup form={form} allPlates={result.allPlates} />

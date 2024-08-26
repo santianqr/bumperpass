@@ -13,13 +13,14 @@ import { Plate } from "./plate";
 type VGCardProps = {
   result: string[];
   description: string;
+  attempt: number;
 };
 
-export function VGCard({ result, description }: VGCardProps) {
+export function VGCard({ result, description, attempt }: VGCardProps) {
   return (
     <Card className="flex flex-col items-stretch">
       <CardHeader>
-        <CardTitle>Your type</CardTitle>
+        <CardTitle>Your request</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -31,16 +32,17 @@ export function VGCard({ result, description }: VGCardProps) {
           ))}
         </CardContent>
       </CardContent>
-      <CardFooter className="self-end">
-        <Link href="/account/dashboard">
-          <Button
-            type="submit"
-            className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
-          >
-            Go to my dashboard
-          </Button>
-        </Link>
-      </CardFooter>
-    </Card>
+      {attempt === 2 && (
+        <CardFooter className="self-end">
+          <Link href="/account/dashboard">
+            <Button
+              type="submit"
+              className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+            >
+              Go to my dashboard
+            </Button>
+          </Link>
+        </CardFooter>
+      )}    </Card>
   );
 }
