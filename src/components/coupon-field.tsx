@@ -7,7 +7,7 @@ import { api } from "@/trpc/react";
 
 export function CouponField() {
   const [coupon, setCoupon] = useState("");
-  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  //const [isCouponApplied, setIsCouponApplied] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const saveServices = api.func.saveServices.useMutation();
@@ -18,11 +18,12 @@ export function CouponField() {
 
   function handleRedeem() {
     if (coupon === "BP4EVER") {
-      setIsCouponApplied(true);
-      setErrorMessage("");
+      //setIsCouponApplied(true);
+      //setErrorMessage("");
       saveServices.mutate();
+      window.location.reload(); 
     } else {
-      setIsCouponApplied(false);
+      //setIsCouponApplied(false);
       setErrorMessage("Invalid coupon, try another one.");
     }
   }
@@ -36,12 +37,7 @@ export function CouponField() {
       />
 
       <Button onClick={handleRedeem}>Redeem Coupon</Button>
-      {isCouponApplied && (
-        <p className="text-sm">
-          Coupon applied successfully! Try on: <a href="/services/vg" className="font-bold">Variation Generator</a>
-        </p>
-      )}
       {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
-      </div>
+    </div>
   );
 }
