@@ -43,6 +43,7 @@ export function VGCard({ result, description, attempt }: VGCardProps) {
             </Button>
           </Link>
         </CardFooter>
-      )}    </Card>
+      )}
+    </Card>
   );
 }

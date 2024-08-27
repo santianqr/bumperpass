@@ -158,6 +158,8 @@ export async function POST(req: NextRequest) {
           validPlates,
           allPlates,
         });
+      } else {
+        await api.func.deleteServices.mutate();
       }
 
       return NextResponse.json({

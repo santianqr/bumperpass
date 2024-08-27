@@ -118,12 +118,18 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         <p className="text-sm font-medium leading-none">
           Are you liking current suggestions?
         </p>
+        <p>
+          New instructions Lorem ipsum dolor sit amet, consectetur adipisicing
+          elit. Adipisci nihil aliquam quisquam laborum temporibus hic porro
+          quaerat soluta tempore iste, repudiandae eveniet dicta illum aperiam?
+          Quibusdam ea enim quae necessitatibus!
+        </p>
         <div className="space-x-4">
           <Button
             type="submit"
             onClick={handleYesClick}
             className="bg-[#E62534] hover:bg-[#E62534]/90"
-            disabled={loading}
+            disabled={loading || showTextarea}
           >
             {loading ? <Loader className="animate-spin" /> : "Yes"}
           </Button>
@@ -133,7 +139,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
             className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
             disabled={loading}
           >
-            {loading ? <Loader className="animate-spin" /> : "No"}
+            No
           </Button>
         </div>
         {showTextarea && (
@@ -162,7 +168,11 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         />
       ) : null}
       {responseSend && form ? (
-        <VGCard result={responseSend.validPlates} description={textareaValue} attempt={2}/>
+        <VGCard
+          result={responseSend.validPlates}
+          description={textareaValue}
+          attempt={2}
+        />
       ) : null}
     </>
   );
