@@ -6,8 +6,7 @@ type CheckoutResponse = {
   url: string;
 };
 
-
-export async function PayButton() {
+export function PayButton() {
   async function onSubmit() {
     const res: Response = await fetch("/api/checkout", {
       method: "POST",

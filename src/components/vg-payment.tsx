@@ -1,18 +1,38 @@
-import { PayButton } from "./pay-button";
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
+import { PayButton } from "./pay-button";
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { CouponField } from "@/components/coupon-field";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export function VGPayment() {
+  const router = useRouter();
+  const [coupon, setCoupon] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const saveServices = api.func.saveServices.useMutation();
+
+  const handleCouponChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCoupon(event.target.value);
+  };
+
+  const handleRedeem = () => {
+    if (coupon === "BP4EVER") {
+      setErrorMessage("");
+      saveServices.mutate();
+      router.refresh();
+    } else {
+      setErrorMessage("Invalid coupon, try another one.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center space-y-2">
       <p className="text-center text-sm">
@@ -21,25 +41,27 @@ export function VGPayment() {
         ipsa rem tempora quis, labore adipisci consequuntur dolorem odio
         distinctio quia?
       </p>
-      <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <PayButton />
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button>Redeem Coupon</Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Do you have a coupon?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  If you have a coupon, you can redeem it here.
-                  <CouponField />
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button>Redeem Coupon</Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <Input
+              value={coupon}
+              onChange={handleCouponChange}
+              placeholder="Enter your coupon"
+              className="w-full"
+            />
+            <Button onClick={handleRedeem} className="w-full">
+              Redeem
+            </Button>
+            {errorMessage && (
+              <p className="text-sm text-red-500">{errorMessage}</p>
+            )}
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
