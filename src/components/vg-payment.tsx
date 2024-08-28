@@ -23,16 +23,16 @@ export function VGPayment() {
     setCoupon(event.target.value);
   };
 
-  const handleRedeem = () => {
+  const handleRedeem = async () => {
     if (coupon === "BP4EVER") {
       setErrorMessage("");
-      saveServices.mutate();
+      await saveServices.mutateAsync();
       router.refresh();
     } else {
       setErrorMessage("Invalid coupon, try another one.");
     }
   };
-
+  
   return (
     <div className="flex flex-col items-center justify-center space-y-2">
       <p className="text-center text-sm">
