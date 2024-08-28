@@ -50,7 +50,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         }),
       });
       const responseData = (await response.json()) as ResponseVg;
-
+  
       if (responseData.message) {
         toast({
           title: "Maximum Iterations Reached",
@@ -58,6 +58,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         });
       } else {
         setResponseYes(responseData);
+        setShowTextarea(false); // Oculta el Textarea cuando ya esté la respuesta
       }
     } catch (error) {
       console.error("Error:", error);
@@ -69,7 +70,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
       setLoading(false);
     }
   };
-
+  
   const handleNoClick = () => {
     setShowTextarea(true);
   };
@@ -92,7 +93,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         }),
       });
       const responseData = (await response.json()) as ResponseVg;
-
+  
       if (responseData.message) {
         toast({
           title: "Maximum Iterations Reached. Please try again.",
@@ -100,6 +101,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         });
       } else {
         setResponseSend(responseData);
+        setShowTextarea(false); // Oculta el Textarea cuando ya esté la respuesta
       }
     } catch (error) {
       console.error("Error:", error);
@@ -111,19 +113,14 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
       setLoading(false);
     }
   };
-
+  
   return (
     <>
       <div className="flex flex-col items-center space-y-2 rounded-xl border bg-card p-6 text-card-foreground shadow">
         <p className="text-sm font-medium leading-none">
           Are you liking current suggestions?
         </p>
-        <p>
-          New instructions Lorem ipsum dolor sit amet, consectetur adipisicing
-          elit. Adipisci nihil aliquam quisquam laborum temporibus hic porro
-          quaerat soluta tempore iste, repudiandae eveniet dicta illum aperiam?
-          Quibusdam ea enim quae necessitatibus!
-        </p>
+
         <div className="space-x-4">
           <Button
             type="submit"
@@ -144,6 +141,13 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         </div>
         {showTextarea && (
           <>
+            <p>
+              New instructions Lorem ipsum dolor sit amet, consectetur
+              adipisicing elit. Adipisci nihil aliquam quisquam laborum
+              temporibus hic porro quaerat soluta tempore iste, repudiandae
+              eveniet dicta illum aperiam? Quibusdam ea enim quae
+              necessitatibus!
+            </p>
             <Textarea
               placeholder="Insert your type"
               value={textareaValue}
