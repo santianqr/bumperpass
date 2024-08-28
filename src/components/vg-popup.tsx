@@ -58,7 +58,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         });
       } else {
         setResponseYes(responseData);
-        setShowTextarea(false); // Oculta el Textarea cuando ya esté la respuesta
+        setShowTextarea(false);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -101,7 +101,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
         });
       } else {
         setResponseSend(responseData);
-        setShowTextarea(false); // Oculta el Textarea cuando ya esté la respuesta
+        setShowTextarea(false);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -113,71 +113,76 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
       setLoading(false);
     }
   };
-  
+
   return (
     <>
-      <div className="flex flex-col items-center space-y-2 rounded-xl border bg-card p-6 text-card-foreground shadow">
-        <p className="text-sm font-medium leading-none">
-          Are you liking current suggestions?
-        </p>
+      {/* Mostrar VGPopup si no hay respuestas, de lo contrario ocultar */}
+      {!(responseYes ?? responseSend) && (
+        <div className="flex flex-col items-center space-y-2 rounded-xl border bg-card p-6 text-card-foreground shadow">
+          <p className="text-sm font-medium leading-none">
+            Are you liking current suggestions?
+          </p>
 
-        <div className="space-x-4">
-          <Button
-            type="submit"
-            onClick={handleYesClick}
-            className="bg-[#E62534] hover:bg-[#E62534]/90"
-            disabled={loading || showTextarea}
-          >
-            {loading ? <Loader className="animate-spin" /> : "Yes"}
-          </Button>
-          <Button
-            type="submit"
-            onClick={handleNoClick}
-            className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-            disabled={loading}
-          >
-            No
-          </Button>
-        </div>
-        {showTextarea && (
-          <>
-            <p>
-              New instructions Lorem ipsum dolor sit amet, consectetur
-              adipisicing elit. Adipisci nihil aliquam quisquam laborum
-              temporibus hic porro quaerat soluta tempore iste, repudiandae
-              eveniet dicta illum aperiam? Quibusdam ea enim quae
-              necessitatibus!
-            </p>
-            <Textarea
-              placeholder="Insert your type"
-              value={textareaValue}
-              onChange={(e) => setTextareaValue(e.target.value)}
-            />
+          <div className="space-x-4">
             <Button
               type="submit"
-              onClick={handleSendClick}
+              onClick={handleYesClick}
+              className="bg-[#E62534] hover:bg-[#E62534]/90"
+              disabled={loading || showTextarea}
+            >
+              {loading ? <Loader className="animate-spin" /> : "Yes"}
+            </Button>
+            <Button
+              type="submit"
+              onClick={handleNoClick}
               className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
               disabled={loading}
             >
-              {loading ? <Loader className="animate-spin" /> : "Send"}
+              No
             </Button>
-          </>
-        )}
-      </div>
-      {responseYes && form ? (
+          </div>
+          {showTextarea && (
+            <>
+              <p>
+                New instructions Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Adipisci nihil aliquam quisquam laborum
+                temporibus hic porro quaerat soluta tempore iste, repudiandae
+                eveniet dicta illum aperiam? Quibusdam ea enim quae
+                necessitatibus!
+              </p>
+              <Textarea
+                placeholder="Insert your type"
+                value={textareaValue}
+                onChange={(e) => setTextareaValue(e.target.value)}
+              />
+              <Button
+                type="submit"
+                onClick={handleSendClick}
+                className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
+                disabled={loading}
+              >
+                {loading ? <Loader className="animate-spin" /> : "Send"}
+              </Button>
+            </>
+          )}
+        </div>
+      )}
+      
+      {/* Mostrar VGCard si hay una respuesta disponible */}
+      {responseYes && form && (
         <VGCard
           result={responseYes.validPlates}
           description={form.description}
           attempt={2}
         />
-      ) : null}
-      {responseSend && form ? (
+      )}
+      {responseSend && form && (
         <VGCard
           result={responseSend.validPlates}
           description={textareaValue}
           attempt={2}
         />
-      ) : null}
+      )}
     </>
   );
 }

@@ -84,6 +84,8 @@ export function VGForm({
   services,
 }: VGFormProps) {
   const [loading, setLoading] = useState(false);
+  const [resultAvailable, setResultAvailable] = useState(false);
+
   //const [plateType, setPlateType] = useState("");
   console.log("from vg form", plates);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -120,6 +122,7 @@ export function VGForm({
         console.log(responseData.validPlates);
         setResult(responseData);
         setForm(data);
+        setResultAvailable(true); 
       }
     } catch (error) {
       console.error("Error:", error);
@@ -135,7 +138,7 @@ export function VGForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col space-y-1"
+        className={`flex flex-col space-y-1 ${resultAvailable ? 'hidden' : 'flex'}`}
       >
         <FormField
           control={form.control}
