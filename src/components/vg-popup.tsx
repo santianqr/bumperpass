@@ -17,6 +17,7 @@ type VGPopupProps = {
     allPlates: string[];
   } | null;
   allPlates: string[];
+  setShowOnlyPayment: (value: boolean) => void;
 };
 
 type ResponseVg = {
@@ -25,7 +26,8 @@ type ResponseVg = {
   message?: string;
 };
 
-export function VGPopup({ form, allPlates }: VGPopupProps) {
+export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
+
   const [showTextarea, setShowTextarea] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const [loading, setLoading] = useState(false);
@@ -59,6 +61,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
       } else {
         setResponseYes(responseData);
         setShowTextarea(false);
+        setShowOnlyPayment(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -102,6 +105,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
       } else {
         setResponseSend(responseData);
         setShowTextarea(false);
+        setShowOnlyPayment(true);
       }
     } catch (error) {
       console.error("Error:", error);
