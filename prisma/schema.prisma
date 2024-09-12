@@ -27,7 +27,7 @@ model Plate {
 
 model CustomPlate {
     id          String   @id @default(cuid())
-    plate       String   @unique
+    plate       String
     userId      String
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now())
