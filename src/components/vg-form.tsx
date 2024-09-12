@@ -73,6 +73,7 @@ type VGFormProps = {
   currentPlate: string | null | undefined;
   vin: string | null | undefined;
   services: number | null | undefined;
+  setResultAvailable: (value: boolean) => void;
 };
 
 export function VGForm({
@@ -82,9 +83,10 @@ export function VGForm({
   currentPlate,
   vin,
   services,
+  setResultAvailable,
 }: VGFormProps) {
   const [loading, setLoading] = useState(false);
-  const [resultAvailable, setResultAvailable] = useState(false);
+  const [resultAvailableLocal, setResultAvailableLocal] = useState(false);
 
   //const [plateType, setPlateType] = useState("");
   console.log("from vg form", plates);
@@ -123,6 +125,7 @@ export function VGForm({
         setResult(responseData);
         setForm(data);
         setResultAvailable(true); 
+        setResultAvailableLocal(true); 
       }
     } catch (error) {
       console.error("Error:", error);
@@ -138,7 +141,7 @@ export function VGForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className={`flex flex-col space-y-1 ${resultAvailable ? 'hidden' : 'flex'}`}
+        className={`flex flex-col space-y-1 ${resultAvailableLocal ? 'hidden' : 'flex'}`}
       >
         <FormField
           control={form.control}

@@ -15,13 +15,17 @@ type VGResultsProps = {
   vin: string | null | undefined;
   currentPlate: string | null | undefined;
   services: number | null | undefined;
-};
+  setResultAvailable: (value: boolean) => void;
+  setShowOnlyPayment: (value: boolean) => void;
+  };
 
 export function VGResults({
   plates,
   vin,
   currentPlate,
   services,
+  setResultAvailable,
+  setShowOnlyPayment,
 }: VGResultsProps) {
   const [result, setResult] = useState<ResponseVg | null>(null);
   const [form, setForm] = useState<{
@@ -43,6 +47,7 @@ export function VGResults({
           currentPlate={currentPlate}
           vin={vin}
           services={services}
+          setResultAvailable={setResultAvailable}
         />
         {result && form ? (
           <>
@@ -52,7 +57,7 @@ export function VGResults({
               attempt={1}
             />
             {form.allPlates}
-            <VGPopup form={form} allPlates={result.allPlates} />
+            <VGPopup form={form} allPlates={result.allPlates} setShowOnlyPayment={setShowOnlyPayment} />
           </>
         ) : null}
       </div>
