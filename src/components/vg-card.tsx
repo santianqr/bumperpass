@@ -1,3 +1,6 @@
+
+"use client"
+
 import {
   Card,
   CardContent,
@@ -9,6 +12,7 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plate } from "./plate";
+import { useRouter } from "next/navigation";
 
 type VGCardProps = {
   result: string[];
@@ -17,6 +21,12 @@ type VGCardProps = {
 };
 
 export function VGCard({ result, description, attempt }: VGCardProps) {
+  const router = useRouter();
+
+  const handleRefresh = () => {
+    router.refresh(); 
+  };
+
   return (
     <Card className="flex flex-col items-stretch">
       <CardHeader>
@@ -41,6 +51,12 @@ export function VGCard({ result, description, attempt }: VGCardProps) {
             >
               Go to my dashboard
             </Button>
+            <Button
+            onClick={handleRefresh}
+            className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
+          >
+            Go to my variation generator
+          </Button>
           </Link>
         </CardFooter>
       )}
