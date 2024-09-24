@@ -149,7 +149,7 @@ export function VGForm({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="Insert your description" {...field} disabled={!services}/>
+                <Textarea placeholder="Insert the detailed description of what you would like to see on your license plate" {...field} disabled={!services}/>
               </FormControl>
               <FormDescription></FormDescription>
               <FormMessage />

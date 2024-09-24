@@ -17,7 +17,6 @@ type VGPopupProps = {
     allPlates: string[];
   } | null;
   allPlates: string[];
-  setShowOnlyPayment: (value: boolean) => void;
 };
 
 type ResponseVg = {
@@ -26,16 +25,17 @@ type ResponseVg = {
   message?: string;
 };
 
-export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
+export function VGPopup({ form, allPlates }: VGPopupProps) {
 
   const [showTextarea, setShowTextarea] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingSend, setLoadingSend] = useState(false);
+  const [loadingYes, setLoadingYes] = useState(false);
   const [responseYes, setResponseYes] = useState<ResponseVg | null>(null);
   const [responseSend, setResponseSend] = useState<ResponseVg | null>(null);
 
   const handleYesClick = async () => {
-    setLoading(true);
+    setLoadingYes(true);
     try {
       const response = await fetch("/api/vg-main", {
         method: "POST",
@@ -61,7 +61,6 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
       } else {
         setResponseYes(responseData);
         setShowTextarea(false);
-        setShowOnlyPayment(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -70,7 +69,7 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
         description: "An error occurred while processing your request.",
       });
     } finally {
-      setLoading(false);
+      setLoadingYes(false);
     }
   };
   
@@ -79,7 +78,7 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
   };
 
   const handleSendClick = async () => {
-    setLoading(true);
+    setLoadingSend(true);
     try {
       const response = await fetch("/api/vg-main", {
         method: "POST",
@@ -105,7 +104,6 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
       } else {
         setResponseSend(responseData);
         setShowTextarea(false);
-        setShowOnlyPayment(true);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -114,7 +112,7 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
         description: "An error occurred while processing your request.",
       });
     } finally {
-      setLoading(false);
+      setLoadingSend(false);
     }
   };
 
@@ -132,15 +130,15 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
               type="submit"
               onClick={handleYesClick}
               className="bg-[#E62534] hover:bg-[#E62534]/90"
-              disabled={loading || showTextarea}
+              disabled={loadingYes || showTextarea}
             >
-              {loading ? <Loader className="animate-spin" /> : "Yes"}
+              {loadingYes ? <Loader className="animate-spin" /> : "Yes"}
             </Button>
             <Button
               type="submit"
               onClick={handleNoClick}
               className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-              disabled={loading}
+              disabled={loadingYes || showTextarea}
             >
               No
             </Button>
@@ -155,7 +153,7 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
                 necessitatibus!
               </p>
               <Textarea
-                placeholder="Insert your type"
+                placeholder="Insert a new detailed description of what you would like to see on your license plate. More specific details and descriptions will result in more tailored suggestions!"
                 value={textareaValue}
                 onChange={(e) => setTextareaValue(e.target.value)}
               />
@@ -163,9 +161,9 @@ export function VGPopup({ form, allPlates, setShowOnlyPayment }: VGPopupProps) {
                 type="submit"
                 onClick={handleSendClick}
                 className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
-                disabled={loading}
+                disabled={loadingSend}
               >
-                {loading ? <Loader className="animate-spin" /> : "Send"}
+                {loadingSend ? <Loader className="animate-spin" /> : "Send"}
               </Button>
             </>
           )}

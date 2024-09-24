@@ -16,7 +16,6 @@ type VGResultsProps = {
   currentPlate: string | null | undefined;
   services: number | null | undefined;
   setResultAvailable: (value: boolean) => void;
-  setShowOnlyPayment: (value: boolean) => void;
   };
 
 export function VGResults({
@@ -25,7 +24,6 @@ export function VGResults({
   currentPlate,
   services,
   setResultAvailable,
-  setShowOnlyPayment,
 }: VGResultsProps) {
   const [result, setResult] = useState<ResponseVg | null>(null);
   const [form, setForm] = useState<{
@@ -57,7 +55,7 @@ export function VGResults({
               attempt={1}
             />
             {form.allPlates}
-            <VGPopup form={form} allPlates={result.allPlates} setShowOnlyPayment={setShowOnlyPayment} />
+            <VGPopup form={form} allPlates={result.allPlates} />
           </>
         ) : null}
       </div>
