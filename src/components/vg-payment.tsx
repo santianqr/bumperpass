@@ -16,6 +16,7 @@ export function VGPayment() {
   const router = useRouter();
   const [coupon, setCoupon] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const saveServices = api.func.saveServices.useMutation();
 
@@ -28,6 +29,7 @@ export function VGPayment() {
       setErrorMessage("");
       await saveServices.mutateAsync();
       router.refresh();
+      setSuccessMessage("Coupon redeemed successfully!");
     } else {
       setErrorMessage("Invalid coupon, try another one.");
     }
@@ -59,6 +61,9 @@ export function VGPayment() {
             </Button>
             {errorMessage && (
               <p className="text-sm text-red-500">{errorMessage}</p>
+            )}
+            {successMessage && (
+              <p className="text-sm text-green-500">{successMessage}</p>
             )}
           </PopoverContent>
         </Popover>
