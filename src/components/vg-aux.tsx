@@ -12,15 +12,14 @@ type VGResultsProps = {
 
 export function VGAux({ plates, vin, currentPlate, services }: VGResultsProps) {
   const [resultAvailable, setResultAvailable] = useState(false);
-  const [showOnlyPayment, setShowOnlyPayment] = useState(false);
 
+  console.log(typeof services);
   return (
     <>
-      {showOnlyPayment && <VGPayment />}
       {!resultAvailable && (
         <section className="flex justify-center">
           <div className="space-y-2">
-            <VGPayment />
+            {(services === null || services === undefined) && <VGPayment />}
             <p className="text-lg font-semibold text-primary">Instructions</p>
             <ul className="list-inside list-disc text-sm marker:text-foreground/60">
               <li>
@@ -58,7 +57,7 @@ export function VGAux({ plates, vin, currentPlate, services }: VGResultsProps) {
         vin={vin}
         services={services}
         setResultAvailable={setResultAvailable}
-        setShowOnlyPayment={setShowOnlyPayment}
+        
       />
     </>
   );
