@@ -2,18 +2,30 @@
 import { useState } from "react";
 import { VGResults } from "@/components/vg-results";
 import { VGPayment } from "@/components/vg-payment";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 type VGResultsProps = {
   plates: string[];
   vin: string | null | undefined;
   currentPlate: string | null | undefined;
   services: number | null | undefined;
+  lastFivePlates: string[];
 };
 
-export function VGAux({ plates, vin, currentPlate, services }: VGResultsProps) {
+export function VGAux({
+  plates,
+  vin,
+  currentPlate,
+  services,
+  lastFivePlates,
+}: VGResultsProps) {
   const [resultAvailable, setResultAvailable] = useState(false);
 
-  console.log(typeof services);
+  console.log(lastFivePlates);
   return (
     <>
       {!resultAvailable && (
@@ -51,13 +63,31 @@ export function VGAux({ plates, vin, currentPlate, services }: VGResultsProps) {
           </div>
         </section>
       )}
+      <Popover>
+        <PopoverTrigger>
+          <button className="text-sm font-medium text-primary hover:underline">
+            View Last 5 Plates
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-44 space-y-1 text-sm text-foreground/60">
+          {lastFivePlates.length > 0 ? (
+            <ul>
+              {lastFivePlates.map((plate, index) => (
+                <li key={index}>{plate}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No plates available</p>
+          )}
+        </PopoverContent>
+      </Popover>
+
       <VGResults
         plates={plates}
         currentPlate={currentPlate}
         vin={vin}
         services={services}
         setResultAvailable={setResultAvailable}
-        
       />
     </>
   );
