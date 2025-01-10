@@ -38,25 +38,6 @@ export function VGResults({
   const [result, setResult] = useState<ResponseVg | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
 
-  // Cargar estado desde localStorage cuando el componente se monta
-  useEffect(() => {
-    const storedResult = localStorage.getItem('result');
-    const storedForm = localStorage.getItem('form');
-    if (storedResult) {
-      const parsedResult = JSON.parse(storedResult) as ResponseVg; // Asignación de tipo explícita
-      setResult(parsedResult);
-    }
-    if (storedForm) {
-      const parsedForm = JSON.parse(storedForm) as FormState; // Asignación de tipo explícita
-      setForm(parsedForm);
-    }
-  }, []);
-
-  // Guardar estado en localStorage cuando result o form cambian
-  useEffect(() => {
-    if (result) localStorage.setItem('result', JSON.stringify(result));
-    if (form) localStorage.setItem('form', JSON.stringify(form));
-  }, [result, form]);
 
   return (
     <section className="flex justify-center">

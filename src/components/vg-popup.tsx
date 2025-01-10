@@ -38,7 +38,7 @@ export function VGPopup({ form, allPlates, setResult, setForm }: VGPopupProps) {
   const handleYesClick = async () => {
     setLoadingYes(true);
     try {
-      const response = await fetch("/api/vg-main", {
+      const response = await fetch("/api/vg-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,11 +62,6 @@ export function VGPopup({ form, allPlates, setResult, setForm }: VGPopupProps) {
       } else {
         setResponseYes(responseData);
         setShowTextarea(false);
-        // Limpiar localStorage
-        setResult(null);
-        setForm(null);
-        localStorage.removeItem('result');
-        localStorage.removeItem('form');
       }
     } catch (error) {
       console.error("Error:", error);
@@ -86,7 +81,7 @@ export function VGPopup({ form, allPlates, setResult, setForm }: VGPopupProps) {
   const handleSendClick = async () => {
     setLoadingSend(true);
     try {
-      const response = await fetch("/api/vg-main", {
+      const response = await fetch("/api/vg-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -110,11 +105,6 @@ export function VGPopup({ form, allPlates, setResult, setForm }: VGPopupProps) {
       } else {
         setResponseSend(responseData);
         setShowTextarea(false);
-        // Limpiar localStorage
-        setResult(null);
-        setForm(null);
-        localStorage.removeItem('result');
-        localStorage.removeItem('form');
       }
     } catch (error) {
       console.error("Error:", error);

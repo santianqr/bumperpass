@@ -106,7 +106,7 @@ export function VGForm({
     console.log(allPlates);
 
     try {
-      const response: Response = await fetch("/api/vg-main", {
+      const response: Response = await fetch("/api/vg-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
