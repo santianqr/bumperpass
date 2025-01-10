@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from 'react';
 import { VGForm } from "@/components/vg-form";
 import { VGCard } from "./vg-card";
 import { VGPopup } from "./vg-popup";

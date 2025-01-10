@@ -27,7 +27,7 @@ type ResponseVg = {
   message?: string;
 };
 
-export function VGPopup({ form, allPlates, setResult, setForm }: VGPopupProps) {
+export function VGPopup({ form, allPlates }: VGPopupProps) {
   const [showTextarea, setShowTextarea] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const [loadingSend, setLoadingSend] = useState(false);
