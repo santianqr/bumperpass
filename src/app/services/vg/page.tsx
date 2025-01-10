@@ -12,16 +12,6 @@ export default async function VGPage() {
     },
   });
 
-  const lastFivePlates = await db.customPlate.findMany({
-    where: { userId: session?.user.id },
-    orderBy: { createdAt: 'desc' }, 
-    take: 5,
-    select: {
-      plate: true,
-    },
-  });
-
-
   const vinPlate = await db.user.findUnique({
     where: { id: session?.user.id },
     select: {
@@ -57,7 +47,6 @@ export default async function VGPage() {
         currentPlate={vinPlate?.currentPlate}
         vin={vinPlate?.vin}
         services={num_services?.services}
-        lastFivePlates={lastFivePlates.map((plate) => plate.plate)}
       />
     </main>
   );

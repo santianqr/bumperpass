@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader } from "lucide-react";
 import { VGCard } from "./vg-card";
@@ -17,6 +17,8 @@ type VGPopupProps = {
     allPlates: string[];
   } | null;
   allPlates: string[];
+  setResult: (value: ResponseVg | null) => void;
+  setForm: (value: null) => void;
 };
 
 type ResponseVg = {
@@ -25,8 +27,7 @@ type ResponseVg = {
   message?: string;
 };
 
-export function VGPopup({ form, allPlates }: VGPopupProps) {
-
+export function VGPopup({ form, allPlates, setResult, setForm }: VGPopupProps) {
   const [showTextarea, setShowTextarea] = useState(false);
   const [textareaValue, setTextareaValue] = useState("");
   const [loadingSend, setLoadingSend] = useState(false);
@@ -51,28 +52,33 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
           allPlates: allPlates,
         }),
       });
-      const responseData = (await response.json()) as ResponseVg;
-  
+      const responseData = await response.json() as ResponseVg;
+
       if (responseData.message) {
         toast({
-          title: "Maximum Iterations Reached",
+          title: "Se alcanzó el máximo de iteraciones",
           description: responseData.message,
         });
       } else {
         setResponseYes(responseData);
         setShowTextarea(false);
+        // Limpiar localStorage
+        setResult(null);
+        setForm(null);
+        localStorage.removeItem('result');
+        localStorage.removeItem('form');
       }
     } catch (error) {
       console.error("Error:", error);
       toast({
         title: "Error",
-        description: "An error occurred while processing your request.",
+        description: "Se produjo un error al procesar su solicitud.",
       });
     } finally {
       setLoadingYes(false);
     }
   };
-  
+
   const handleNoClick = () => {
     setShowTextarea(true);
   };
@@ -94,22 +100,27 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
           allPlates: allPlates,
         }),
       });
-      const responseData = (await response.json()) as ResponseVg;
-  
+      const responseData = await response.json() as ResponseVg;
+
       if (responseData.message) {
         toast({
-          title: "Maximum Iterations Reached. Please try again.",
+          title: "Se alcanzó el máximo de iteraciones. Intente de nuevo.",
           description: responseData.message,
         });
       } else {
         setResponseSend(responseData);
         setShowTextarea(false);
+        // Limpiar localStorage
+        setResult(null);
+        setForm(null);
+        localStorage.removeItem('result');
+        localStorage.removeItem('form');
       }
     } catch (error) {
       console.error("Error:", error);
       toast({
         title: "Error",
-        description: "An error occurred while processing your request.",
+        description: "Se produjo un error al procesar su solicitud.",
       });
     } finally {
       setLoadingSend(false);
@@ -118,24 +129,20 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
 
   return (
     <>
-      {/* Mostrar VGPopup si no hay respuestas, de lo contrario ocultar */}
-      {!(responseYes ?? responseSend) && (
+      {!responseYes && !responseSend && (
         <div className="flex flex-col items-center space-y-2 rounded-xl border bg-card p-6 text-card-foreground shadow">
           <p className="text-sm font-medium leading-none">
-            Are you liking current suggestions?
+            ¿Le gustan las sugerencias actuales?
           </p>
-
           <div className="space-x-4">
             <Button
-              type="submit"
               onClick={handleYesClick}
               className="bg-[#E62534] hover:bg-[#E62534]/90"
               disabled={loadingYes || showTextarea}
             >
-              {loadingYes ? <Loader className="animate-spin" /> : "Yes"}
+              {loadingYes ? <Loader className="animate-spin" /> : "Sí"}
             </Button>
             <Button
-              type="submit"
               onClick={handleNoClick}
               className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
               disabled={loadingYes || showTextarea}
@@ -145,32 +152,23 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
           </div>
           {showTextarea && (
             <>
-              <p>
-                New instructions Lorem ipsum dolor sit amet, consectetur
-                adipisicing elit. Adipisci nihil aliquam quisquam laborum
-                temporibus hic porro quaerat soluta tempore iste, repudiandae
-                eveniet dicta illum aperiam? Quibusdam ea enim quae
-                necessitatibus!
-              </p>
               <Textarea
-                placeholder="Insert a new detailed description of what you would like to see on your license plate. More specific details and descriptions will result in more tailored suggestions!"
+                placeholder="Inserte una nueva descripción detallada de lo que le gustaría ver en su placa. ¡Cuanto más específicos sean los detalles y descripciones, más adaptadas serán las sugerencias!"
                 value={textareaValue}
                 onChange={(e) => setTextareaValue(e.target.value)}
               />
               <Button
-                type="submit"
                 onClick={handleSendClick}
                 className="bg-[#F59F0F] hover:bg-[#F59F0F]/90"
                 disabled={loadingSend}
               >
-                {loadingSend ? <Loader className="animate-spin" /> : "Send"}
+                {loadingSend ? <Loader className="animate-spin" /> : "Enviar"}
               </Button>
             </>
           )}
         </div>
       )}
       
-      {/* Mostrar VGCard si hay una respuesta disponible */}
       {responseYes && form && (
         <VGCard
           result={responseYes.validPlates}
