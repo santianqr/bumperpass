@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader } from "lucide-react";
@@ -35,6 +35,30 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
   const [responseYes, setResponseYes] = useState<ResponseVg | null>(null);
   const [responseSend, setResponseSend] = useState<ResponseVg | null>(null);
 
+  // Recuperar estados desde localStorage al cargar
+  useEffect(() => {
+    const storedResponseYes = localStorage.getItem("responseYes");
+    const storedResponseSend = localStorage.getItem("responseSend");
+
+    if (storedResponseYes) {
+      setResponseYes(JSON.parse(storedResponseYes) as ResponseVg);
+    }
+
+    if (storedResponseSend) {
+      setResponseSend(JSON.parse(storedResponseSend) as ResponseVg);
+    }
+  }, []);
+
+  // Guardar estados en localStorage cuando cambian
+  useEffect(() => {
+    if (responseYes) {
+      localStorage.setItem("responseYes", JSON.stringify(responseYes));
+    }
+    if (responseSend) {
+      localStorage.setItem("responseSend", JSON.stringify(responseSend));
+    }
+  }, [responseYes, responseSend]);
+
   const handleYesClick = async () => {
     setLoadingYes(true);
     try {
@@ -52,7 +76,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
           allPlates: allPlates,
         }),
       });
-      const responseData = await response.json() as ResponseVg;
+      const responseData = (await response.json()) as ResponseVg;
 
       if (responseData.message) {
         toast({
@@ -95,7 +119,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
           allPlates: allPlates,
         }),
       });
-      const responseData = await response.json() as ResponseVg;
+      const responseData = (await response.json()) as ResponseVg;
 
       if (responseData.message) {
         toast({
@@ -158,7 +182,7 @@ export function VGPopup({ form, allPlates }: VGPopupProps) {
           )}
         </div>
       )}
-      
+
       {responseYes && form && (
         <VGCard
           result={responseYes.validPlates}

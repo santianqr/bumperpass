@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VGResults } from "@/components/vg-results";
 import { VGPayment } from "@/components/vg-payment";
 
@@ -16,11 +16,29 @@ export function VGAux({
   currentPlate,
   services,
 }: VGResultsProps) {
-  const [resultAvailable, setResultAvailable] = useState(false);
+  const [resultAvailable, setResultAvailable] = useState<boolean | null>(null);
+
+  // Cargar el estado inicial desde localStorage
+  useEffect(() => {
+    const storedResultAvailable = localStorage.getItem("resultAvailable");
+    if (storedResultAvailable !== null) {
+      setResultAvailable(JSON.parse(storedResultAvailable) as boolean);
+    } else {
+      setResultAvailable(false); // Estado inicial si no hay nada guardado
+    }
+  }, []);
+
+  // Guardar el estado en localStorage cuando cambia
+  useEffect(() => {
+    if (resultAvailable !== null) {
+      localStorage.setItem("resultAvailable", JSON.stringify(resultAvailable));
+    }
+  }, [resultAvailable]);
 
   return (
     <>
-      {!resultAvailable && (
+      {/* Mostrar instrucciones solo si resultAvailable es false */}
+      {resultAvailable === false && (
         <section className="flex justify-center">
           <div className="space-y-2">
             {(services === null || services === undefined) && <VGPayment />}
@@ -55,13 +73,15 @@ export function VGAux({
           </div>
         </section>
       )}
-      <VGResults
-        plates={plates}
-        currentPlate={currentPlate}
-        vin={vin}
-        services={services}
-        setResultAvailable={setResultAvailable}
-      />
+      {resultAvailable !== null && (
+        <VGResults
+          plates={plates}
+          currentPlate={currentPlate}
+          vin={vin}
+          services={services}
+          setResultAvailable={setResultAvailable}
+        />
+      )}
     </>
   );
 }

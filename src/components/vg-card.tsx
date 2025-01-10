@@ -11,7 +11,6 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Plate } from "./plate";
-import { useRouter } from "next/navigation";
 
 type VGCardProps = {
   result: string[];
@@ -20,7 +19,17 @@ type VGCardProps = {
 };
 
 export function VGCard({ result, description, attempt }: VGCardProps) {
-  const router = useRouter();
+  const handleReset = async () => {
+    // Limpia los datos de localStorage
+    localStorage.removeItem("resultAvailable");
+    localStorage.removeItem("vgResult");
+    localStorage.removeItem("vgForm");
+    localStorage.removeItem("responseYes");
+    localStorage.removeItem("responseSend");
+
+    // Refresca la página usando window.location
+    window.location.reload();
+  };
 
   return (
     <Card className="flex flex-col items-stretch">
@@ -49,7 +58,7 @@ export function VGCard({ result, description, attempt }: VGCardProps) {
           </Link>
           <Button
             className="rounded-3xl bg-[#E62534] hover:bg-[#E62534]/90"
-            onClick={() => router.refresh()}
+            onClick={handleReset}
           >
             Go to my variation generator
           </Button>
